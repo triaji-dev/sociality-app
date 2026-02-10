@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { useSearchUsers } from "@/hooks";
@@ -8,7 +8,7 @@ import { UserList } from "@/components/users";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function UserSearchPage() {
+function SearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
@@ -59,5 +59,13 @@ export default function UserSearchPage() {
         </p>
       )}
     </div>
+  );
+}
+
+export default function UserSearchPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading search...</div>}>
+      <SearchContent />
+    </Suspense>
   );
 }
