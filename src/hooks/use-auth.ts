@@ -9,15 +9,13 @@ import { toast } from "sonner";
 
 export function useRegister() {
   const router = useRouter();
-  const login = useAuthStore((state) => state.login);
 
   return useMutation({
     mutationFn: (data: RegisterRequest) => authService.register(data),
     onSuccess: (response) => {
-      if (response.success && response.data) {
-        login(response.data.user, response.data.token);
-        toast.success("Registration successful!");
-        router.push("/feed");
+      if (response.success) {
+        toast.success("Registration successful! Please login.");
+        router.push("/login");
       } else {
         toast.error(response.message || "Registration failed");
       }

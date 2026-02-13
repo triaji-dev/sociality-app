@@ -25,10 +25,13 @@ export interface PublicProfile {
   name: string;
   bio: string | null;
   avatarUrl: string | null;
+  email: string;
+  phone: string;
   counts: {
-    posts: number;
+    post: number;
     followers: number;
     following: number;
+    likes: number;
   };
   isFollowing: boolean;
   isMe: boolean;
@@ -70,5 +73,6 @@ export interface Liker {
   name: string;
   avatarUrl: string | null;
   isFollowedByMe: boolean;
+  isMe: boolean;
   followsMe: boolean;
 }

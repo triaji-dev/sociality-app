@@ -10,7 +10,7 @@ interface PostActionsProps {
   likeCount: number;
   commentCount: number;
   likedByMe: boolean;
-  savedByMe: boolean;
+  savedByMe?: boolean;
   onCommentClick?: () => void;
   onLikersClick?: () => void;
 }
@@ -20,7 +20,7 @@ export function PostActions({
   likeCount,
   commentCount,
   likedByMe,
-  savedByMe,
+  savedByMe = false,
   onCommentClick,
   onLikersClick,
 }: PostActionsProps) {

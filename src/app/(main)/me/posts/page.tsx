@@ -1,16 +1,13 @@
 "use client";
 
-import { useUserPosts } from "@/hooks";
+import { useMyPosts } from "@/hooks";
 import { AuthGuard } from "@/components/auth";
 import { PostGrid } from "@/components/posts";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useMe } from "@/hooks";
 
 function PostsContent() {
-  const { data: meData } = useMe();
-  const username = meData?.data?.profile.username || "";
-  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage, error, refetch } = useUserPosts(username);
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage, error, refetch } = useMyPosts();
   const posts = data?.pages.flatMap((page) => page.data?.items || []) || [];
 
   return (

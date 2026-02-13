@@ -13,9 +13,10 @@ interface ProfileHeaderProps {
   bio: string | null;
   avatarUrl: string | null;
   stats: {
-    posts: number;
+    post: number;
     followers: number;
     following: number;
+    likes: number;
   };
   isFollowing?: boolean;
   isMe: boolean;
@@ -58,7 +59,7 @@ export function ProfileHeader({
           {/* Stats */}
           <div className="flex gap-6 text-sm">
             <Link href={`${baseUrl}/posts`} className="hover:underline">
-              <span className="font-semibold">{stats.posts}</span>{" "}
+              <span className="font-semibold">{stats.post}</span>{" "}
               <span className="text-muted-foreground">posts</span>
             </Link>
             <Link href={`${baseUrl}/followers`} className="hover:underline">

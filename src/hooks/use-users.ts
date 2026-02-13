@@ -9,6 +9,7 @@ import { toast } from "sonner";
 export const userKeys = {
   all: ["users"] as const,
   me: () => ["me"] as const,
+  myPosts: () => ["me", "posts"] as const,
   myLikes: () => ["me", "likes"] as const,
   mySaved: () => ["me", "saved"] as const,
   myFollowers: () => ["me", "followers"] as const,
@@ -26,6 +27,19 @@ export function useMe() {
   return useQuery({
     queryKey: userKeys.me(),
     queryFn: () => userService.getMe(),
+  });
+}
+
+export function useMyPosts() {
+  return useInfiniteQuery({
+    queryKey: userKeys.myPosts(),
+    queryFn: ({ pageParam = 1 }) => userService.getMyPosts({ page: pageParam, limit: 12 }),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.data) return undefined;
+      const { page, totalPages } = lastPage.data.pagination;
+      return page < totalPages ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
   });
 }
 

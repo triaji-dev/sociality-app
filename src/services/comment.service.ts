@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { ApiResponse, PaginatedResponse, PaginationParams, Comment, CreateCommentRequest } from "@/types";
+import { ApiResponse, PaginatedResponse, PaginationParams, Comment, CreateCommentRequest, DeleteResponse } from "@/types";
 
 export const commentService = {
   async getComments(postId: number, params?: PaginationParams): Promise<PaginatedResponse<Comment>> {
@@ -12,8 +12,8 @@ export const commentService = {
     return response.data;
   },
 
-  async deleteComment(commentId: number): Promise<ApiResponse<null>> {
-    const response = await api.delete<ApiResponse<null>>(`/api/comments/${commentId}`);
+  async deleteComment(commentId: number): Promise<ApiResponse<DeleteResponse>> {
+    const response = await api.delete<ApiResponse<DeleteResponse>>(`/api/comments/${commentId}`);
     return response.data;
   },
 };

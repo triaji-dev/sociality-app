@@ -9,6 +9,8 @@ import {
   UserListItem,
   UpdateProfileRequest,
   Post,
+  LikedPost,
+  SavedPost,
 } from "@/types";
 
 export const userService = {
@@ -33,13 +35,18 @@ export const userService = {
     return response.data;
   },
 
-  async getMyLikes(params?: PaginationParams): Promise<PaginatedResponse<Post>> {
-    const response = await api.get<PaginatedResponse<Post>>("/api/me/likes", { params });
+  async getMyPosts(params?: PaginationParams): Promise<PaginatedResponse<Post>> {
+    const response = await api.get<PaginatedResponse<Post>>("/api/me/posts", { params });
     return response.data;
   },
 
-  async getMySaved(params?: PaginationParams): Promise<PaginatedResponse<Post>> {
-    const response = await api.get<PaginatedResponse<Post>>("/api/me/saved", { params });
+  async getMyLikes(params?: PaginationParams): Promise<PaginatedResponse<LikedPost>> {
+    const response = await api.get<PaginatedResponse<LikedPost>>("/api/me/likes", { params });
+    return response.data;
+  },
+
+  async getMySaved(params?: PaginationParams): Promise<PaginatedResponse<SavedPost>> {
+    const response = await api.get<PaginatedResponse<SavedPost>>("/api/me/saved", { params });
     return response.data;
   },
 

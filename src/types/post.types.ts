@@ -15,7 +15,20 @@ export interface Post {
   likeCount: number;
   commentCount: number;
   likedByMe: boolean;
-  savedByMe: boolean;
+  savedByMe?: boolean; // client-side only, used for optimistic save UI
+  createdAt: string;
+}
+
+// Liked Post — extends Post with timestamp of when user liked it
+export interface LikedPost extends Post {
+  likedAt: string;
+}
+
+// Saved Post — minimal fields returned by GET /api/me/saved
+export interface SavedPost {
+  id: number;
+  imageUrl: string;
+  caption: string;
   createdAt: string;
 }
 
@@ -51,4 +64,9 @@ export interface CreateCommentRequest {
 export interface LikeResponse {
   liked: boolean;
   likeCount: number;
+}
+
+// Delete Response (posts & comments)
+export interface DeleteResponse {
+  deleted: boolean;
 }

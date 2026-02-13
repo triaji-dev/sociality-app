@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { ApiResponse, PaginatedResponse, PaginationParams, Post, CreatePostRequest } from "@/types";
+import { ApiResponse, PaginatedResponse, PaginationParams, Post, CreatePostRequest, DeleteResponse } from "@/types";
 
 export const postService = {
   async getFeed(params?: PaginationParams): Promise<PaginatedResponse<Post>> {
@@ -28,8 +28,8 @@ export const postService = {
     return response.data;
   },
 
-  async deletePost(id: number): Promise<ApiResponse<null>> {
-    const response = await api.delete<ApiResponse<null>>(`/api/posts/${id}`);
+  async deletePost(id: number): Promise<ApiResponse<DeleteResponse>> {
+    const response = await api.delete<ApiResponse<DeleteResponse>>(`/api/posts/${id}`);
     return response.data;
   },
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMe, useUserPosts } from "@/hooks";
+import { useMe, useMyPosts } from "@/hooks";
 import { AuthGuard } from "@/components/auth";
 import { ProfileHeader } from "@/components/users";
 import { PostGrid } from "@/components/posts";
@@ -13,8 +13,7 @@ function ProfileContent() {
   const [editOpen, setEditOpen] = useState(false);
   const { data, isLoading, error, refetch } = useMe();
 
-  const username = data?.data?.profile.username || "";
-  const postsQuery = useUserPosts(username);
+  const postsQuery = useMyPosts();
   const posts = postsQuery.data?.pages.flatMap((page) => page.data?.items || []) || [];
 
   if (isLoading) {
@@ -36,9 +35,10 @@ function ProfileContent() {
         bio={profile.profile.bio}
         avatarUrl={profile.profile.avatarUrl}
         stats={{
-          posts: profile.stats.posts,
+          post: profile.stats.posts,
           followers: profile.stats.followers,
           following: profile.stats.following,
+          likes: profile.stats.likes,
         }}
         isMe={true}
         onEditClick={() => setEditOpen(true)}
