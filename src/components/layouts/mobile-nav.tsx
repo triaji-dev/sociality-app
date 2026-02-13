@@ -9,7 +9,7 @@ import { useAuthStore } from "@/stores/auth-store";
 const mobileNavItems = [
   { href: "/timeline", label: "Timeline", icon: Home, requiresAuth: true, fallbackHref: "/timeline" },
   { href: "/posts/new", label: "Create", icon: PlusSquare, requiresAuth: true, fallbackHref: "/login" },
-  { href: "/me", label: "Profile", icon: User, requiresAuth: true, fallbackHref: "/login" },
+  { href: "/profile", label: "Profile", icon: User, requiresAuth: true, fallbackHref: "/login" },
 ];
 
 export function MobileNav() {

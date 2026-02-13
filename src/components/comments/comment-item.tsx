@@ -25,7 +25,7 @@ export function CommentItem({ comment, postId }: CommentItemProps) {
 
   return (
     <div className="flex gap-3 py-3">
-      <Link href={`/users/${comment.author.username}`}>
+      <Link href={`/profile/${comment.author.username}`}>
         <UserAvatar
           src={comment.author.avatarUrl}
           name={comment.author.name}
@@ -35,7 +35,7 @@ export function CommentItem({ comment, postId }: CommentItemProps) {
       <div className="flex-1 min-w-0">
         <p className="text-sm">
           <Link
-            href={`/users/${comment.author.username}`}
+            href={`/profile/${comment.author.username}`}
             className="font-semibold hover:underline"
           >
             {comment.author.username}

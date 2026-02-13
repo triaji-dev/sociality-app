@@ -24,7 +24,7 @@ function FeedContent() {
       emptyDescription="Follow other users to see their posts here"
       emptyAction={
         <Button asChild>
-          <Link href="/users/search">Find people to follow</Link>
+          <Link href="/profile/search">Find people to follow</Link>
         </Button>
       }
     />

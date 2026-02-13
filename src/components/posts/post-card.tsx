@@ -59,7 +59,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
     <Card className="gap-0 overflow-hidden">
       <CardHeader className="flex-row items-center justify-between space-y-0 px-4 py-3">
         <Link
-          href={isOwner ? "/me" : `/users/${post.author.username}`}
+          href={isOwner ? "/profile" : `/profile/${post.author.username}`}
           className="flex items-center gap-3"
         >
           <UserAvatar
@@ -118,7 +118,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
         {caption && (
           <div className="text-sm leading-snug">
             <Link
-              href={`/users/${post.author.username}`}
+              href={`/profile/${post.author.username}`}
               className="font-semibold hover:underline"
             >
               {post.author.username}

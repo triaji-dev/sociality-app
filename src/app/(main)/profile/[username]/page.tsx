@@ -42,12 +42,12 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
 
   const profile = data.data;
 
-  // Redirect to /me if viewing own profile
+  // Redirect to /profile if viewing own profile
   if (profile.isMe) {
     return (
       <div className="text-center py-8">
         <p>Redirecting to your profile...</p>
-        <Link href="/me" className="text-primary hover:underline">
+        <Link href="/profile" className="text-primary hover:underline">
           Go to My Profile
         </Link>
       </div>

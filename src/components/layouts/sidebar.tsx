@@ -9,7 +9,7 @@ import { useAuthStore } from "@/stores/auth-store";
 const navItems = [
   { href: "/timeline", label: "Timeline", icon: Home, requiresAuth: true },
   { href: "/posts/new", label: "Create", icon: PlusSquare, requiresAuth: true },
-  { href: "/me", label: "Profile", icon: User, requiresAuth: true },
+  { href: "/profile", label: "Profile", icon: User, requiresAuth: true },
 ];
 
 export function Sidebar() {

@@ -31,7 +31,7 @@ export function PostDetail({ post, onCommentClick, onLikersClick }: PostDetailPr
       <div className="flex flex-col">
         {/* Header */}
         <div className="flex items-center gap-3 p-4 border-b">
-          <Link href={`/users/${post.author.username}`}>
+          <Link href={`/profile/${post.author.username}`}>
             <UserAvatar
               src={post.author.avatarUrl}
               name={post.author.name}
@@ -40,7 +40,7 @@ export function PostDetail({ post, onCommentClick, onLikersClick }: PostDetailPr
           </Link>
           <div>
             <Link
-              href={`/users/${post.author.username}`}
+              href={`/profile/${post.author.username}`}
               className="font-semibold text-sm hover:underline"
             >
               {post.author.username}
@@ -56,7 +56,7 @@ export function PostDetail({ post, onCommentClick, onLikersClick }: PostDetailPr
           <div className="p-4 border-b">
             <p className="text-sm whitespace-pre-wrap">
               <Link
-                href={`/users/${post.author.username}`}
+                href={`/profile/${post.author.username}`}
                 className="font-semibold hover:underline"
               >
                 {post.author.username}

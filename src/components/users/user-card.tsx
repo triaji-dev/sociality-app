@@ -28,7 +28,7 @@ export function UserCard({
   return (
     <div className="flex items-center justify-between gap-3 py-2">
       <Link
-        href={isMe ? "/me" : `/users/${username}`}
+        href={isMe ? "/profile" : `/profile/${username}`}
         className="flex flex-1 items-center gap-3 min-w-0"
       >
         <UserAvatar src={avatarUrl} name={name} size="md" />

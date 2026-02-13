@@ -34,7 +34,7 @@ export function Navbar() {
     const formData = new FormData(e.currentTarget);
     const query = formData.get("search") as string;
     if (query.trim()) {
-      router.push(`/users/search?q=${encodeURIComponent(query.trim())}`);
+      router.push(`/profile/search?q=${encodeURIComponent(query.trim())}`);
     }
   };
 
@@ -97,7 +97,7 @@ export function Navbar() {
                     users.map((user) => (
                       <Link
                         key={user.id}
-                        href={`/users/${user.username}`}
+                        href={`/profile/${user.username}`}
                         className="flex items-center gap-3 p-2 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
                         onClick={() => setIsOpen(false)}
                       >
@@ -162,7 +162,7 @@ export function Navbar() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/me">My Profile</Link>
+                    <Link href="/profile">My Profile</Link>
                   </DropdownMenuItem>
 
                   <DropdownMenuSeparator />

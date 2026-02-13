@@ -97,7 +97,7 @@ function EditProfileContent() {
       },
       {
         onSuccess: () => {
-          router.push("/me");
+          router.push("/profile");
         },
       }
     );
@@ -106,7 +106,7 @@ function EditProfileContent() {
   return (
     <div className="max-w-xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
-        <Link href="/me" className="p-2 hover:bg-muted rounded-full">
+        <Link href="/profile" className="p-2 hover:bg-muted rounded-full">
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <h1 className="text-xl font-bold">Edit Profile</h1>
@@ -203,7 +203,7 @@ function EditProfileContent() {
               type="button"
               variant="outline"
               className="flex-1"
-              onClick={() => router.push("/me")}
+              onClick={() => router.push("/profile")}
               disabled={updateMe.isPending}
             >
               Cancel
