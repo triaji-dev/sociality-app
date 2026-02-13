@@ -4,36 +4,14 @@ import { useInfiniteQuery, useMutation, useQueryClient, InfiniteData } from "@ta
 import { likeService } from "@/services";
 import { postKeys } from "./use-posts";
 import { Post, PaginatedResponse } from "@/types";
+import { updatePostInInfiniteData, InfinitePostData } from "@/lib/query-utils";
 
 export const likeKeys = {
   all: ["likes"] as const,
   likers: (postId: number) => [...likeKeys.all, "likers", postId] as const,
 };
 
-type InfinitePostData = InfiniteData<PaginatedResponse<Post>>;
 
-function updatePostInInfiniteData(
-  data: InfinitePostData | undefined,
-  postId: number,
-  updater: (post: Post) => Post,
-): InfinitePostData | undefined {
-  if (!data) return data;
-  return {
-    ...data,
-    pages: data.pages.map((page) => {
-      if (!page.data) return page;
-      return {
-        ...page,
-        data: {
-          ...page.data,
-          items: page.data.items.map((post) =>
-            post.id === postId ? updater(post) : post,
-          ),
-        },
-      };
-    }),
-  };
-}
 
 export function useLikers(postId: number) {
   return useInfiniteQuery({

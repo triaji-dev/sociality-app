@@ -4,6 +4,7 @@ import {
   PaginatedResponse,
   PaginationParams,
   MyProfile,
+  UserProfile,
   PublicProfile,
   UserSearchResult,
   UserListItem,
@@ -20,18 +21,15 @@ export const userService = {
     return response.data;
   },
 
-  async updateMe(data: UpdateProfileRequest): Promise<ApiResponse<MyProfile>> {
+  async updateMe(data: UpdateProfileRequest): Promise<ApiResponse<UserProfile>> {
     const formData = new FormData();
-    if (data.name) formData.append("name", data.name);
-    if (data.username) formData.append("username", data.username);
-    if (data.phone) formData.append("phone", data.phone);
-    if (data.bio) formData.append("bio", data.bio);
+    if (data.name !== undefined) formData.append("name", data.name);
+    if (data.username !== undefined) formData.append("username", data.username);
+    if (data.phone !== undefined) formData.append("phone", data.phone);
+    if (data.bio !== undefined) formData.append("bio", data.bio);
     if (data.avatar) formData.append("avatar", data.avatar);
-    if (data.avatarUrl) formData.append("avatarUrl", data.avatarUrl);
 
-    const response = await api.patch<ApiResponse<MyProfile>>("/api/me", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const response = await api.patch<ApiResponse<UserProfile>>("/api/me", formData);
     return response.data;
   },
 

@@ -55,12 +55,12 @@ export function useUpdateMe() {
         queryClient.invalidateQueries({ queryKey: userKeys.me() });
         // Update auth store with new user info
         setUser({
-          id: response.data.profile.id,
-          name: response.data.profile.name,
-          username: response.data.profile.username,
-          email: response.data.profile.email,
-          phone: response.data.profile.phone,
-          avatarUrl: response.data.profile.avatarUrl,
+          id: response.data.id,
+          name: response.data.name,
+          username: response.data.username,
+          email: response.data.email,
+          phone: response.data.phone,
+          avatarUrl: response.data.avatarUrl,
         });
       } else {
         toast.error(response.message || "Failed to update profile");

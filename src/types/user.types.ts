@@ -1,15 +1,19 @@
+// Profile data structure
+export interface UserProfile {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  phone: string;
+  bio: string | null;
+  avatarUrl: string | null;
+  createdAt: string;
+  updatedAt?: string;
+}
+
 // My Profile (authenticated user's full profile)
 export interface MyProfile {
-  profile: {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    phone: string;
-    bio: string | null;
-    avatarUrl: string | null;
-    createdAt: string;
-  };
+  profile: UserProfile;
   stats: {
     posts: number;
     followers: number;

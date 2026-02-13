@@ -20,7 +20,9 @@ interface ProfileHeaderProps {
   };
   isFollowing?: boolean;
   isMe: boolean;
-  onEditClick?: () => void;
+  onPostsClick?: () => void;
+  onFollowersClick?: () => void;
+  onFollowingClick?: () => void;
 }
 
 export function ProfileHeader({
@@ -32,9 +34,10 @@ export function ProfileHeader({
   stats,
   isFollowing = false,
   isMe,
-  onEditClick,
+  onPostsClick,
+  onFollowersClick,
+  onFollowingClick,
 }: ProfileHeaderProps) {
-  const baseUrl = isMe ? "/me" : `/users/${username}`;
 
   return (
     <div className="space-y-6">
@@ -47,9 +50,11 @@ export function ProfileHeader({
             <h1 className="text-xl font-semibold">@{username}</h1>
             
             {isMe ? (
-              <Button variant="outline" size="sm" onClick={onEditClick}>
-                <Settings className="mr-2 h-4 w-4" />
-                Edit Profile
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/me/edit">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Edit Profile
+                </Link>
               </Button>
             ) : (
               <FollowButton username={username} isFollowing={isFollowing} />
@@ -58,18 +63,27 @@ export function ProfileHeader({
 
           {/* Stats */}
           <div className="flex gap-6 text-sm">
-            <Link href={`${baseUrl}/posts`} className="hover:underline">
+            <button 
+              onClick={onPostsClick}
+              className="hover:underline flex items-center gap-1"
+            >
               <span className="font-semibold">{stats.post}</span>{" "}
               <span className="text-muted-foreground">posts</span>
-            </Link>
-            <Link href={`${baseUrl}/followers`} className="hover:underline">
+            </button>
+            <button 
+              onClick={onFollowersClick}
+              className="hover:underline flex items-center gap-1"
+            >
               <span className="font-semibold">{stats.followers}</span>{" "}
               <span className="text-muted-foreground">followers</span>
-            </Link>
-            <Link href={`${baseUrl}/following`} className="hover:underline">
+            </button>
+            <button 
+              onClick={onFollowingClick}
+              className="hover:underline flex items-center gap-1"
+            >
               <span className="font-semibold">{stats.following}</span>{" "}
               <span className="text-muted-foreground">following</span>
-            </Link>
+            </button>
           </div>
 
           {/* Bio */}

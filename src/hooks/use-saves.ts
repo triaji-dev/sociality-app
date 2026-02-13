@@ -4,31 +4,9 @@ import { useMutation, useQueryClient, InfiniteData } from "@tanstack/react-query
 import { saveService } from "@/services";
 import { postKeys } from "./use-posts";
 import { Post, PaginatedResponse } from "@/types";
+import { updatePostInInfiniteData, InfinitePostData } from "@/lib/query-utils";
 
-type InfinitePostData = InfiniteData<PaginatedResponse<Post>>;
 
-function updatePostInInfiniteData(
-  data: InfinitePostData | undefined,
-  postId: number,
-  updater: (post: Post) => Post,
-): InfinitePostData | undefined {
-  if (!data) return data;
-  return {
-    ...data,
-    pages: data.pages.map((page) => {
-      if (!page.data) return page;
-      return {
-        ...page,
-        data: {
-          ...page.data,
-          items: page.data.items.map((post) =>
-            post.id === postId ? updater(post) : post,
-          ),
-        },
-      };
-    }),
-  };
-}
 
 export function useToggleSave() {
   const queryClient = useQueryClient();
