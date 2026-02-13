@@ -7,10 +7,8 @@ import { ProfileHeader, UserListDialog } from "@/components/users";
 import { PostGrid } from "@/components/posts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageLoader, ErrorState } from "@/components/shared";
-import { EditProfileDialog } from "./edit-profile-dialog";
 
 function ProfileContent() {
-  const [editOpen, setEditOpen] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");

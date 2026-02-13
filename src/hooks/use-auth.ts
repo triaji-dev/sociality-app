@@ -40,7 +40,7 @@ export function useLogin() {
         
         // Check for returnTo param
         const params = new URLSearchParams(window.location.search);
-        const returnTo = params.get("returnTo") || "/feed";
+        const returnTo = params.get("returnTo") || "/timeline";
         router.push(returnTo);
       } else {
         toast.error(response.message || "Login failed");

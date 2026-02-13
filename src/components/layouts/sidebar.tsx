@@ -7,12 +7,9 @@ import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
 
 const navItems = [
-  { href: "/feed", label: "Feed", icon: Home, requiresAuth: true },
-  { href: "/explore", label: "Explore", icon: Compass, requiresAuth: false },
+  { href: "/timeline", label: "Timeline", icon: Home, requiresAuth: true },
   { href: "/posts/new", label: "Create", icon: PlusSquare, requiresAuth: true },
-  { href: "/users/search", label: "Search", icon: Users, requiresAuth: false },
   { href: "/me", label: "Profile", icon: User, requiresAuth: true },
-  { href: "/me/saved", label: "Saved", icon: Bookmark, requiresAuth: true },
 ];
 
 export function Sidebar() {

@@ -41,7 +41,7 @@ export function CreatePostForm() {
       { image: data.image, caption: data.caption },
       {
         onSuccess: () => {
-          router.push("/feed");
+          router.push("/timeline");
         },
       }
     );

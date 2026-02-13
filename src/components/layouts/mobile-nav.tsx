@@ -7,8 +7,7 @@ import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
 
 const mobileNavItems = [
-  { href: "/feed", label: "Feed", icon: Home, requiresAuth: true, fallbackHref: "/explore" },
-  { href: "/explore", label: "Explore", icon: Compass, requiresAuth: false },
+  { href: "/timeline", label: "Timeline", icon: Home, requiresAuth: true, fallbackHref: "/timeline" },
   { href: "/posts/new", label: "Create", icon: PlusSquare, requiresAuth: true, fallbackHref: "/login" },
   { href: "/me", label: "Profile", icon: User, requiresAuth: true, fallbackHref: "/login" },
 ];

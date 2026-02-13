@@ -45,8 +45,9 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
   const deletePost = useDeletePost();
 
   const [isExpanded, setIsExpanded] = useState(showFullCaption);
+  const caption = post.caption || "";
   const captionLimit = 150;
-  const shouldTruncate = !showFullCaption && post.caption.length > captionLimit;
+  const shouldTruncate = !showFullCaption && caption.length > captionLimit;
 
   const handleDelete = () => {
     deletePost.mutate(post.id, {
@@ -114,7 +115,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
           onCommentClick={() => router.push(`/posts/${post.id}`)}
         />
 
-        {post.caption && (
+        {caption && (
           <div className="text-sm leading-snug">
             <Link
               href={`/users/${post.author.username}`}
@@ -124,8 +125,8 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
             </Link>{" "}
             <span className="text-muted-foreground">
               {shouldTruncate && !isExpanded
-                ? post.caption.slice(0, captionLimit) + "..."
-                : post.caption}
+                ? caption.slice(0, captionLimit) + "..."
+                : caption}
             </span>
             {shouldTruncate && !isExpanded && (
               <button
