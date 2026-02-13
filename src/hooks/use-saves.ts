@@ -1,9 +1,34 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, InfiniteData } from "@tanstack/react-query";
 import { saveService } from "@/services";
 import { postKeys } from "./use-posts";
-import { Post } from "@/types";
+import { Post, PaginatedResponse } from "@/types";
+
+type InfinitePostData = InfiniteData<PaginatedResponse<Post>>;
+
+function updatePostInInfiniteData(
+  data: InfinitePostData | undefined,
+  postId: number,
+  updater: (post: Post) => Post,
+): InfinitePostData | undefined {
+  if (!data) return data;
+  return {
+    ...data,
+    pages: data.pages.map((page) => {
+      if (!page.data) return page;
+      return {
+        ...page,
+        data: {
+          ...page.data,
+          items: page.data.items.map((post) =>
+            post.id === postId ? updater(post) : post,
+          ),
+        },
+      };
+    }),
+  };
+}
 
 export function useToggleSave() {
   const queryClient = useQueryClient();
@@ -17,34 +42,47 @@ export function useToggleSave() {
       }
     },
     onMutate: async ({ postId, isSaved }) => {
-      await queryClient.cancelQueries({ queryKey: postKeys.detail(postId) });
+      await queryClient.cancelQueries({ queryKey: postKeys.all });
 
-      const previousPost = queryClient.getQueryData(postKeys.detail(postId));
+      const previousFeed = queryClient.getQueryData<InfinitePostData>(postKeys.feedInfinite());
+      const previousExplore = queryClient.getQueryData<InfinitePostData>(postKeys.exploreInfinite());
+      const previousDetail = queryClient.getQueryData(postKeys.detail(postId));
 
-      // Optimistic update
-      queryClient.setQueryData(postKeys.detail(postId), (old: { success: boolean; data: Post | null } | undefined) => {
-        if (!old?.data) return old;
-        return {
-          ...old,
-          data: {
-            ...old.data,
-            savedByMe: !isSaved,
-          },
-        };
-      });
+      const updater = (post: Post): Post => ({ ...post, savedByMe: !isSaved });
 
-      return { previousPost };
+      queryClient.setQueryData<InfinitePostData>(
+        postKeys.feedInfinite(),
+        (old) => updatePostInInfiniteData(old, postId, updater),
+      );
+      queryClient.setQueryData<InfinitePostData>(
+        postKeys.exploreInfinite(),
+        (old) => updatePostInInfiniteData(old, postId, updater),
+      );
+      queryClient.setQueryData(
+        postKeys.detail(postId),
+        (old: { success: boolean; data: Post | null } | undefined) => {
+          if (!old?.data) return old;
+          return { ...old, data: updater(old.data) };
+        },
+      );
+
+      return { previousFeed, previousExplore, previousDetail };
     },
     onError: (err, { postId }, context) => {
-      if (context?.previousPost) {
-        queryClient.setQueryData(postKeys.detail(postId), context.previousPost);
+      if (context?.previousFeed) {
+        queryClient.setQueryData(postKeys.feedInfinite(), context.previousFeed);
+      }
+      if (context?.previousExplore) {
+        queryClient.setQueryData(postKeys.exploreInfinite(), context.previousExplore);
+      }
+      if (context?.previousDetail) {
+        queryClient.setQueryData(postKeys.detail(postId), context.previousDetail);
       }
       console.error("Toggle save error:", err);
     },
-    onSettled: (_, __, { postId }) => {
-      queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) });
-      queryClient.invalidateQueries({ queryKey: postKeys.feedInfinite() });
-      queryClient.invalidateQueries({ queryKey: postKeys.exploreInfinite() });
+    onSettled: () => {
+      // Only invalidate saved list — not post queries, because the API
+      // doesn't return savedByMe so refetch would overwrite our optimistic state
       queryClient.invalidateQueries({ queryKey: ["me", "saved"] });
     },
   });

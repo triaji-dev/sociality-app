@@ -55,8 +55,8 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
+    <Card className="gap-0 overflow-hidden">
+      <CardHeader className="flex-row items-center justify-between space-y-0 px-4 py-3">
         <Link
           href={isOwner ? "/me" : `/users/${post.author.username}`}
           className="flex items-center gap-3"
@@ -67,7 +67,9 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
             size="md"
           />
           <div>
-            <p className="font-semibold text-sm">{post.author.username}</p>
+            <p className="text-sm font-semibold leading-tight">
+              {post.author.username}
+            </p>
             <p className="text-xs text-muted-foreground">
               {dayjs(post.createdAt).fromNow()}
             </p>
@@ -102,7 +104,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
         />
       </Link>
 
-      <CardContent className="pt-4 space-y-3">
+      <CardContent className="space-y-2 px-4 py-3">
         <PostActions
           postId={post.id}
           likeCount={post.likeCount}
@@ -113,8 +115,11 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
         />
 
         {post.caption && (
-          <div className="text-sm">
-            <Link href={`/users/${post.author.username}`} className="font-semibold hover:underline">
+          <div className="text-sm leading-snug">
+            <Link
+              href={`/users/${post.author.username}`}
+              className="font-semibold hover:underline"
+            >
               {post.author.username}
             </Link>{" "}
             <span className="text-muted-foreground">
@@ -125,7 +130,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
             {shouldTruncate && !isExpanded && (
               <button
                 onClick={() => setIsExpanded(true)}
-                className="text-muted-foreground hover:text-foreground ml-1"
+                className="ml-1 text-muted-foreground hover:text-foreground"
               >
                 more
               </button>
@@ -136,7 +141,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
         {post.commentCount > 0 && (
           <Link
             href={`/posts/${post.id}`}
-            className="text-sm text-muted-foreground hover:underline block"
+            className="block text-sm text-muted-foreground/80 hover:text-muted-foreground"
           >
             View all {post.commentCount} comments
           </Link>
@@ -148,7 +153,8 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete post?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your post.
+              This action cannot be undone. This will permanently delete your
+              post.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

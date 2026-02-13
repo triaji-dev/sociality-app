@@ -1,8 +1,8 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery, InfiniteData } from "@tanstack/react-query";
 import { postService } from "@/services";
-import { CreatePostRequest, Post } from "@/types";
+import { CreatePostRequest, Post, PaginatedResponse } from "@/types";
 import { toast } from "sonner";
 
 export const postKeys = {
@@ -41,10 +41,37 @@ export function usePosts() {
 }
 
 export function usePost(id: number) {
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: postKeys.detail(id),
     queryFn: () => postService.getPost(id),
     enabled: !!id,
+    initialData: () => {
+      // Try to find the post in the feed cache
+      const feedData = queryClient.getQueryData<InfiniteData<PaginatedResponse<Post>>>(postKeys.feedInfinite());
+      const feedPost = feedData?.pages.flatMap((page) => page.data?.items ?? []).find((p) => p.id === id);
+
+      if (feedPost) {
+        return { success: true, message: "From cache", data: feedPost };
+      }
+
+      // Try to find the post in the explore cache
+      const exploreData = queryClient.getQueryData<InfiniteData<PaginatedResponse<Post>>>(postKeys.exploreInfinite());
+      const explorePost = exploreData?.pages.flatMap((page) => page.data?.items ?? []).find((p) => p.id === id);
+
+      if (explorePost) {
+        return { success: true, message: "From cache", data: explorePost };
+      }
+
+      return undefined;
+    },
+    initialDataUpdatedAt: () => {
+      // Use the query client's last update time for the source queries
+      const feedState = queryClient.getQueryState(postKeys.feedInfinite());
+      const exploreState = queryClient.getQueryState(postKeys.exploreInfinite());
+      return Math.max(feedState?.dataUpdatedAt || 0, exploreState?.dataUpdatedAt || 0);
+    },
   });
 }
 

@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { followService } from "@/services";
+import { postKeys } from "./use-posts";
 import { toast } from "sonner";
 
 export const followKeys = {
@@ -22,10 +23,9 @@ export function useToggleFollow() {
     onSuccess: (response, { username, isFollowing }) => {
       if (response.success) {
         toast.success(isFollowing ? "Unfollowed" : "Following");
-        // Invalidate related queries
         queryClient.invalidateQueries({ queryKey: ["users", username] });
         queryClient.invalidateQueries({ queryKey: ["me"] });
-        queryClient.invalidateQueries({ queryKey: ["feed"] });
+        queryClient.invalidateQueries({ queryKey: postKeys.feedInfinite() });
       } else {
         toast.error(response.message || "Action failed");
       }

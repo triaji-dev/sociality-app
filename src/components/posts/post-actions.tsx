@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Heart, MessageCircle, Bookmark, Share2 } from "lucide-react";
 import { useToggleLike, useToggleSave } from "@/hooks";
+import { LikersDialog } from "./likers-dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,39 +19,78 @@ interface PostActionsProps {
 
 export function PostActions({
   postId,
-  likeCount,
+  likeCount: initialLikeCount,
   commentCount,
-  likedByMe,
-  savedByMe = false,
+  likedByMe: initialLikedByMe,
+  savedByMe: initialSavedByMe = false,
   onCommentClick,
   onLikersClick,
 }: PostActionsProps) {
+  const [liked, setLiked] = useState(initialLikedByMe);
+  const [saved, setSaved] = useState(initialSavedByMe);
+  const [currentLikeCount, setCurrentLikeCount] = useState(initialLikeCount);
+  const [showLikers, setShowLikers] = useState(false);
+
+  // Sync with parent props when they change (e.g. from query refetch)
+  useEffect(() => { setLiked(initialLikedByMe); }, [initialLikedByMe]);
+  useEffect(() => { setSaved(initialSavedByMe); }, [initialSavedByMe]);
+  useEffect(() => { setCurrentLikeCount(initialLikeCount); }, [initialLikeCount]);
+
   const toggleLike = useToggleLike();
   const toggleSave = useToggleSave();
 
   const handleLike = () => {
-    toggleLike.mutate({ postId, isLiked: likedByMe });
+    const wasLiked = liked;
+    setLiked(!wasLiked);
+    setCurrentLikeCount((c) => (wasLiked ? c - 1 : c + 1));
+
+    toggleLike.mutate(
+      { postId, isLiked: wasLiked },
+      {
+        onSuccess: (response) => {
+          if (response.data) {
+            setLiked(response.data.liked);
+            setCurrentLikeCount(response.data.likeCount);
+          }
+        },
+        onError: () => {
+          setLiked(wasLiked);
+          setCurrentLikeCount((c) => (wasLiked ? c + 1 : c - 1));
+        },
+      },
+    );
   };
 
   const handleSave = () => {
-    toggleSave.mutate({ postId, isSaved: savedByMe });
+    const wasSaved = saved;
+    setSaved(!wasSaved);
+
+    toggleSave.mutate(
+      { postId, isSaved: wasSaved },
+      {
+        onError: () => {
+          setSaved(wasSaved);
+        },
+      },
+    );
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1">
+        <div className="-ml-2 flex items-center">
           <Button
             variant="ghost"
             size="icon"
+            className="h-9 w-9 hover:text-red-500"
             onClick={handleLike}
-            className="hover:text-red-500"
+            disabled={toggleLike.isPending}
           >
             <Heart
               className={cn(
-                "h-6 w-6 transition-all",
-                likedByMe && "fill-red-500 text-red-500",
-                toggleLike.isPending && "opacity-50"
+                "h-5 w-5 transition-all",
+                liked && "fill-red-500 text-red-500",
+                toggleLike.isPending && "opacity-50",
               )}
             />
           </Button>
@@ -57,38 +98,50 @@ export function PostActions({
           <Button
             variant="ghost"
             size="icon"
+            className="h-9 w-9"
             onClick={onCommentClick}
           >
-            <MessageCircle className="h-6 w-6" />
+            <MessageCircle className="h-5 w-5" />
           </Button>
 
-          <Button variant="ghost" size="icon">
-            <Share2 className="h-6 w-6" />
+          <Button variant="ghost" size="icon" className="h-9 w-9">
+            <Share2 className="h-5 w-5" />
           </Button>
         </div>
 
         <Button
           variant="ghost"
           size="icon"
+          className="-mr-2 h-9 w-9"
           onClick={handleSave}
+          disabled={toggleSave.isPending}
         >
           <Bookmark
             className={cn(
-              "h-6 w-6 transition-all",
-              savedByMe && "fill-current",
-              toggleSave.isPending && "opacity-50"
+              "h-5 w-5 transition-all",
+              saved && "fill-current",
+              toggleSave.isPending && "opacity-50",
             )}
           />
         </Button>
       </div>
 
-      {likeCount > 0 && (
+      {currentLikeCount > 0 && (
         <button
-          onClick={onLikersClick}
+          onClick={() => setShowLikers(true)}
           className="text-sm font-semibold hover:underline"
         >
-          {likeCount.toLocaleString()} {likeCount === 1 ? "like" : "likes"}
+          {currentLikeCount.toLocaleString()}{" "}
+          {currentLikeCount === 1 ? "like" : "likes"}
         </button>
+      )}
+
+      {showLikers && (
+        <LikersDialog
+          postId={postId}
+          open={showLikers}
+          onOpenChange={setShowLikers}
+        />
       )}
     </div>
   );

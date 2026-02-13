@@ -15,7 +15,7 @@ export interface Post {
   likeCount: number;
   commentCount: number;
   likedByMe: boolean;
-  savedByMe?: boolean; // client-side only, used for optimistic save UI
+  savedByMe?: boolean;
   createdAt: string;
 }
 

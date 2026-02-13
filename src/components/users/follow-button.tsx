@@ -1,8 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useToggleFollow } from "@/hooks";
 import { Button } from "@/components/ui/button";
-import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { cn } from "@/lib/utils";
 
 interface FollowButtonProps {
@@ -12,13 +12,46 @@ interface FollowButtonProps {
   className?: string;
 }
 
-export function FollowButton({ username, isFollowing, size = "default", className }: FollowButtonProps) {
+export function FollowButton({ 
+  username, 
+  isFollowing: initialIsFollowing, 
+  size = "default", 
+  className,
+}: FollowButtonProps) {
+  const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const toggleFollow = useToggleFollow();
+
+  // Sync with parent props when they change (e.g. from query refetch)
+  useEffect(() => {
+    setIsFollowing(initialIsFollowing);
+  }, [initialIsFollowing]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleFollow.mutate({ username, isFollowing });
+
+    // Optimistic toggle
+    const newIsFollowing = !isFollowing;
+    setIsFollowing(newIsFollowing);
+
+    toggleFollow.mutate(
+      { username, isFollowing: !newIsFollowing }, // send CURRENT server state (which is !new)
+      {
+        onSuccess: (response) => {
+          if (response.success && response.data) {
+             // Server confirms new state
+             setIsFollowing(response.data.following);
+          } else {
+             // Revert on API logic failure 
+             setIsFollowing(!newIsFollowing); 
+          }
+        },
+        onError: () => {
+          // Revert on network/server error
+          setIsFollowing(!newIsFollowing);
+        },
+      }
+    );
   };
 
   return (
@@ -33,13 +66,7 @@ export function FollowButton({ username, isFollowing, size = "default", classNam
         className
       )}
     >
-      {toggleFollow.isPending ? (
-        <LoadingSpinner size="sm" />
-      ) : isFollowing ? (
-        "Following"
-      ) : (
-        "Follow"
-      )}
+      {isFollowing ? "Following" : "Follow"}
     </Button>
   );
 }
