@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAuthStore } from "@/stores/auth-store";
+import { usePostModalStore } from "@/stores/post-modal-store";
 import { useDeletePost } from "@/hooks";
 import type { Post } from "@/types";
 
@@ -39,6 +40,7 @@ interface PostCardProps {
 
 export function PostCard({ post, showFullCaption = false }: PostCardProps) {
   const router = useRouter();
+  const { openPost } = usePostModalStore();
   const currentUser = useAuthStore((state) => state.user);
   const isOwner = currentUser?.id === post.author.id;
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -97,13 +99,16 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
         )}
       </CardHeader>
 
-      <Link href={`/posts/${post.id}`}>
+      <div
+        className="cursor-pointer"
+        onClick={() => openPost(post.id)}
+      >
         <img
           src={post.imageUrl}
           alt={post.caption || "Post image"}
           className="aspect-square w-full object-cover"
         />
-      </Link>
+      </div>
 
       <CardContent className="space-y-2 px-4 py-3">
         <PostActions
@@ -112,7 +117,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
           commentCount={post.commentCount}
           likedByMe={post.likedByMe}
           savedByMe={post.savedByMe}
-          onCommentClick={() => router.push(`/posts/${post.id}`)}
+          onCommentClick={() => openPost(post.id)}
         />
 
         {caption && (
@@ -140,12 +145,12 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
         )}
 
         {post.commentCount > 0 && (
-          <Link
-            href={`/posts/${post.id}`}
-            className="block text-sm text-muted-foreground/80 hover:text-muted-foreground"
+          <button
+            onClick={() => openPost(post.id)}
+            className="block text-sm text-muted-foreground/80 hover:text-muted-foreground text-left"
           >
             View all {post.commentCount} comments
-          </Link>
+          </button>
         )}
       </CardContent>
 

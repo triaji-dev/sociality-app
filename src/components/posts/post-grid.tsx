@@ -5,6 +5,7 @@ import { Heart, MessageCircle } from "lucide-react";
 import { InfiniteScroll, EmptyState, PageLoader, ErrorState } from "@/components/shared";
 import { ImageOff } from "lucide-react";
 import type { Post, SavedPost, LikedPost } from "@/types";
+import { usePostModalStore } from "@/stores/post-modal-store";
 
 interface PostGridProps {
   posts: (Post | SavedPost | LikedPost)[];
@@ -29,6 +30,8 @@ export function PostGrid({
   error,
   onRetry,
 }: PostGridProps) {
+  const { openPost } = usePostModalStore();
+
   if (isLoading) {
     return <PageLoader />;
   }
@@ -55,10 +58,10 @@ export function PostGrid({
     >
       <div className="grid grid-cols-3 gap-1 sm:gap-2">
         {posts.map((post) => (
-          <Link
+          <div
             key={post.id}
-            href={`/posts/${post.id}`}
-            className="group relative aspect-square overflow-hidden bg-muted"
+            onClick={() => openPost(post.id)}
+            className="group relative aspect-square overflow-hidden bg-muted cursor-pointer"
           >
             <img
               src={post.imageUrl}
@@ -79,7 +82,7 @@ export function PostGrid({
                 </div>
               </div>
             )}
-          </Link>
+          </div>
         ))}
       </div>
     </InfiniteScroll>

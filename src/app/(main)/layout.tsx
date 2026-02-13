@@ -1,4 +1,5 @@
 import { Navbar, Sidebar, MobileNav } from "@/components/layouts";
+import { PostDetailModal } from "@/components/posts/post-detail-modal";
 
 export default function MainLayout({
   children,
@@ -17,6 +18,7 @@ export default function MainLayout({
         </main>
       </div>
       <MobileNav />
+      <PostDetailModal />
     </div>
   );
 }
