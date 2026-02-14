@@ -50,7 +50,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
       {/* Profile Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className='flex items-center gap-3 hover:opacity-80 transition-opacity focus:outline-none'
+        className='cursor-pointer flex items-center gap-3 hover:opacity-90 transition-all hover:scale-105 ease-in-out duration-200 focus:outline-none'
       >
         <UserAvatar user={user} size='md' />
         <span className='text-foreground text-sm font-medium hidden sm:block'>
@@ -60,11 +60,11 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className='absolute right-0 top-full mt-2 w-56 bg-background border border-border rounded-xl shadow-lg py-2 z-50 animate-in slide-in-from-top-2 duration-200'>
+        <div className='absolute right-0 top-full mt-2 w-56 bg-background border border-border rounded-xl shadow-lg py-2 z-50 animate-in fade-in zoom-in-95 slide-in-from-top-4 duration-200 ease-out fill-mode-forwards'>
           {/* Profile Link */}
           <Link
             href='/profile'
-            className='flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent transition-colors'
+            className='flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent/50 transition-colors'
             onClick={() => setIsOpen(false)}
           >
             <User className='h-4 w-4 text-muted-foreground' />
@@ -74,7 +74,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
           {/* Edit Profile Link */}
           <Link
             href='/profile/edit'
-            className='flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent transition-colors'
+            className='flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent/50 transition-colors'
             onClick={() => setIsOpen(false)}
           >
             <UserPen className='h-4 w-4 text-muted-foreground' />
@@ -85,7 +85,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
           {mounted && (
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className='flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent transition-colors w-full text-left'
+              className='flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent/50 transition-colors w-full text-left cursor-pointer'
             >
               {theme === 'dark' ? (
                 <>
@@ -107,7 +107,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className='flex items-center gap-3 px-4 py-3 text-sm text-red hover:bg-accent transition-colors w-full text-left'
+            className='flex items-center gap-3 px-4 py-3 text-sm text-red hover:bg-accent/50 transition-colors w-full text-left cursor-pointer'
           >
             <LogOut className='h-4 w-4' />
             <span className='font-medium'>Logout</span>

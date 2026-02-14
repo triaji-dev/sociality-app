@@ -53,7 +53,7 @@ export function DesktopSearchDropdown({
   return (
     <div
       ref={dropdownRef}
-      className='absolute left-1/2 transform -translate-x-1/2 top-[60px] w-[491px] h-auto max-h-[384px] bg-popover border border-border rounded-[20px] p-5 flex flex-col gap-4 overflow-y-auto z-50'
+      className='absolute left-1/2 transform -translate-x-1/2 top-[60px] w-[491px] h-auto max-h-[384px] bg-background border border-border rounded-[20px] py-2 flex flex-col gap-2 overflow-y-auto z-50 animate-in fade-in slide-in-from-top-4 duration-200 ease-out fill-mode-forwards minimal-scrollbar'
       style={{
         boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.2)',
       }}
@@ -63,12 +63,12 @@ export function DesktopSearchDropdown({
           <div className='text-gray-400 text-sm'>Searching...</div>
         </div>
       ) : users?.data?.items && users.data.items.length > 0 ? (
-        users.data.items.slice(0, 5).map((user: UserSearchResult) => (
+        users.data.items.map((user: UserSearchResult) => (
           <Link
             key={user.id}
             href={`/profile/${user.username}`}
             onClick={onClose}
-            className='flex flex-row items-center gap-2 hover:opacity-80 transition-opacity'
+            className='flex flex-row items-center gap-3 px-4 py-2 hover:bg-accent/50 transition-all cursor-pointer'
           >
             {/* User Avatar */}
             <div className='w-12 h-12 shrink-0'>

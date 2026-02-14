@@ -28,7 +28,7 @@ export function Navbar() {
 
   // Fetch updated user data if authenticated to ensure freshness
   useQuery({
-    queryKey: ['me'],
+    queryKey: ['profile'],
     queryFn: async () => {
         const response = await userService.getMe();
         if (response.data) {
@@ -45,8 +45,8 @@ export function Navbar() {
     <header className='fixed top-0 left-0 w-full h-16 md:h-20 bg-background/80 backdrop-blur-md border-b border-border flex flex-row justify-between items-center px-4 md:px-[120px] gap-4 md:gap-[124px] z-50'>
       {/* Logo Section */}
       <Link
-        href='/feed'
-        className='flex items-center gap-3 hover:opacity-80 transition-opacity'
+        href='/timeline'
+        className='flex items-center gap-3 hover:opacity-90 transition-all hover:scale-105 ease-in-out duration-200'
       >
         <Image
           src='/logos/main-logo.svg'

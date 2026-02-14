@@ -286,3 +286,35 @@
 .btn-shine:hover::after {
   animation: shine 0.3s ease-in-out;
 }
+
+/* Minimalist Scrollbar Utility */
+.minimal-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-button {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-corner {
+  display: none !important;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin-block: 16px; 
+}
+
+.minimal-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 20px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-right-width: 2px;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
