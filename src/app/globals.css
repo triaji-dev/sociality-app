@@ -318,3 +318,28 @@
 .minimal-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
 }
+
+/* Sonner toast type accent colors */
+[data-sonner-toast][data-type="success"] {
+  border-color: var(--color-green) !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-icon] {
+  color: var(--color-green) !important;
+}
+
+[data-sonner-toast][data-type="error"] {
+  border-color: var(--color-red) !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-icon] {
+  color: var(--color-red) !important;
+}
+
+[data-sonner-toast][data-type="warning"] {
+  border-color: var(--color-yellow) !important;
+}
+
+[data-sonner-toast][data-type="warning"] [data-icon] {
+  color: var(--color-yellow) !important;
+}

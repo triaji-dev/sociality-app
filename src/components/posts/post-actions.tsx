@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Heart, Bookmark } from "lucide-react";
 import { useToggleLike, useToggleSave } from "@/hooks";
 import { LikersDialog } from "./likers-dialog";
+import { ShareModal } from "./share-modal";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ export function PostActions({
   const [saved, setSaved] = useState(initialSavedByMe);
   const [currentLikeCount, setCurrentLikeCount] = useState(initialLikeCount);
   const [showLikers, setShowLikers] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   // Sync with parent props when they change (e.g. from query refetch)
   useEffect(() => { setLiked(initialLikedByMe); }, [initialLikedByMe]);
@@ -52,7 +54,11 @@ export function PostActions({
           if (response.data) {
             setLiked(response.data.liked);
             setCurrentLikeCount(response.data.likeCount);
-            toast.success(response.data.liked ? "Liked" : "Unliked");
+            if (response.data.liked) {
+              toast.success("Liked");
+            } else {
+              toast.error("Unliked");
+            }
           }
         },
         onError: () => {
@@ -72,7 +78,11 @@ export function PostActions({
       { postId, isSaved: wasSaved },
       {
         onSuccess: () => {
-             toast.success(!wasSaved ? "Saved" : "Unsaved");
+             if (!wasSaved) {
+               toast.success("Saved");
+             } else {
+               toast.error("Unsaved");
+             }
         },
         onError: () => {
           setSaved(wasSaved);
@@ -116,20 +126,18 @@ export function PostActions({
           onClick={onCommentClick}
           className="group flex flex-row items-center gap-1.5 cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
         >
-          <img src="/icons/comment-icon.svg" alt="Comment" className="w-6 h-6 transition-transform duration-200" />
+          <img src="/icons/comment-icon.svg" alt="Comment" className="w-6 h-6 transition-transform duration-200 dark:invert-0 invert" />
           <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em] transition-colors duration-200">
             {commentCount}
           </span>
         </button>
 
-        {/* Share Button (Placeholder for now) */}
+        {/* Share Button */}
         <button
+          onClick={() => setShowShare(true)}
           className="group flex flex-row items-center gap-1.5 cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
         >
-          <img src="/icons/share-icon.svg" alt="Share" className="w-6 h-6 transition-transform duration-200" />
-          <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em] transition-colors duration-200">
-            0
-          </span>
+          <img src="/icons/share-icon.svg" alt="Share" className="w-6 h-6 transition-transform duration-200 dark:invert-0 invert" />
         </button>
       </div>
 
@@ -155,6 +163,13 @@ export function PostActions({
           onOpenChange={setShowLikers}
         />
       )}
+
+      <ShareModal
+        isOpen={showShare}
+        onClose={() => setShowShare(false)}
+        url={typeof window !== "undefined" ? `${window.location.origin}/posts/${postId}` : ""}
+        title="Check out this post on Sociality!"
+      />
     </div>
   );
 }

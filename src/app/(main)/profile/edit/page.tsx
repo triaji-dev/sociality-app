@@ -123,7 +123,7 @@ function EditProfileContent() {
           <div className="flex flex-row items-center gap-2 flex-1">
             <button
               onClick={handleBack}
-              className="w-6 h-6 flex items-center justify-center hover:bg-accent rounded-full transition-colors"
+              className="w-6 h-6 flex items-center justify-center hover:bg-accent rounded-full transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4 text-foreground" strokeWidth={1.875} />
             </button>
@@ -148,7 +148,7 @@ function EditProfileContent() {
         <div className="hidden md:flex flex-row items-center gap-3 mb-8">
           <button
             onClick={handleBack}
-            className="w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors"
+            className="w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 text-foreground" strokeWidth={2.5} />
           </button>

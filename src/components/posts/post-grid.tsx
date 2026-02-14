@@ -6,6 +6,7 @@ import { InfiniteScroll, EmptyState, PageLoader, ErrorState } from "@/components
 import { ImageOff } from "lucide-react";
 import type { Post, SavedPost, LikedPost } from "@/types";
 import { usePostModalStore } from "@/stores/post-modal-store";
+import { PostImage } from "./post-image";
 
 interface PostGridProps {
   posts: (Post | SavedPost | LikedPost)[];
@@ -63,7 +64,7 @@ export function PostGrid({
             onClick={() => openPost(post.id)}
             className="group relative aspect-square overflow-hidden bg-muted cursor-pointer"
           >
-            <img
+            <PostImage
               src={post.imageUrl}
               alt={post.caption || "Post"}
               className="h-full w-full object-cover transition-transform group-hover:scale-105"

@@ -107,7 +107,7 @@ export function Navbar() {
       <div className='flex items-center gap-4 md:gap-3'>
         {/* Mobile Search Icon - Only visible on mobile */}
         <button
-          className='md:hidden p-2 hover:opacity-80 transition-opacity'
+          className='md:hidden p-2 hover:opacity-80 transition-opacity cursor-pointer'
           onClick={() => setIsSearchModalOpen(true)}
         >
           <Search className='h-5 w-5 text-foreground' strokeWidth={1.25} />
@@ -125,7 +125,7 @@ export function Navbar() {
           <>
             {/* Mobile Menu Icon - Only visible on mobile when logged out */}
             <button
-              className='md:hidden p-2 hover:opacity-80 transition-opacity'
+              className='md:hidden p-2 hover:opacity-80 transition-opacity cursor-pointer'
               onClick={() => setIsMenuDropdownOpen(!isMenuDropdownOpen)}
             >
               <Menu className='h-6 w-6 text-foreground' strokeWidth={1.5} />

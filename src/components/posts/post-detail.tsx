@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { UserAvatar } from "@/components/users/user-avatar";
 import { PostActions } from "./post-actions";
+import { PostImage } from "./post-image";
 import Link from "next/link";
 import type { Post } from "@/types";
 
@@ -20,7 +21,7 @@ export function PostDetail({ post, onCommentClick, onLikersClick }: PostDetailPr
     <div className="grid md:grid-cols-2 gap-4 md:gap-0 overflow-hidden rounded-lg border bg-card">
       {/* Image */}
       <div className="bg-black flex items-center justify-center">
-        <img
+        <PostImage
           src={post.imageUrl}
           alt={post.caption || "Post image"}
           className="max-h-[600px] w-full object-contain"

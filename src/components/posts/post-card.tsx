@@ -8,6 +8,7 @@ import { MoreHorizontal, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UserAvatar } from "@/components/users/user-avatar";
 import { PostActions } from "./post-actions";
+import { PostImage } from "./post-image";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -94,7 +95,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
                     onClick={() => setShowDeleteDialog(true)}
-                    className="text-destructive focus:text-destructive"
+                    className="text-foreground cursor-pointer"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
                     Delete post
@@ -113,7 +114,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
               className="w-full aspect-square relative overflow-hidden rounded-lg bg-muted cursor-pointer hover:opacity-95 transition-opacity"
               style={{ minHeight: '300px' }}
             >
-              <img
+              <PostImage
                 src={post.imageUrl}
                 alt={post.caption || "Post image"}
                 className="w-full h-full object-cover"

@@ -81,7 +81,7 @@ function ProfileContent() {
                   navigator.clipboard.writeText(window.location.href);
                 }
               }}
-              className="w-10 h-10 md:w-12 md:h-12 border border-border rounded-full flex items-center justify-center hover:bg-accent transition-colors"
+              className="w-10 h-10 md:w-12 md:h-12 border border-border rounded-full flex items-center justify-center hover:bg-accent transition-colors cursor-pointer"
             >
               <Image
                 src="/icons/share-icon.svg"
@@ -106,7 +106,7 @@ function ProfileContent() {
           {/* Posts */}
           <button
             onClick={() => setActiveTab("posts")}
-            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity"
+            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity cursor-pointer"
           >
             <div className="text-foreground text-lg md:text-xl font-bold leading-8 md:leading-[34px] tracking-tight">
               {stats.posts}

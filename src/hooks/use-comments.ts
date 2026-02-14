@@ -57,7 +57,7 @@ export function useDeleteComment(postId: number) {
     mutationFn: (commentId: number) => commentService.deleteComment(commentId),
     onSuccess: (response) => {
       if (response.success) {
-        toast.success("Comment deleted");
+        toast.error("Comment deleted");
         queryClient.invalidateQueries({ queryKey: commentKeys.infinite(postId) });
         queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) });
       } else {

@@ -77,7 +77,7 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
           </div>
 
           <SheetClose asChild>
-            <button className='p-2 hover:opacity-80 transition-opacity'>
+            <button className='p-2 hover:opacity-80 transition-opacity cursor-pointer'>
               <X className='h-6 w-6 text-foreground' strokeWidth={2} />
             </button>
           </SheetClose>

@@ -95,7 +95,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
                   navigator.clipboard.writeText(window.location.href);
                 }
               }}
-              className="w-10 h-10 md:w-12 md:h-12 border border-border rounded-full flex items-center justify-center hover:bg-accent transition-colors"
+              className="w-10 h-10 md:w-12 md:h-12 border border-border rounded-full flex items-center justify-center hover:bg-accent transition-colors cursor-pointer"
             >
               <Image
                 src="/icons/share-icon.svg"
@@ -132,7 +132,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
           {/* Followers */}
           <button
             onClick={() => setShowFollowers(true)}
-            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity"
+            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity cursor-pointer"
           >
             <div className="text-foreground text-lg md:text-xl font-bold leading-8 md:leading-[34px] tracking-tight">
               {profile.counts.followers}
@@ -147,7 +147,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
           {/* Following */}
           <button
             onClick={() => setShowFollowing(true)}
-            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity"
+            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity cursor-pointer"
           >
             <div className="text-foreground text-lg md:text-xl font-bold leading-8 md:leading-[34px] tracking-tight">
               {profile.counts.following}
@@ -177,7 +177,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
         <div className="flex flex-row items-center w-full">
           <button
             onClick={() => setActiveTab("posts")}
-            className={`flex-1 flex flex-row justify-center items-center gap-2 md:gap-3 h-12 border-b-2 transition-colors ${
+            className={`flex-1 flex flex-row justify-center items-center gap-2 md:gap-3 h-12 border-b-2 transition-colors cursor-pointer ${
               activeTab === "posts" ? "border-foreground" : "border-border"
             }`}
           >
@@ -205,7 +205,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
 
           <button
             onClick={() => setActiveTab("likes")}
-            className={`flex-1 flex flex-row justify-center items-center gap-2 md:gap-3 h-12 border-b-2 transition-colors ${
+            className={`flex-1 flex flex-row justify-center items-center gap-2 md:gap-3 h-12 border-b-2 transition-colors cursor-pointer ${
               activeTab === "likes" ? "border-foreground" : "border-border"
             }`}
           >

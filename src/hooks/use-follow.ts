@@ -22,7 +22,11 @@ export function useToggleFollow() {
     },
     onSuccess: (response, { username, isFollowing }) => {
       if (response.success) {
-        toast.success(isFollowing ? "Unfollowed" : "Following");
+        if (isFollowing) {
+          toast.error("Unfollowed");
+        } else {
+          toast.success("Following");
+        }
         queryClient.invalidateQueries({ queryKey: ["users", username] });
         queryClient.invalidateQueries({ queryKey: ["me"] });
         queryClient.invalidateQueries({ queryKey: postKeys.feedInfinite() });

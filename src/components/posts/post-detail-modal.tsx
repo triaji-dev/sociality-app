@@ -199,7 +199,7 @@ export function PostDetailModal() {
                   <div className="relative post-menu-container">
                     <button 
                       onClick={() => setShowPostMenu(!showPostMenu)}
-                      className="p-1 hover:bg-gray-900 rounded-full transition-colors"
+                      className="p-1 hover:bg-gray-900 rounded-full transition-colors cursor-pointer"
                     >
                       <MoreHorizontal className="w-5 h-5 text-gray-25" />
                     </button>
@@ -269,7 +269,7 @@ export function PostDetailModal() {
                                   <div className="absolute right-0 top-6 w-24 bg-gray-950 border border-gray-900 rounded-lg shadow-lg z-50 py-1">
                                     <button
                                       onClick={() => deleteComment.mutate(comment.id)}
-                                      className="w-full px-3 py-1.5 text-left text-xs text-red-500 hover:bg-gray-900"
+                                      className="w-full px-3 py-1.5 text-left text-xs text-red-500 hover:bg-gray-900 cursor-pointer"
                                     >
                                       Delete
                                     </button>
@@ -314,7 +314,7 @@ export function PostDetailModal() {
                       {showEmojiPicker && (
                          <div className="absolute bottom-12 left-0 w-[280px] h-[200px] bg-gray-950 border border-gray-900 rounded-xl p-2 grid grid-cols-6 gap-1 overflow-y-auto z-50 shadow-xl">
                             {commonEmojis.map(emoji => (
-                              <button key={emoji} type="button" onClick={() => handleEmojiClick(emoji)} className="text-xl p-1 hover:bg-gray-900 rounded">
+                              <button key={emoji} type="button" onClick={() => handleEmojiClick(emoji)} className="text-xl p-1 hover:bg-gray-900 rounded cursor-pointer">
                                 {emoji}
                               </button>
                             ))}

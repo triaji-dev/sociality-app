@@ -35,7 +35,13 @@ export function PostList({
   emptyAction,
 }: PostListProps) {
   if (isLoading) {
-    return <PostListSkeleton />;
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-full">
+          <PostListSkeleton />
+        </div>
+      </div>
+    );
   }
 
   if (error) {

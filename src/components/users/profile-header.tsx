@@ -65,21 +65,21 @@ export function ProfileHeader({
           <div className="flex gap-6 text-sm">
             <button 
               onClick={onPostsClick}
-              className="hover:underline flex items-center gap-1"
+              className="hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span className="font-semibold">{stats.post}</span>{" "}
               <span className="text-muted-foreground">posts</span>
             </button>
             <button 
               onClick={onFollowersClick}
-              className="hover:underline flex items-center gap-1"
+              className="hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span className="font-semibold">{stats.followers}</span>{" "}
               <span className="text-muted-foreground">followers</span>
             </button>
             <button 
               onClick={onFollowingClick}
-              className="hover:underline flex items-center gap-1"
+              className="hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span className="font-semibold">{stats.following}</span>{" "}
               <span className="text-muted-foreground">following</span>

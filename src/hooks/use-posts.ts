@@ -104,7 +104,7 @@ export function useDeletePost() {
     mutationFn: (id: number) => postService.deletePost(id),
     onSuccess: (response, id) => {
       if (response.success) {
-        toast.success("Post deleted");
+        toast.error("Post deleted");
         queryClient.invalidateQueries({ queryKey: postKeys.feedInfinite() });
         queryClient.invalidateQueries({ queryKey: postKeys.exploreInfinite() });
         queryClient.invalidateQueries({ queryKey: postKeys.detail(id) });

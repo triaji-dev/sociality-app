@@ -61,7 +61,7 @@ export function useLogout() {
   return () => {
     logout();
     queryClient.clear();
-    toast.success("Logged out successfully");
+    toast.info("Logged out successfully");
     router.push("/login");
   };
 }
