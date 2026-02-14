@@ -188,21 +188,101 @@
   background-color: color-mix(in oklch, var(--background), transparent 20%);
   @apply backdrop-blur-md border border-border/50 shadow-sm;
 }
-@utility animate-blob {
-  animation: blob 7s infinite;
+
+@property --svg-stop-1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #5613A3;
 }
 
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
+@property --svg-stop-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #522BC8;
+}
+
+@property --svg-stop-3 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #AC88FF;
+}
+
+@property --svg-stop-4 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #AD3AE7;
+}
+
+.animate-svg-gradient {
+  animation: svg-gradient-shift 10s ease-in-out infinite;
+}
+
+@keyframes svg-gradient-shift {
+  0%, 100% {
+    --svg-stop-1: #5613A3;
+    --svg-stop-2: #522BC8;
+    --svg-stop-3: #AC88FF;
+    --svg-stop-4: #AD3AE7;
   }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
+  25% {
+    --svg-stop-1: #4A108C;
+    --svg-stop-2: #3E1B99;
+    --svg-stop-3: #9A77E6;
+    --svg-stop-4: #9A2DCF;
   }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
+  50% {
+    --svg-stop-1: #6936F2;
+    --svg-stop-2: #7F51F9;
+    --svg-stop-3: #8B5CF6;
+    --svg-stop-4: #D946EF;
   }
-  100% {
-    transform: translate(0px, 0px) scale(1);
+  75% {
+    --svg-stop-1: #385e9b;
+    --svg-stop-2: #6366F1;
+    --svg-stop-3: #93C5FD;
+    --svg-stop-4: #A855F7;
   }
+}
+
+/* Base values for the variables */
+:root {
+  --svg-stop-1: #5613A3;
+  --svg-stop-2: #522BC8;
+  --svg-stop-3: #AC88FF;
+  --svg-stop-4: #AD3AE7;
+}
+
+@keyframes shine {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: none;
+  pointer-events: none;
+}
+
+.btn-shine:hover::after {
+  animation: shine 0.3s ease-in-out;
 }

@@ -63,7 +63,7 @@ export function RegisterForm() {
 
       <div className='relative z-10 flex items-center justify-center h-full px-6 py-4'>
         <div
-          className='w-full max-w-[460px] bg-black/20 border border-gray-900 rounded-2xl flex flex-col items-center py-6 px-8 gap-4'
+          className='w-full max-w-[460px] bg-black/20 border border-gray-900 rounded-2xl flex flex-col items-center py-6 px-6 gap-4'
           style={{ backdropFilter: 'blur(50px)' }}
         >
           <AuthHeader title='Register' />
@@ -179,7 +179,7 @@ export function RegisterForm() {
             <div className='w-full flex flex-col items-center gap-2'>
               <Button
                 type='submit'
-                className='w-full h-9 bg-primary-300 text-gray-25 text-sm font-bold leading-5 tracking-[-0.02em] rounded-full hover:opacity-90 transition-opacity'
+                className='w-full h-12 bg-primary-300 text-gray-25 text-base font-bold leading-[30px] tracking-[-0.02em] rounded-full hover:opacity-90 transition-opacity btn-shine'
                 disabled={registerMutation.isPending}
               >
                 {registerMutation.isPending ? 'Creating account...' : 'Register'}

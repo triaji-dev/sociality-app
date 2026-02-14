@@ -92,7 +92,7 @@ export function LoginForm() {
 
             <Button
               type='submit'
-              className='w-full h-12 bg-primary-300 text-white text-base font-bold leading-[30px] tracking-[-0.02em] rounded-full hover:opacity-90 transition-opacity'
+              className='w-full h-12 bg-primary-300 text-white text-base font-bold leading-[30px] tracking-[-0.02em] rounded-full hover:opacity-90 transition-opacity btn-shine'
               disabled={loginMutation.isPending}
             >
               {loginMutation.isPending ? 'Logging in...' : 'Login'}
