@@ -4,12 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 
 
 export function MobileNav() {
   const pathname = usePathname();
   const { isAuthenticated } = useAuthStore();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navItems = [
     { href: "/timeline", label: "Home", icon: "home", requiresAuth: true, fallbackHref: "/timeline" },
@@ -18,7 +26,7 @@ export function MobileNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-gray-900 h-[82px] flex items-center justify-center">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background h-[82px] flex items-center justify-center">
       <div className="flex w-full justify-between px-8 md:px-0 md:justify-center md:gap-14">
         {navItems.map((item) => {
            const href = item.requiresAuth && !isAuthenticated
@@ -49,7 +57,7 @@ export function MobileNav() {
                     style={{ 
                         filter: isActive 
                             ? (item.icon === 'home' ? 'none' : 'brightness(0) saturate(100%) invert(51%) sepia(73%) saturate(4587%) hue-rotate(245deg) brightness(98%) contrast(93%)')
-                            : 'brightness(0) saturate(100%) invert(100%)'
+                            : (mounted && theme === 'light' ? 'brightness(0) saturate(100%) invert(60%)' : 'brightness(0) saturate(100%) invert(100%)')
                     }}
                   />
                 )}
@@ -62,7 +70,7 @@ export function MobileNav() {
                     "text-xs leading-4 text-center tracking-[-0.02em] w-[94px]",
                      isActive 
                         ? (item.icon === 'home' ? 'text-primary-200 font-bold' : 'text-primary-200 font-normal')
-                        : 'text-gray-25 font-normal'
+                        : 'text-muted-foreground font-normal'
                   )}
                 >
                   {item.label}

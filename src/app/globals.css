@@ -114,7 +114,7 @@
 
   /* Neutrals / Grays */
   --background: var(--color-white);
-  --foreground: var(--color-gray-950);
+  --foreground: var(--color-black);
 
   --card: var(--color-white);
   --card-foreground: var(--color-gray-950);
@@ -147,7 +147,7 @@
 }
 
 .dark {
-  --background: var(--color-gray-950); 
+  --background: var(--color-black); 
   --foreground: var(--color-gray-25);
 
   --card: var(--color-gray-900);

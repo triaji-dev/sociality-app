@@ -42,7 +42,7 @@ export function Navbar() {
   });
 
   return (
-    <header className='fixed top-0 left-0 w-full h-16 md:h-20 bg-black border-b border-gray-900 flex flex-row justify-between items-center px-4 md:px-[120px] gap-4 md:gap-[124px] z-50'>
+    <header className='fixed top-0 left-0 w-full h-16 md:h-20 bg-background/80 backdrop-blur-md border-b border-border flex flex-row justify-between items-center px-4 md:px-[120px] gap-4 md:gap-[124px] z-50'>
       {/* Logo Section */}
       <Link
         href='/feed'
@@ -55,7 +55,7 @@ export function Navbar() {
           height={30}
           className='w-[30px] h-[30px]'
         />
-        <span className='text-white text-xl md:text-lg font-bold md:font-semibold'>
+        <span className='text-foreground text-xl md:text-lg font-bold md:font-semibold'>
           Sociality
         </span>
       </Link>
@@ -80,7 +80,7 @@ export function Navbar() {
                 setIsDesktopDropdownOpen(true);
               }
             }}
-            className='w-full h-full pl-10 pr-4 bg-gray-950 border-gray-900 text-white placeholder-gray-25 focus:border-purple-500 focus:ring-purple-500 rounded-full'
+            className='w-full h-full pl-10 pr-4 bg-muted/50 border-border text-foreground placeholder-muted-foreground focus:border-purple-500 focus:ring-purple-500 rounded-full'
           />
         </div>
 
@@ -102,7 +102,7 @@ export function Navbar() {
           className='md:hidden p-2 hover:opacity-80 transition-opacity'
           onClick={() => setIsSearchModalOpen(true)}
         >
-          <Search className='h-5 w-5 text-white' strokeWidth={1.25} />
+          <Search className='h-5 w-5 text-foreground' strokeWidth={1.25} />
         </button>
 
         {/* Profile Section */}
@@ -120,20 +120,20 @@ export function Navbar() {
               className='md:hidden p-2 hover:opacity-80 transition-opacity'
               onClick={() => setIsMenuDropdownOpen(!isMenuDropdownOpen)}
             >
-              <Menu className='h-6 w-6 text-white' strokeWidth={1.5} />
+              <Menu className='h-6 w-6 text-foreground' strokeWidth={1.5} />
             </button>
 
             {/* Desktop Auth Buttons - Hidden on mobile */}
             <div className='hidden md:flex items-center gap-3'>
               <Link
                 href='/login'
-                className='flex items-center justify-center w-[130px] h-11 border border-gray-900 rounded-full text-gray-25 font-bold text-base leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity'
+                className='flex items-center justify-center w-[130px] h-11 border border-border rounded-full text-foreground font-bold text-base leading-[30px] tracking-[-0.02em] hover:bg-accent transition-colors'
               >
                 Login
               </Link>
               <Link
                 href='/register'
-                className='flex items-center justify-center w-[130px] h-11 bg-primary-300 rounded-full text-gray-25 font-bold text-base leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity'
+                className='flex items-center justify-center w-[130px] h-11 bg-primary-300 rounded-full text-white font-bold text-base leading-[30px] tracking-[-0.02em] hover:opacity-90 transition-opacity'
               >
                 Register
               </Link>

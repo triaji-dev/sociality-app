@@ -53,9 +53,9 @@ export function DesktopSearchDropdown({
   return (
     <div
       ref={dropdownRef}
-      className='absolute left-1/2 transform -translate-x-1/2 top-[60px] w-[491px] h-auto max-h-[384px] bg-gray-950 border border-gray-900 rounded-[20px] p-5 flex flex-col gap-4 overflow-y-auto z-50'
+      className='absolute left-1/2 transform -translate-x-1/2 top-[60px] w-[491px] h-auto max-h-[384px] bg-popover border border-border rounded-[20px] p-5 flex flex-col gap-4 overflow-y-auto z-50'
       style={{
-        boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.4)',
+        boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.2)',
       }}
     >
       {isLoading ? (
@@ -78,7 +78,7 @@ export function DesktopSearchDropdown({
             {/* User Details */}
             <div className='flex flex-col justify-center flex-1 min-w-0'>
               {/* Name */}
-              <div className='text-gray-25 text-sm font-bold leading-7 tracking-[-0.01em] truncate'>
+              <div className='text-foreground text-sm font-bold leading-7 tracking-[-0.01em] truncate'>
                 {user.name || user.username}
               </div>
               {/* Username */}
@@ -90,7 +90,7 @@ export function DesktopSearchDropdown({
         ))
       ) : (
         <div className='flex flex-col items-center justify-center py-8'>
-          <div className='text-gray-25 text-sm font-bold leading-7 tracking-[-0.02em] mb-1'>
+          <div className='text-foreground text-sm font-bold leading-7 tracking-[-0.02em] mb-1'>
             No results found
           </div>
           <div className='text-gray-400 text-sm font-normal leading-7 tracking-[-0.02em]'>

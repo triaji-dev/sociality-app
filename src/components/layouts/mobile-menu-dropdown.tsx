@@ -52,7 +52,7 @@ export function MobileMenuDropdown({
 
   return (
     <div
-      className='fixed top-16 left-0 w-full h-16 bg-black border-b border-gray-900 z-40 md:hidden'
+      className='fixed top-16 left-0 w-full h-16 bg-background border-b border-border z-40 md:hidden'
       data-mobile-menu
     >
       <div className='flex flex-row items-center justify-center px-4 pt-2 gap-3'>
@@ -60,7 +60,7 @@ export function MobileMenuDropdown({
         <Button
           asChild
           variant='outline'
-          className='flex-1 h-10 border-gray-900 bg-transparent text-gray-25 font-bold text-sm leading-7 tracking-[-0.01em] hover:opacity-80 transition-opacity hover:bg-transparent hover:border-gray-900 rounded-full'
+          className='flex-1 h-10 border-border bg-transparent text-foreground font-bold text-sm leading-7 tracking-[-0.01em] hover:bg-accent transition-colors rounded-full'
         >
           <Link
             href='/login'
@@ -73,7 +73,7 @@ export function MobileMenuDropdown({
         {/* Register Button */}
         <Button
           asChild
-          className='flex-1 h-10 bg-primary-300 text-gray-25 font-bold text-sm leading-7 tracking-[-0.01em] hover:opacity-80 transition-opacity hover:bg-primary-300 rounded-full'
+          className='flex-1 h-10 bg-primary-300 text-white font-bold text-sm leading-7 tracking-[-0.01em] hover:opacity-90 transition-opacity rounded-full'
         >
           <Link
             href='/register'

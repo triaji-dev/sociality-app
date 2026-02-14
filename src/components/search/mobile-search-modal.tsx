@@ -55,20 +55,20 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 z-50 bg-black'>
+    <div className='fixed inset-0 z-50 bg-background flex flex-col'>
       {/* Header */}
-      <header className='flex items-center justify-between px-4 py-4 border-b border-gray-900'>
+      <header className='flex items-center justify-between px-4 py-4 border-b border-border'>
         {/* Search Bar */}
         <div className='flex-1 flex items-center gap-3'>
           <div className='flex-1 relative'>
-            <div className='flex items-center gap-2 px-3 py-2 bg-gray-950 border border-gray-900 rounded-full'>
+            <div className='flex items-center gap-2 px-3 py-2 bg-muted/50 border border-border rounded-full'>
               <Search className='h-5 w-5 text-gray-500' strokeWidth={1.25} />
               <input
                 type='text'
                 placeholder='Search...'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className='flex-1 bg-transparent text-white placeholder-gray-25 text-sm focus:outline-none'
+                className='flex-1 bg-transparent text-foreground placeholder-muted-foreground text-sm focus:outline-none'
                 autoFocus
               />
             </div>
@@ -79,7 +79,7 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
             onClick={onClose}
             className='p-2 hover:opacity-80 transition-opacity'
           >
-            <X className='h-6 w-6 text-white' strokeWidth={2} />
+            <X className='h-6 w-6 text-foreground' strokeWidth={2} />
           </button>
         </div>
       </header>
@@ -112,13 +112,13 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
                 key={user.id}
                 href={`/profile/${user.username}`}
                 onClick={onClose}
-                className='flex items-center gap-3 p-2 hover:bg-gray-950 rounded-lg transition-colors cursor-pointer'
+                className='flex items-center gap-3 p-2 hover:bg-accent rounded-lg transition-colors cursor-pointer'
               >
                 <div className="w-16 h-16">
                   <UserAvatar user={user} size='lg' />
                 </div>
                 <div className='flex-1'>
-                  <div className='text-white text-sm font-bold leading-7'>
+                  <div className='text-foreground text-sm font-bold leading-7'>
                     {user.name || user.username}
                   </div>
                   <div className='text-gray-400 text-sm leading-7'>
@@ -131,7 +131,7 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
         ) : (
           <div className='flex flex-col justify-center items-center pt-24'>
             <div className='flex flex-col justify-center items-start gap-1 w-[138px] h-[155px]'>
-              <div className='text-center text-gray-25 text-base font-bold leading-[30px] tracking-[-0.02em] w-full'>
+              <div className='text-center text-foreground text-base font-bold leading-[30px] tracking-[-0.02em] w-full'>
                 No results found
               </div>
               <div className='text-center text-gray-400 text-sm font-normal leading-7 tracking-[-0.02em] w-full'>
