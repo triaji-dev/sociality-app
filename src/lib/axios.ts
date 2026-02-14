@@ -1,7 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { getToken, removeToken } from "./auth";
 
-const API_BASE_URL = "https://social-media-be-400174736012.asia-southeast2.run.app";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://social-media-be-400174736012.asia-southeast2.run.app";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
