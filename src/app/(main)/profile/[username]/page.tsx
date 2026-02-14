@@ -57,7 +57,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link href="/explore" className="p-2 hover:bg-muted rounded-full">
+        <Link href="/timeline" className="p-2 hover:bg-muted rounded-full">
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <h1 className="text-xl font-bold">@{username}</h1>

@@ -17,7 +17,7 @@ export function MobileNav() {
   const { isAuthenticated } = useAuthStore();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background">
       <div className="flex h-16 items-center justify-around">
         {mobileNavItems.map((item) => {
           const href = item.requiresAuth && !isAuthenticated

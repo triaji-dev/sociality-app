@@ -128,17 +128,10 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           {isAuthenticated ? (
             <>
-              {/* Create Post */}
-              <Button variant="ghost" size="icon" asChild className="hidden sm:flex">
-                <Link href="/posts/new">
-                  <PlusSquare className="h-5 w-5" />
-                </Link>
-              </Button>
-
               {/* User Menu */}
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full cursor-pointer">
                     <Avatar className="h-9 w-9">
                       <AvatarImage src={user?.avatarUrl || undefined} alt={user?.name} />
                       <AvatarFallback className="bg-linear-to-br from-purple-500 to-pink-500 text-white text-sm">
