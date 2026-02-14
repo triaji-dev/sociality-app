@@ -1,132 +1,346 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
+import { X, Smile, Loader2, MoreHorizontal } from "lucide-react";
 import { usePostModalStore } from "@/stores/post-modal-store";
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { usePost } from "@/hooks";
+import { usePost, useDeletePost } from "@/hooks/use-posts";
+import { useComments, useAddComment, useDeleteComment } from "@/hooks/use-comments";
 import { UserAvatar } from "@/components/users/user-avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { PostActions } from "@/components/posts/post-actions";
-import { CommentList } from "@/components/comments";
-import { PageLoader, ErrorState } from "@/components/shared";
+import { toast } from "sonner";
+import { useAuthStore } from "@/stores/auth-store";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { cn } from "@/lib/utils";
 
 dayjs.extend(relativeTime);
 
+// Helper for generic image URL handling
+const getImageUrl = (url?: string) => {
+  if (!url) return "/placeholder.png";
+  if (url.startsWith("http")) return url;
+  return `${process.env.NEXT_PUBLIC_BASE_URL || ""}${url}`;
+};
+
 export function PostDetailModal() {
   const { isOpen, postId, closePost } = usePostModalStore();
-  const { data, isLoading, error } = usePost(postId || 0);
+  const { data: postData, isLoading: isPostLoading } = usePost(postId || 0);
+  const post = postData?.data;
+
+  // Hooks for comments
+  const { 
+    data: commentsData, 
+    fetchNextPage, 
+    hasNextPage, 
+    isFetchingNextPage, 
+    isLoading: isCommentsLoading 
+  } = useComments(postId || 0);
+
+  const comments = commentsData?.pages.flatMap((page) => page.data?.items || []) || [];
+
+  // Mutations
+  const addComment = useAddComment(postId || 0);
+  const deleteComment = useDeleteComment(postId || 0);
+  const deletePostMutation = useDeletePost();
+
+  // Local State
+  const [commentText, setCommentText] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showDeleteMenu, setShowDeleteMenu] = useState<number | null>(null);
+  const [showPostMenu, setShowPostMenu] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+  
+  const commentsContainerRef = useRef<HTMLDivElement>(null);
+  const loadMoreTriggerRef = useRef<HTMLDivElement>(null);
+
+  const currentUser = useAuthStore((state) => state.user);
+
+  // Reset states when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setImageLoading(true);
+      setImageError(false);
+      setCommentText("");
+      setShowEmojiPicker(false);
+      setShowDeleteMenu(null);
+      setShowPostMenu(false);
+    }
+  }, [isOpen, postId]);
+
+  // Infinite Scroll Observer
+  useEffect(() => {
+    if (!loadMoreTriggerRef.current || !hasNextPage || isFetchingNextPage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      },
+      { root: commentsContainerRef.current, rootMargin: "100px", threshold: 0.1 }
+    );
+
+    observer.observe(loadMoreTriggerRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // Handle outside clicks for menus
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Element;
+      if (showEmojiPicker && !target.closest('.emoji-picker-container')) setShowEmojiPicker(false);
+      if (showDeleteMenu !== null && !target.closest('.delete-menu-container')) setShowDeleteMenu(null);
+      if (showPostMenu && !target.closest('.post-menu-container')) setShowPostMenu(false);
+    };
+
+    if (showEmojiPicker || showDeleteMenu !== null || showPostMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showEmojiPicker, showDeleteMenu, showPostMenu]);
+
+  const handleSubmitComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!commentText.trim()) return;
+    
+    addComment.mutate(
+      { text: commentText },
+      {
+        onSuccess: () => setCommentText("")
+        // Toast handled by hook
+      }
+    );
+  };
+
+  const handleDeletePost = () => {
+    if (postId) {
+      deletePostMutation.mutate(postId, {
+        onSuccess: () => closePost()
+      });
+    }
+  };
+
+  const handleEmojiClick = (emoji: string) => {
+    setCommentText((prev) => prev + emoji);
+    setShowEmojiPicker(false);
+  };
+
+  const commonEmojis = ['😀','😂','😍','🥰','😊','😎','🤔','😮','😢','😡','👍','👎','❤️','🔥','💯','🎉','😘','🤗'];
 
   if (!isOpen) return null;
 
-  const post = data?.data;
-
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closePost()}>
-      <DialogContent className="max-w-screen-2xl w-full p-0 overflow-hidden h-[90vh] flex flex-col md:flex-row gap-0">
+      <DialogContent className="w-[calc(100vw-32px)] md:w-[calc(100vw-240px)] sm:max-w-none h-[80vh] max-h-[720px] p-0 gap-0 overflow-hidden bg-gray-950 border border-gray-900 flex flex-col md:flex-row">
         <VisuallyHidden>
           <DialogTitle>Post Detail</DialogTitle>
-          <DialogDescription>
-            Details of the post including image, caption, and comments
-          </DialogDescription>
+          <DialogDescription>Full post view with comments</DialogDescription>
         </VisuallyHidden>
 
-        {isLoading ? (
+        {isPostLoading || !post ? (
           <div className="flex items-center justify-center w-full h-full">
-            <PageLoader />
-          </div>
-        ) : error || !post ? (
-          <div className="flex items-center justify-center w-full h-full p-6">
-            <ErrorState message={error?.message || "Post not found"} />
+            <Loader2 className="w-10 h-10 animate-spin text-gray-500" />
           </div>
         ) : (
           <>
-            {/* Left side - Image */}
-            <div className="flex-1 bg-black flex items-center justify-center relative min-h-[40vh] md:min-h-full">
-              <img
-                src={post.imageUrl}
-                alt={post.caption || "Post image"}
-                className="max-h-full max-w-full object-contain"
-              />
+             {/* Close Button (Mobile inside, Desktop handled by Dialog or custom) */}
+             {/* Using standard DialogClose for simplicity or custom button if needed. 
+                 User code had a custom button outside. DialogContent usually has a close button. 
+                 I'll hide the default one via CSS if needed or just let it be. 
+                 User code: hidden md:flex absolute ... outside.
+                 Dialog component restricts content to *inside*. 
+                 I will put a close button INSIDE top right for mobile, or rely on Dialog's default behavior.
+             */}
+
+            {/* Image Section */}
+            <div className="w-full md:w-[60%] h-[40vh] md:h-full bg-black relative shrink-0">
+               {imageLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900 z-10">
+                    <Loader2 className="w-12 h-12 text-gray-400 animate-spin" />
+                  </div>
+                )}
+                <img
+                  src={getImageUrl(post.imageUrl)}
+                  alt={post.caption || "Post"}
+                  className={cn(
+                    "w-full h-full object-contain transition-opacity duration-300",
+                    imageLoading ? "opacity-0" : "opacity-100"
+                  )}
+                  onLoad={() => setImageLoading(false)}
+                  onError={() => { setImageLoading(false); setImageError(true); }}
+                />
             </div>
 
-            {/* Right side - Details */}
-            <div className="w-full md:w-[400px] flex flex-col h-full bg-background border-l">
+            {/* Content Section */}
+            <div className="flex flex-col w-full md:w-[40%] h-full bg-gray-950 border-l border-gray-900">
+              
               {/* Header */}
-              <div className="flex items-center gap-3 p-4 border-b">
-                <Link
-                  href={`/profile/${post.author.username}`}
-                  onClick={closePost}
-                  className="flex items-center gap-3"
-                >
-                  <UserAvatar
-                    src={post.author.avatarUrl}
-                    name={post.author.name}
-                    size="sm"
-                  />
-                  <div>
-                    <p className="text-sm font-semibold leading-none">
-                      {post.author.username}
+              <div className="flex items-center justify-between p-4 border-b border-gray-900">
+                <div className="flex items-center gap-3 min-w-0">
+                  <UserAvatar user={post.author} size="md" />
+                  <div className="flex flex-col min-w-0">
+                    <p className="text-gray-25 text-sm font-bold truncate">
+                      {post.author.name || post.author.username}
+                    </p>
+                    <p className="text-gray-400 text-xs truncate">
+                      {dayjs(post.createdAt).fromNow()}
                     </p>
                   </div>
-                </Link>
-              </div>
-
-              {/* Comments Area */}
-              <ScrollArea className="flex-1 p-4">
-                <div className="space-y-4">
-                  {/* Caption */}
-                  {post.caption && (
-                     <div className="flex gap-3">
-                      <Link
-                        href={`/profile/${post.author.username}`}
-                        onClick={closePost}
-                      >
-                         <UserAvatar
-                          src={post.author.avatarUrl}
-                          name={post.author.name}
-                          size="sm"
-                          className="h-8 w-8"
-                        />
-                      </Link>
-                      <div className="space-y-1 text-sm">
-                        <Link
-                          href={`/profile/${post.author.username}`}
-                          onClick={closePost}
-                          className="font-semibold mr-2"
-                        >
-                          {post.author.username}
-                        </Link>
-                        <span className="whitespace-pre-wrap">{post.caption}</span>
-                         <p className="text-xs text-muted-foreground mt-1">
-                          {dayjs(post.createdAt).fromNow()}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                   <div className="my-4 border-t" />
-                   
-                   <CommentList postId={post.id} />
                 </div>
-              </ScrollArea>
 
-               {/* Footer Actions */}
-              <div className="p-4 border-t bg-background mt-auto">
-                 <PostActions
-                  postId={post.id}
-                  likeCount={post.likeCount}
-                  commentCount={post.commentCount}
-                  likedByMe={post.likedByMe}
-                  savedByMe={post.savedByMe}
-                  onCommentClick={() => {}} 
-                />
-                 <p className="text-xs text-muted-foreground mt-2 uppercase">
-                  {dayjs(post.createdAt).format("MMMM D, YYYY")}
-                </p>
+                {/* Post Menu (Owner only) */}
+                {post.author.id === currentUser?.id && (
+                  <div className="relative post-menu-container">
+                    <button 
+                      onClick={() => setShowPostMenu(!showPostMenu)}
+                      className="p-1 hover:bg-gray-900 rounded-full transition-colors"
+                    >
+                      <MoreHorizontal className="w-5 h-5 text-gray-25" />
+                    </button>
+                    {showPostMenu && (
+                      <div className="absolute right-0 top-8 w-32 bg-gray-950 border border-gray-900 rounded-lg shadow-lg z-50 py-1">
+                        {/* Edit omitted as service missing */}
+                        <button
+                          onClick={handleDeletePost}
+                          className="w-full px-3 py-2 text-left text-sm text-red-500 hover:bg-gray-900 transition-colors"
+                        >
+                          Delete Post
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
+
+              {/* Caption & Comments Scroll Area */}
+              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-gray-800" ref={commentsContainerRef}>
+                {post.caption && (
+                  <div className="mb-4">
+                    <p className="text-gray-25 text-sm leading-relaxed whitespace-pre-wrap">
+                      {post.caption}
+                    </p>
+                  </div>
+                )}
+                
+                <div className="w-full h-px bg-gray-900 mb-4" />
+                
+                <h3 className="text-gray-25 text-base font-bold mb-3">Comments</h3>
+
+                <div className="space-y-4">
+                  {isCommentsLoading && comments.length === 0 ? (
+                    <div className="text-center py-4 text-gray-400 text-sm">Loading comments...</div>
+                  ) : comments.length === 0 ? (
+                     <div className="text-center py-4 text-gray-400 text-sm">No comments yet</div>
+                  ) : (
+                    <>
+                      {comments.map((comment) => (
+                        <div key={comment.id} className="group flex gap-3">
+                           <UserAvatar user={comment.author} size="sm" className="w-8 h-8 shrink-0" />
+                           <div className="flex-1 min-w-0">
+                              <div className="flex justify-between items-start">
+                                <span className="text-gray-25 text-sm font-bold truncate mr-2">
+                                  {comment.author.name || comment.author.username}
+                                </span>
+                                <span className="text-gray-400 text-xs shrink-0">
+                                  {dayjs(comment.createdAt).fromNow()}
+                                </span>
+                              </div>
+                              <p className="text-gray-25 text-sm mt-0.5 whitespace-pre-wrap word-break-all">
+                                {comment.text}
+                              </p>
+                           </div>
+
+                           {/* Comment Menu */}
+                           {(post.author.id === currentUser?.id || comment.author.id === currentUser?.id) && (
+                              <div className="relative delete-menu-container opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                  onClick={() => setShowDeleteMenu(showDeleteMenu === comment.id ? null : comment.id)}
+                                  className="p-1 hover:bg-gray-900 rounded-full"
+                                >
+                                  <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                                </button>
+                                {showDeleteMenu === comment.id && (
+                                  <div className="absolute right-0 top-6 w-24 bg-gray-950 border border-gray-900 rounded-lg shadow-lg z-50 py-1">
+                                    <button
+                                      onClick={() => deleteComment.mutate(comment.id)}
+                                      className="w-full px-3 py-1.5 text-left text-xs text-red-500 hover:bg-gray-900"
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                           )}
+                        </div>
+                      ))}
+                      
+                      <div ref={loadMoreTriggerRef} className="h-4 w-full" />
+                      {isFetchingNextPage && (
+                        <div className="flex justify-center py-2">
+                          <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Footer Actions & Input */}
+              <div className="p-4 border-t border-gray-900 bg-gray-950 mt-auto">
+                 <PostActions 
+                    postId={post.id}
+                    likeCount={post.likeCount}
+                    commentCount={post.commentCount} 
+                    likedByMe={post.likedByMe}
+                    savedByMe={post.savedByMe}
+                    // onCommentClick not needed as we are already in the modal
+                 />
+                 
+                 <form onSubmit={handleSubmitComment} className="mt-4 flex gap-2 relative">
+                    <div className="relative emoji-picker-container">
+                      <button
+                        type="button"
+                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                        className="p-3 border border-gray-900 rounded-xl hover:bg-gray-900 transition-colors"
+                      >
+                        <Smile className="w-5 h-5 text-gray-25" />
+                      </button>
+                      {showEmojiPicker && (
+                         <div className="absolute bottom-12 left-0 w-[280px] h-[200px] bg-gray-950 border border-gray-900 rounded-xl p-2 grid grid-cols-6 gap-1 overflow-y-auto z-50 shadow-xl">
+                            {commonEmojis.map(emoji => (
+                              <button key={emoji} type="button" onClick={() => handleEmojiClick(emoji)} className="text-xl p-1 hover:bg-gray-900 rounded">
+                                {emoji}
+                              </button>
+                            ))}
+                         </div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 relative">
+                       <Input
+                          value={commentText}
+                          onChange={(e) => setCommentText(e.target.value)}
+                          placeholder="Add a comment..."
+                          className="bg-gray-950 border border-gray-900 pr-12 focus:border-primary-300 text-gray-25 placeholder:text-gray-500"
+                          disabled={addComment.isPending}
+                       />
+                       <Button 
+                          type="submit" 
+                          disabled={!commentText.trim() || addComment.isPending}
+                          className="absolute right-1 top-1 h-8 px-3 bg-transparent hover:bg-transparent text-primary-300 font-semibold disabled:text-gray-600"
+                       >
+                          Post
+                       </Button>
+                    </div>
+                 </form>
+              </div>
+
             </div>
           </>
         )}

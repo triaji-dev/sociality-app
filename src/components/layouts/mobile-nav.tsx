@@ -24,10 +24,8 @@ export function MobileNav() {
       const currentScrollY = window.scrollY;
       
       if (currentScrollY > lastScrollY && currentScrollY > 10) {
-        // Scroll Down -> Hide
         setIsVisible(false);
       } else {
-        // Scroll Up -> Show
         setIsVisible(true);
       }
 
@@ -41,6 +39,9 @@ export function MobileNav() {
     };
   }, [lastScrollY]);
 
+  // Hide on specific pages (must be after all hooks)
+  if (pathname === "/profile/edit") return null;
+
   const navItems = [
     { href: "/timeline", label: "Home", icon: "home", requiresAuth: true, fallbackHref: "/timeline" },
     { href: "/posts/new", label: "Create", icon: "post", requiresAuth: true, fallbackHref: "/login" },
@@ -50,7 +51,7 @@ export function MobileNav() {
   return (
     <nav 
       className={cn(
-        "fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[345px] md:w-[360px] h-16 md:h-20 bg-gray-950 border border-gray-800 rounded-full flex flex-row justify-center items-center p-0 gap-[45px] md:gap-[25px] z-50 transition-transform duration-300",
+        "fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[345px] md:w-[360px] h-16 md:h-20 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-full flex flex-row justify-center items-center p-0 gap-[45px] md:gap-[25px] z-50 transition-transform duration-300 shadow-lg dark:shadow-none",
         !isVisible && "translate-y-[200%]"
       )}
     >
@@ -84,7 +85,9 @@ export function MobileNav() {
                     style={{ 
                         filter: isActive 
                             ? 'none'
-                            : 'brightness(0) saturate(100%) invert(100%)'
+                            : mounted && theme === 'dark'
+                              ? 'brightness(0) saturate(100%) invert(100%)'
+                              : 'brightness(0) saturate(100%) invert(50%)'
                     }}
                   />
                 )}

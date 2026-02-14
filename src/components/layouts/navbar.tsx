@@ -61,7 +61,7 @@ export function Navbar() {
           alt='Sociality'
           width={30}
           height={30}
-          className='w-[30px] h-[30px]'
+          className='w-[30px] h-[30px] dark:invert-0 invert'
         />
         <span className='text-foreground text-xl md:text-lg font-bold md:font-semibold'>
           Sociality

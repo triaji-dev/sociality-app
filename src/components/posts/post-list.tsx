@@ -2,7 +2,8 @@
 
 import { Post } from "@/types";
 import { PostCard } from "./post-card";
-import { InfiniteScroll, PageLoader, ErrorState, EmptyState } from "@/components/shared";
+import { PostListSkeleton } from "./post-card-skeleton";
+import { InfiniteScroll, ErrorState, EmptyState } from "@/components/shared";
 import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -34,7 +35,7 @@ export function PostList({
   emptyAction,
 }: PostListProps) {
   if (isLoading) {
-    return <PageLoader />;
+    return <PostListSkeleton />;
   }
 
   if (error) {

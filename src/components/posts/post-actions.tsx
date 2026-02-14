@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Heart, Bookmark } from "lucide-react";
 import { useToggleLike, useToggleSave } from "@/hooks";
 import { LikersDialog } from "./likers-dialog";
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 
@@ -51,11 +52,13 @@ export function PostActions({
           if (response.data) {
             setLiked(response.data.liked);
             setCurrentLikeCount(response.data.likeCount);
+            toast.success(response.data.liked ? "Liked" : "Unliked");
           }
         },
         onError: () => {
           setLiked(wasLiked);
           setCurrentLikeCount((c) => (wasLiked ? c + 1 : c - 1));
+          toast.error("Failed to update like status");
         },
       },
     );
@@ -68,8 +71,12 @@ export function PostActions({
     toggleSave.mutate(
       { postId, isSaved: wasSaved },
       {
+        onSuccess: () => {
+             toast.success(!wasSaved ? "Saved" : "Unsaved");
+        },
         onError: () => {
           setSaved(wasSaved);
+          toast.error("Failed to update save status");
         },
       },
     );

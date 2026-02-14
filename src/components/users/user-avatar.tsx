@@ -50,7 +50,7 @@ export function UserAvatar({
         alt={displayName}
         className="object-cover"
       />
-      <AvatarFallback className="bg-linear-to-br from-purple-500 to-pink-500 text-white">
+      <AvatarFallback className="bg-linear-to-br from-neutral-600 to-neutral-800 text-white">
         {getInitials(displayName)}
       </AvatarFallback>
     </Avatar>
