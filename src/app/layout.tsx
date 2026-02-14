@@ -29,7 +29,16 @@ export default function RootLayout({
           <AuthHydration />
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
             {children}
-            <Toaster position="top-center" />
+            <Toaster 
+              position="top-right" 
+              offset="90px" 
+              toastOptions={{
+                style: {
+                  maxWidth: '320px',
+                  paddingRight: '24px'
+                }
+              }}
+            />
           </ThemeProvider>
         </QueryProvider>
       </body>

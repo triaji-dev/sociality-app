@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { ProfileDropdown } from './profile-dropdown';
 import { MobileSearchModal } from '@/components/search/mobile-search-modal';
@@ -15,6 +16,7 @@ import { userService } from '@/services/user.service';
 
 export function Navbar() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuthStore();
+  const pathname = usePathname();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isMenuDropdownOpen, setIsMenuDropdownOpen] = useState(false);
   const [desktopSearchQuery, setDesktopSearchQuery] = useState('');
@@ -46,6 +48,12 @@ export function Navbar() {
       {/* Logo Section */}
       <Link
         href='/timeline'
+        onClick={(e) => {
+          if (pathname === '/timeline') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }}
         className='flex items-center gap-3 hover:opacity-90 transition-all hover:scale-105 ease-in-out duration-200'
       >
         <Image

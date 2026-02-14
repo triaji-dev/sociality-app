@@ -84,16 +84,21 @@ export function PostActions({
           <button
             onClick={handleLike}
             disabled={toggleLike.isPending}
-            className="flex flex-row items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity"
+            className="group flex flex-row items-center justify-center cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
           >
              <Heart
               className={cn(
-                "w-6 h-6 transition-all",
-                liked ? "fill-red text-red" : "text-foreground",
+                "w-6 h-6 transition-all duration-200",
+                liked ? "fill-red text-red" : "text-foreground group-hover:text-red",
                 toggleLike.isPending && "opacity-50"
               )}
             />
-            <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em]">
+          </button>
+          <button
+            onClick={() => setShowLikers(true)}
+            className="group flex flex-row items-center justify-center cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
+          >
+            <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em] transition-colors duration-200 group-hover:text-red">
                {currentLikeCount}
             </span>
           </button>
@@ -102,20 +107,20 @@ export function PostActions({
         {/* Comment Button */}
         <button
           onClick={onCommentClick}
-          className="flex flex-row items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity"
+          className="group flex flex-row items-center gap-1.5 cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
         >
-          <img src="/icons/comment-icon.svg" alt="Comment" className="w-6 h-6" />
-          <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em]">
+          <img src="/icons/comment-icon.svg" alt="Comment" className="w-6 h-6 transition-transform duration-200" />
+          <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em] transition-colors duration-200">
             {commentCount}
           </span>
         </button>
 
         {/* Share Button (Placeholder for now) */}
         <button
-          className="flex flex-row items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity"
+          className="group flex flex-row items-center gap-1.5 cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
         >
-          <img src="/icons/share-icon.svg" alt="Share" className="w-6 h-6" />
-          <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em]">
+          <img src="/icons/share-icon.svg" alt="Share" className="w-6 h-6 transition-transform duration-200" />
+          <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em] transition-colors duration-200">
             0
           </span>
         </button>
@@ -125,11 +130,11 @@ export function PostActions({
       <button
         onClick={handleSave}
         disabled={toggleSave.isPending}
-        className="cursor-pointer hover:opacity-80 transition-opacity"
+        className="cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
       >
         <Bookmark
           className={cn(
-            "w-6 h-6 transition-all",
+            "w-6 h-6 transition-all duration-200",
             saved ? "fill-foreground text-foreground" : "text-foreground",
              toggleSave.isPending && "opacity-50"
           )}

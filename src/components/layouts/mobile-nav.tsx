@@ -14,10 +14,32 @@ export function MobileNav() {
   const { isAuthenticated } = useAuthStore();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 10) {
+        // Scroll Down -> Hide
+        setIsVisible(false);
+      } else {
+        // Scroll Up -> Show
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', controlNavbar);
+
+    return () => {
+      window.removeEventListener('scroll', controlNavbar);
+    };
+  }, [lastScrollY]);
 
   const navItems = [
     { href: "/timeline", label: "Home", icon: "home", requiresAuth: true, fallbackHref: "/timeline" },
@@ -26,7 +48,12 @@ export function MobileNav() {
   ];
 
   return (
-    <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[345px] md:w-[360px] h-16 md:h-20 bg-gray-950 border border-gray-800 rounded-full flex flex-row justify-center items-center p-0 gap-[45px] md:gap-[25px] z-50">
+    <nav 
+      className={cn(
+        "fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[345px] md:w-[360px] h-16 md:h-20 bg-gray-950 border border-gray-800 rounded-full flex flex-row justify-center items-center p-0 gap-[45px] md:gap-[25px] z-50 transition-transform duration-300",
+        !isVisible && "translate-y-[200%]"
+      )}
+    >
       <div className="flex w-full justify-between px-4 md:px-0 md:justify-center md:gap-6">
         {navItems.map((item) => {
            const href = item.requiresAuth && !isAuthenticated

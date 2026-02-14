@@ -138,7 +138,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
             <p className="text-foreground text-base font-normal leading-[30px] tracking-[-0.02em]">
               <Link
                 href={isOwner ? "/profile" : `/profile/${post.author.username}`}
-                className="text-foreground text-base font-bold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity mr-2"
+                className="text-foreground text-base font-bold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity cursor-pointer mr-2"
               >
                 {post.author.name}
               </Link>
@@ -149,7 +149,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
             {shouldTruncate && !isExpanded && (
               <button
                 onClick={() => setIsExpanded(true)}
-                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity"
+                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity cursor-pointer"
               >
                 Show more
               </button>
@@ -158,7 +158,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
             {isExpanded && caption.length > captionLimit && (
                <button
                 onClick={() => setIsExpanded(false)}
-                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity"
+                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity cursor-pointer"
               >
                 Show less
               </button>
