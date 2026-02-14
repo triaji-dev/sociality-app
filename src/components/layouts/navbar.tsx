@@ -61,7 +61,7 @@ export function Navbar() {
       </Link>
 
       {/* Desktop Search Bar - Hidden on mobile */}
-      <div className='hidden md:flex mx-auto relative'>
+      <div className='hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'>
         <div className='relative w-[491px] h-12'>
           <Search
             className='absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500'

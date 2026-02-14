@@ -7,7 +7,6 @@ export default function TimelinePage() {
   return (
     <AuthGuard>
       <div className="max-w-xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Timeline</h1>
         <TimelineTabs />
       </div>
     </AuthGuard>

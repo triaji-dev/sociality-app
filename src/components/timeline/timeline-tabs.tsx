@@ -51,12 +51,26 @@ function ExploreContent() {
   );
 }
 
+import { Home, Compass } from "lucide-react";
+
 export function TimelineTabs() {
   return (
-    <Tabs defaultValue="feed" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 mb-6">
-        <TabsTrigger value="feed">Feed</TabsTrigger>
-        <TabsTrigger value="explore">Explore</TabsTrigger>
+    <Tabs defaultValue="feed" className="w-full" onValueChange={() => window.scrollTo(0, 0)}>
+      <TabsList className="grid w-full grid-cols-2 mb-6 h-auto bg-muted p-1 rounded-full gap-1">
+        <TabsTrigger 
+          value="feed" 
+          className="btn-shine relative overflow-hidden data-[state=active]:bg-linear-to-r data-[state=active]:from-primary-200 data-[state=active]:to-primary-300 dark:data-[state=active]:from-primary-200 dark:data-[state=active]:to-primary-300 data-[state=active]:text-white dark:data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-linear-to-r hover:from-primary-200/50 hover:to-primary-300/50 transition-all duration-200 py-2.5 data-[state=active]:font-extrabold rounded-l-full rounded-r-2xl flex items-center justify-center gap-2"
+        >
+          <Home className="w-4 h-4" />
+          Feed
+        </TabsTrigger>
+        <TabsTrigger 
+          value="explore" 
+          className="btn-shine relative overflow-hidden data-[state=active]:bg-linear-to-r data-[state=active]:from-primary-200 data-[state=active]:to-primary-300 dark:data-[state=active]:from-primary-200 dark:data-[state=active]:to-primary-300 data-[state=active]:text-white dark:data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-linear-to-r hover:from-primary-200/50 hover:to-primary-300/50 transition-all duration-200 py-2.5 data-[state=active]:font-extrabold rounded-r-full rounded-l-2xl flex items-center justify-center gap-2"
+        >
+          <Compass className="w-4 h-4" />
+          Explore
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="feed">
         <FeedContent />

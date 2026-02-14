@@ -58,9 +58,14 @@ export function PostList({
       isLoading={isFetchingNextPage}
       onLoadMore={() => fetchNextPage()}
     >
-      <div className="space-y-6">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+      <div className="flex flex-col">
+        {posts.map((post, index) => (
+          <div key={post.id}>
+            <PostCard post={post} />
+            {index < posts.length - 1 && (
+              <div className="h-px w-full bg-border my-6" />
+            )}
+          </div>
         ))}
       </div>
     </InfiniteScroll>

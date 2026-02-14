@@ -26,8 +26,8 @@ export function MobileNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background h-[82px] flex items-center justify-center">
-      <div className="flex w-full justify-between px-8 md:px-0 md:justify-center md:gap-14">
+    <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[345px] md:w-[360px] h-16 md:h-20 bg-gray-950 border border-gray-800 rounded-full flex flex-row justify-center items-center p-0 gap-[45px] md:gap-[25px] z-50">
+      <div className="flex w-full justify-between px-4 md:px-0 md:justify-center md:gap-6">
         {navItems.map((item) => {
            const href = item.requiresAuth && !isAuthenticated
             ? (item.fallbackHref || "/login")
@@ -38,7 +38,7 @@ export function MobileNav() {
              <Link
               key={item.href}
               href={href}
-              className="flex flex-col items-center justify-center gap-[2px] w-[94px] h-[46px]"
+              className="flex flex-col items-center justify-center gap-[2px] w-[94px] h-[46px] transition-transform hover:scale-110 active:scale-95 duration-200 ease-in-out"
             >
               {/* Icon Container */}
               <div className="flex items-center justify-center">
@@ -46,18 +46,18 @@ export function MobileNav() {
                   <img
                     src="/icons/post-icon.svg"
                     alt="Post"
-                    className="w-11 h-11"
+                    className="w-11 h-11 md:w-12 md:h-12"
                     style={{ filter: 'none' }}
                   />
                 ) : (
                   <img
                     src={item.icon === 'home' ? '/icons/home-icon.svg' : '/icons/profile-icon.svg'}
                     alt={item.label}
-                    className="w-5 h-5"
+                    className="w-5 h-5 md:w-6 md:h-6"
                     style={{ 
                         filter: isActive 
-                            ? (item.icon === 'home' ? 'none' : 'brightness(0) saturate(100%) invert(51%) sepia(73%) saturate(4587%) hue-rotate(245deg) brightness(98%) contrast(93%)')
-                            : (mounted && theme === 'light' ? 'brightness(0) saturate(100%) invert(60%)' : 'brightness(0) saturate(100%) invert(100%)')
+                            ? 'none'
+                            : 'brightness(0) saturate(100%) invert(100%)'
                     }}
                   />
                 )}
