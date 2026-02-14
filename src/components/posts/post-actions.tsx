@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Heart, MessageCircle, Bookmark, Share2 } from "lucide-react";
+import { Heart, Bookmark } from "lucide-react";
 import { useToggleLike, useToggleSave } from "@/hooks";
 import { LikersDialog } from "./likers-dialog";
-import { Button } from "@/components/ui/button";
+
 import { cn } from "@/lib/utils";
 
 interface PostActionsProps {
@@ -76,65 +76,65 @@ export function PostActions({
   };
 
   return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between">
-        <div className="-ml-2 flex items-center">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 hover:text-red-500"
+    <div className="flex flex-row justify-between items-center w-full h-[30px]">
+      {/* Left Actions */}
+      <div className="flex flex-row items-center gap-4">
+        {/* Like Button */}
+        <div className="flex flex-row items-center gap-1.5">
+          <button
             onClick={handleLike}
             disabled={toggleLike.isPending}
+            className="flex flex-row items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <Heart
+             <Heart
               className={cn(
-                "h-5 w-5 transition-all",
-                liked && "fill-red-500 text-red-500",
-                toggleLike.isPending && "opacity-50",
+                "w-6 h-6 transition-all",
+                liked ? "fill-red text-red" : "text-foreground",
+                toggleLike.isPending && "opacity-50"
               )}
             />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9"
-            onClick={onCommentClick}
-          >
-            <MessageCircle className="h-5 w-5" />
-          </Button>
-
-          <Button variant="ghost" size="icon" className="h-9 w-9">
-            <Share2 className="h-5 w-5" />
-          </Button>
+            <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em]">
+               {currentLikeCount}
+            </span>
+          </button>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="-mr-2 h-9 w-9"
-          onClick={handleSave}
-          disabled={toggleSave.isPending}
+        {/* Comment Button */}
+        <button
+          onClick={onCommentClick}
+          className="flex flex-row items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity"
         >
-          <Bookmark
-            className={cn(
-              "h-5 w-5 transition-all",
-              saved && "fill-current",
-              toggleSave.isPending && "opacity-50",
-            )}
-          />
-        </Button>
+          <img src="/icons/comment-icon.svg" alt="Comment" className="w-6 h-6" />
+          <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em]">
+            {commentCount}
+          </span>
+        </button>
+
+        {/* Share Button (Placeholder for now) */}
+        <button
+          className="flex flex-row items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          <img src="/icons/share-icon.svg" alt="Share" className="w-6 h-6" />
+          <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em]">
+            0
+          </span>
+        </button>
       </div>
 
-      {currentLikeCount > 0 && (
-        <button
-          onClick={() => setShowLikers(true)}
-          className="text-sm font-semibold hover:underline"
-        >
-          {currentLikeCount.toLocaleString()}{" "}
-          {currentLikeCount === 1 ? "like" : "likes"}
-        </button>
-      )}
+      {/* Right Action - Save */}
+      <button
+        onClick={handleSave}
+        disabled={toggleSave.isPending}
+        className="cursor-pointer hover:opacity-80 transition-opacity"
+      >
+        <Bookmark
+          className={cn(
+            "w-6 h-6 transition-all",
+            saved ? "fill-foreground text-foreground" : "text-foreground",
+             toggleSave.isPending && "opacity-50"
+          )}
+        />
+      </button>
 
       {showLikers && (
         <LikersDialog

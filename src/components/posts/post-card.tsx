@@ -25,7 +25,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAuthStore } from "@/stores/auth-store";
 import { usePostModalStore } from "@/stores/post-modal-store";
 import { useDeletePost } from "@/hooks";
@@ -58,101 +57,117 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
   };
 
   return (
-    <Card className="gap-0 overflow-hidden">
-      <CardHeader className="flex-row items-center justify-between space-y-0 px-4 py-3">
-        <Link
-          href={isOwner ? "/profile" : `/profile/${post.author.username}`}
-          className="flex items-center gap-3"
-        >
-          <UserAvatar
-            src={post.author.avatarUrl}
-            name={post.author.name}
-            size="md"
-          />
-          <div>
-            <p className="text-sm font-semibold leading-tight">
-              {post.author.username}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {dayjs(post.createdAt).fromNow()}
-            </p>
+    <div className="w-full max-w-[600px] mx-auto">
+      <div className="flex flex-col items-start gap-3">
+        {/* Post Container */}
+        <div className="flex flex-col items-start gap-3 w-full">
+          {/* Header */}
+          <div className="flex flex-row items-center justify-between w-full h-16">
+            <div className="flex flex-row items-center gap-3">
+              <Link href={isOwner ? "/profile" : `/profile/${post.author.username}`}>
+                <UserAvatar
+                  src={post.author.avatarUrl}
+                  name={post.author.name}
+                  size="lg"
+                />
+              </Link>
+              <div className="flex flex-col items-start">
+                <Link
+                  href={isOwner ? "/profile" : `/profile/${post.author.username}`}
+                  className="text-foreground text-base font-bold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity"
+                >
+                  {post.author.name}
+                </Link>
+                <p className="text-muted-foreground text-sm font-normal leading-7 tracking-[-0.02em]">
+                  {dayjs(post.createdAt).fromNow()}
+                </p>
+              </div>
+            </div>
+
+            {isOwner && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => setShowDeleteDialog(true)}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete post
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
-        </Link>
 
-        {isOwner && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => setShowDeleteDialog(true)}
-                className="text-destructive focus:text-destructive"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete post
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-      </CardHeader>
-
-      <div
-        className="cursor-pointer"
-        onClick={() => openPost(post.id)}
-      >
-        <img
-          src={post.imageUrl}
-          alt={post.caption || "Post image"}
-          className="aspect-square w-full object-cover"
-        />
-      </div>
-
-      <CardContent className="space-y-2 px-4 py-3">
-        <PostActions
-          postId={post.id}
-          likeCount={post.likeCount}
-          commentCount={post.commentCount}
-          likedByMe={post.likedByMe}
-          savedByMe={post.savedByMe}
-          onCommentClick={() => openPost(post.id)}
-        />
-
-        {caption && (
-          <div className="text-sm leading-snug">
-            <Link
-              href={`/profile/${post.author.username}`}
-              className="font-semibold hover:underline"
+          {/* Image */}
+          <div
+            className="cursor-pointer w-full"
+            onClick={() => openPost(post.id)}
+          >
+             <div
+              className="w-full aspect-square relative overflow-hidden rounded-lg bg-muted cursor-pointer hover:opacity-95 transition-opacity"
+              style={{ minHeight: '300px' }}
             >
-              {post.author.username}
-            </Link>{" "}
-            <span className="text-muted-foreground">
-              {shouldTruncate && !isExpanded
+              <img
+                src={post.imageUrl}
+                alt={post.caption || "Post image"}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="w-full">
+             <PostActions
+              postId={post.id}
+              likeCount={post.likeCount}
+              commentCount={post.commentCount}
+              likedByMe={post.likedByMe}
+              savedByMe={post.savedByMe}
+              onCommentClick={() => openPost(post.id)}
+            />
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col items-start gap-1 w-full">
+            <p className="text-foreground text-base font-normal leading-[30px] tracking-[-0.02em]">
+              <Link
+                href={isOwner ? "/profile" : `/profile/${post.author.username}`}
+                className="text-foreground text-base font-bold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity mr-2"
+              >
+                {post.author.name}
+              </Link>
+               {shouldTruncate && !isExpanded
                 ? caption.slice(0, captionLimit) + "..."
                 : caption}
-            </span>
+            </p>
             {shouldTruncate && !isExpanded && (
               <button
                 onClick={() => setIsExpanded(true)}
-                className="ml-1 text-muted-foreground hover:text-foreground"
+                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity"
               >
-                more
+                Show more
+              </button>
+            )}
+            
+            {isExpanded && caption.length > captionLimit && (
+               <button
+                onClick={() => setIsExpanded(false)}
+                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity"
+              >
+                Show less
               </button>
             )}
           </div>
-        )}
+        </div>
+      </div>
 
-        {post.commentCount > 0 && (
-          <button
-            onClick={() => openPost(post.id)}
-            className="block text-sm text-muted-foreground/80 hover:text-muted-foreground text-left"
-          >
-            View all {post.commentCount} comments
-          </button>
-        )}
-      </CardContent>
+
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
@@ -174,6 +189,6 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </Card>
+    </div>
   );
 }

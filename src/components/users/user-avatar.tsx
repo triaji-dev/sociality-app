@@ -3,9 +3,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
+interface User {
+  avatarUrl?: string | null;
+  name?: string;
+  username?: string;
+}
+
 interface UserAvatarProps {
+  user?: User | null;
   src?: string | null;
-  name: string;
+  name?: string;
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;
 }
@@ -17,7 +24,16 @@ const sizeClasses = {
   xl: "h-24 w-24 text-2xl",
 };
 
-export function UserAvatar({ src, name, size = "md", className }: UserAvatarProps) {
+export function UserAvatar({
+  src,
+  name,
+  user,
+  size = "md",
+  className,
+}: UserAvatarProps) {
+  const avatarUrl = user ? user.avatarUrl : src;
+  const displayName = user ? user.name || user.username || "??" : name || "??";
+
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -29,9 +45,13 @@ export function UserAvatar({ src, name, size = "md", className }: UserAvatarProp
 
   return (
     <Avatar className={cn(sizeClasses[size], className)}>
-      <AvatarImage src={src || undefined} alt={name} />
+      <AvatarImage
+        src={avatarUrl || undefined}
+        alt={displayName}
+        className="object-cover"
+      />
       <AvatarFallback className="bg-linear-to-br from-purple-500 to-pink-500 text-white">
-        {getInitials(name)}
+        {getInitials(displayName)}
       </AvatarFallback>
     </Avatar>
   );

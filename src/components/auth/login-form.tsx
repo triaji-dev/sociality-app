@@ -1,115 +1,116 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import Link from "next/link";
-import { useLogin } from "@/hooks";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useLogin } from '@/hooks';
+import { AuthBackground } from './auth-background';
+import { AuthHeader } from './auth-header';
+import { PasswordInput } from './password-input';
+import { cn } from '@/lib/utils';
+import type { LoginRequest } from '@/types';
 
 const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
-
-type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const loginMutation = useLogin();
-
-  const form = useForm<LoginFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginRequest>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    mode: 'onChange',
   });
 
-  function onSubmit(data: LoginFormData) {
+  const onSubmit = (data: LoginRequest) => {
     loginMutation.mutate(data);
-  }
+  };
 
   return (
-    <div className="mx-auto w-full max-w-sm space-y-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
-        <p className="text-muted-foreground">
-          Enter your credentials to sign in
-        </p>
-      </div>
+    <div className='fixed inset-0 bg-black overflow-hidden'>
+      <AuthBackground />
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    disabled={loginMutation.isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <div className='relative z-10 flex items-center justify-center h-full px-6'>
+        <div className='w-[446px] bg-black/20 border border-gray-900 backdrop-blur-[20px] rounded-2xl p-6 space-y-6'>
+          <AuthHeader title='Welcome Back!' />
 
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="••••••••"
-                    disabled={loginMutation.isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
+            <div className='space-y-1'>
+              <Label
+                htmlFor='email'
+                className='text-white text-sm font-bold leading-7 tracking-[-0.02em]'
+              >
+                Email
+              </Label>
+              <Input
+                id='email'
+                type='email'
+                placeholder='Enter your email'
+                className={cn(
+                  'w-full h-12 px-4 bg-gray-950 border-gray-900 text-white placeholder-gray-600 text-base leading-[30px] tracking-[-0.02em] rounded-xl focus:border-purple-500 focus:ring-purple-500',
+                  errors.email && 'border-red ring-red ring-1'
+                )}
+                {...register('email')}
+              />
+              {errors.email && (
+                <p className='text-red text-xs mt-1 font-medium'>
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loginMutation.isPending}
-          >
-            {loginMutation.isPending ? (
-              <>
-                <LoadingSpinner size="sm" className="mr-2" />
-                Signing in...
-              </>
-            ) : (
-              "Sign in"
-            )}
-          </Button>
-        </form>
-      </Form>
+            <div className='space-y-1'>
+              <Label
+                htmlFor='password'
+                className='text-white text-sm font-bold leading-7 tracking-[-0.02em]'
+              >
+                Password
+              </Label>
+              <PasswordInput
+                id='password'
+                placeholder='Enter your password'
+                className={cn(
+                  'w-full h-12 px-4 bg-gray-950 border-gray-900 text-white placeholder-gray-600 text-base leading-[30px] tracking-[-0.02em] rounded-xl focus:border-purple-500 focus:ring-purple-500',
+                  errors.password && 'border-red ring-red ring-1'
+                )}
+                {...register('password')}
+              />
+              {errors.password && (
+                <p className='text-red text-xs mt-1 font-medium'>
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
 
-      <div className="text-center text-sm">
-        <span className="text-muted-foreground">Don&apos;t have an account? </span>
-        <Link href="/register" className="text-primary hover:underline font-medium">
-          Sign up
-        </Link>
+            <Button
+              type='submit'
+              className='w-full h-12 bg-primary-300 text-white text-base font-bold leading-[30px] tracking-[-0.02em] rounded-full hover:opacity-90 transition-opacity'
+              disabled={loginMutation.isPending}
+            >
+              {loginMutation.isPending ? 'Logging in...' : 'Login'}
+            </Button>
+          </form>
+
+          <div className='flex justify-center items-center gap-1'>
+            <span className='text-white text-base leading-[30px] tracking-[-0.02em]'>
+              Don&apos;t have an account?
+            </span>
+            <Link
+              href='/register'
+              className='text-primary-200 text-base font-bold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity'
+            >
+              Register
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
