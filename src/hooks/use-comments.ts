@@ -3,6 +3,7 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { commentService } from "@/services";
 import { CreateCommentRequest, Comment } from "@/types";
+import { getStandardNextPageParam } from "@/lib/query-utils";
 import { postKeys } from "./use-posts";
 import { toast } from "sonner";
 
@@ -16,11 +17,7 @@ export function useComments(postId: number) {
   return useInfiniteQuery({
     queryKey: commentKeys.infinite(postId),
     queryFn: ({ pageParam = 1 }) => commentService.getComments(postId, { page: pageParam, limit: 20 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
     enabled: !!postId,
   });

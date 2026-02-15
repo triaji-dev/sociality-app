@@ -4,7 +4,7 @@ import { useInfiniteQuery, useMutation, useQueryClient, InfiniteData } from "@ta
 import { likeService } from "@/services";
 import { postKeys } from "./use-posts";
 import { Post, PaginatedResponse } from "@/types";
-import { updatePostInInfiniteData, InfinitePostData } from "@/lib/query-utils";
+import { updatePostInInfiniteData, InfinitePostData, getStandardNextPageParam } from "@/lib/query-utils";
 
 export const likeKeys = {
   all: ["likes"] as const,
@@ -17,11 +17,7 @@ export function useLikers(postId: number) {
   return useInfiniteQuery({
     queryKey: likeKeys.likers(postId),
     queryFn: ({ pageParam = 1 }) => likeService.getLikers(postId, { page: pageParam, limit: 20 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
     enabled: !!postId,
   });

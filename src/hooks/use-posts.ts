@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery, InfiniteData } from "@tanstack/react-query";
 import { postService } from "@/services";
 import { CreatePostRequest, Post, PaginatedResponse } from "@/types";
+import { getStandardNextPageParam } from "@/lib/query-utils";
 import { toast } from "sonner";
 
 export const postKeys = {
@@ -18,11 +19,7 @@ export function useFeed() {
   return useInfiniteQuery({
     queryKey: postKeys.feedInfinite(),
     queryFn: ({ pageParam = 1 }) => postService.getFeed({ page: pageParam, limit: 10 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
   });
 }
@@ -31,11 +28,7 @@ export function usePosts() {
   return useInfiniteQuery({
     queryKey: postKeys.exploreInfinite(),
     queryFn: ({ pageParam = 1 }) => postService.getPosts({ page: pageParam, limit: 12 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
   });
 }

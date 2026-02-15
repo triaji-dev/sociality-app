@@ -70,3 +70,8 @@ export interface LikeResponse {
 export interface DeleteResponse {
   deleted: boolean;
 }
+
+// Save/Unsave Response
+export interface SaveResponse {
+  saved: boolean;
+}

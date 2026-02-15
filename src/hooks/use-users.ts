@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { userService } from "@/services";
 import { UpdateProfileRequest } from "@/types";
+import { getStandardNextPageParam } from "@/lib/query-utils";
 import { useAuthStore } from "@/stores/auth-store";
 import { toast } from "sonner";
 
@@ -34,11 +35,7 @@ export function useMyPosts() {
   return useInfiniteQuery({
     queryKey: userKeys.myPosts(),
     queryFn: ({ pageParam = 1 }) => userService.getMyPosts({ page: pageParam, limit: 12 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
   });
 }
@@ -77,11 +74,7 @@ export function useMyLikes() {
   return useInfiniteQuery({
     queryKey: userKeys.myLikes(),
     queryFn: ({ pageParam = 1 }) => userService.getMyLikes({ page: pageParam, limit: 12 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
   });
 }
@@ -90,11 +83,7 @@ export function useMySaved() {
   return useInfiniteQuery({
     queryKey: userKeys.mySaved(),
     queryFn: ({ pageParam = 1 }) => userService.getMySaved({ page: pageParam, limit: 12 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
   });
 }
@@ -103,11 +92,7 @@ export function useMyFollowers() {
   return useInfiniteQuery({
     queryKey: userKeys.myFollowers(),
     queryFn: ({ pageParam = 1 }) => userService.getMyFollowers({ page: pageParam, limit: 20 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
   });
 }
@@ -116,11 +101,7 @@ export function useMyFollowing() {
   return useInfiniteQuery({
     queryKey: userKeys.myFollowing(),
     queryFn: ({ pageParam = 1 }) => userService.getMyFollowing({ page: pageParam, limit: 20 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
   });
 }
@@ -130,11 +111,7 @@ export function useSearchUsers(query: string) {
   return useInfiniteQuery({
     queryKey: userKeys.search(query),
     queryFn: ({ pageParam = 1 }) => userService.searchUsers(query, { page: pageParam, limit: 20 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
     enabled: query.length > 0,
   });
@@ -153,11 +130,7 @@ export function useUserPosts(username: string) {
   return useInfiniteQuery({
     queryKey: userKeys.userPosts(username),
     queryFn: ({ pageParam = 1 }) => userService.getUserPosts(username, { page: pageParam, limit: 12 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
     enabled: !!username,
   });
@@ -167,11 +140,7 @@ export function useUserLikes(username: string) {
   return useInfiniteQuery({
     queryKey: userKeys.userLikes(username),
     queryFn: ({ pageParam = 1 }) => userService.getUserLikes(username, { page: pageParam, limit: 12 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
     enabled: !!username,
   });
@@ -181,11 +150,7 @@ export function useUserFollowers(username: string) {
   return useInfiniteQuery({
     queryKey: userKeys.userFollowers(username),
     queryFn: ({ pageParam = 1 }) => userService.getUserFollowers(username, { page: pageParam, limit: 20 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
     enabled: !!username,
   });
@@ -195,11 +160,7 @@ export function useUserFollowing(username: string) {
   return useInfiniteQuery({
     queryKey: userKeys.userFollowing(username),
     queryFn: ({ pageParam = 1 }) => userService.getUserFollowing(username, { page: pageParam, limit: 20 }),
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data) return undefined;
-      const { page, totalPages } = lastPage.data.pagination;
-      return page < totalPages ? page + 1 : undefined;
-    },
+    getNextPageParam: getStandardNextPageParam,
     initialPageParam: 1,
     enabled: !!username,
   });

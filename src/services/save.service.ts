@@ -1,9 +1,5 @@
 import api from "@/lib/axios";
-import { ApiResponse } from "@/types";
-
-interface SaveResponse {
-  saved: boolean;
-}
+import { ApiResponse, SaveResponse } from "@/types";
 
 export const saveService = {
   async savePost(postId: number): Promise<ApiResponse<SaveResponse>> {

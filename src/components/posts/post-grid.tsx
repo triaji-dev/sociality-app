@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Heart, MessageCircle } from "lucide-react";
 import { InfiniteScroll, EmptyState, PageLoader, ErrorState } from "@/components/shared";
 import { ImageOff } from "lucide-react";

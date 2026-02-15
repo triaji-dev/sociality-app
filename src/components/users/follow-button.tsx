@@ -64,7 +64,7 @@ export function FollowButton({
       className={cn(
         "rounded-full transition-all whitespace-nowrap",
         isFollowing 
-          ? "border-gray-600 text-white hover:bg-gray-800 hover:text-white w-[140px]" 
+          ? "border-border text-foreground hover:bg-accent hover:text-foreground w-[140px]" 
           : "bg-primary-300 hover:bg-primary-300/90 text-white shadow-md shadow-primary-300/20 w-[90px]",
         className
       )}

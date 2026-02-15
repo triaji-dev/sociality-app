@@ -1,9 +1,5 @@
 import api from "@/lib/axios";
-import { ApiResponse } from "@/types";
-
-interface FollowResponse {
-  following: boolean;
-}
+import { ApiResponse, FollowResponse } from "@/types";
 
 export const followService = {
   async follow(username: string): Promise<ApiResponse<FollowResponse>> {

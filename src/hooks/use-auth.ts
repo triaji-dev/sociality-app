@@ -33,7 +33,7 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: (data: LoginRequest) => authService.login(data),
-    onSuccess: (response, _variables, context) => {
+    onSuccess: (response) => {
       if (response.success && response.data) {
         login(response.data.user, response.data.token);
         toast.success("Welcome back!");

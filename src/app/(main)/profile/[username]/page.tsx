@@ -95,7 +95,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
                 alt="Share"
                 width={20}
                 height={20}
-                className="w-5 h-5 md:w-6 md:h-6"
+                className="w-5 h-5 md:w-6 md:h-6 dark:invert-0 invert"
               />
             </button>
           </div>
@@ -180,9 +180,9 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
               width={20}
               height={20}
               className={`w-5 h-5 md:w-6 md:h-6 transition-all ${
-                activeTab !== "posts"
-                  ? "brightness-0 saturate-100 invert-65% sepia-11 hue-rotate-183"
-                  : ""
+                activeTab === "posts"
+                  ? "dark:invert-0 invert"
+                  : "dark:invert-0 invert opacity-50"
               }`}
             />
             <span

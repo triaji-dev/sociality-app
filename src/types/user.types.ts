@@ -80,3 +80,8 @@ export interface Liker {
   isMe: boolean;
   followsMe: boolean;
 }
+
+// Follow/Unfollow Response
+export interface FollowResponse {
+  following: boolean;
+}

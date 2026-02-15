@@ -109,7 +109,7 @@ export function ShareModal({
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-[440px] glass rounded-[32px] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-10 duration-300">
+      <div className="relative w-full max-w-[440px] bg-background border border-border rounded-[32px] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 shadow-2xl">
         {/* Header */}
         <div className="flex flex-row justify-between items-center px-6 py-5 border-b border-border/50">
           <h2 className="text-foreground text-xl font-bold tracking-tight">
