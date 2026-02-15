@@ -322,24 +322,30 @@
 /* Sonner toast type accent colors */
 [data-sonner-toast][data-type="success"] {
   border-color: var(--color-green) !important;
+  background-color: var(--color-green) !important;
+  color: var(--color-white) !important;
 }
 
 [data-sonner-toast][data-type="success"] [data-icon] {
-  color: var(--color-green) !important;
+  color: var(--color-white) !important;
 }
 
 [data-sonner-toast][data-type="error"] {
   border-color: var(--color-red) !important;
+  background-color: var(--color-red) !important;
+  color: var(--color-white) !important;
 }
 
 [data-sonner-toast][data-type="error"] [data-icon] {
-  color: var(--color-red) !important;
+  color: var(--color-white) !important;
 }
 
 [data-sonner-toast][data-type="warning"] {
   border-color: var(--color-yellow) !important;
+  background-color: var(--color-yellow) !important;
+  color: var(--color-white) !important;
 }
 
 [data-sonner-toast][data-type="warning"] [data-icon] {
-  color: var(--color-yellow) !important;
+  color: var(--color-white) !important;
 }

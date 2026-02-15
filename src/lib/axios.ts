@@ -52,9 +52,16 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response?.status === 401) {
       removeToken();
+      
+      // Skip redirection if we're on the login page or the request specifically avoids it
       if (typeof window !== "undefined") {
-        const returnTo = encodeURIComponent(window.location.pathname);
-        window.location.href = `/login?returnTo=${returnTo}`;
+        const isLoginPage = window.location.pathname === "/login";
+        const isLoginRequest = error.config?.url?.includes("/api/auth/login");
+        
+        if (!isLoginPage && !isLoginRequest) {
+          const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+          window.location.href = `/login?returnTo=${returnTo}`;
+        }
       }
     }
     console.error("API Error:", error.response?.status, error.message);

@@ -5,6 +5,7 @@ import { useUser, useUserPosts, useUserLikes, useUserFollowers, useUserFollowing
 import { UserListDialog } from "@/components/users";
 import { FollowButton } from "@/components/users/follow-button";
 import { PostGrid } from "@/components/posts";
+import { ShareModal } from "@/components/posts/share-modal";
 import { PageLoader, ErrorState } from "@/components/shared";
 import { UserAvatar } from "@/components/users/user-avatar";
 import { Loader2, Bookmark } from "lucide-react";
@@ -22,6 +23,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
   const [activeTab, setActiveTab] = useState<"posts" | "likes">("posts");
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   const { data, isLoading, error, refetch } = useUser(username);
 
@@ -85,16 +87,7 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
               <FollowButton username={profile.username} isFollowing={profile.isFollowing} />
             </div>
             <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: `${profile.name || profile.username}'s Profile`,
-                    url: window.location.href,
-                  }).catch(() => {});
-                } else {
-                  navigator.clipboard.writeText(window.location.href);
-                }
-              }}
+              onClick={() => setShowShare(true)}
               className="w-10 h-10 md:w-12 md:h-12 border border-border rounded-full flex items-center justify-center hover:bg-accent transition-colors cursor-pointer"
             >
               <Image
@@ -276,6 +269,14 @@ export default function UserProfilePage({ params }: UserProfilePageProps) {
         hasNextPage={followingQuery.hasNextPage}
         isFetchingNextPage={followingQuery.isFetchingNextPage}
         emptyMessage="Not following anyone yet."
+      />
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={showShare}
+        onClose={() => setShowShare(false)}
+        url={typeof window !== "undefined" ? window.location.href : ""}
+        title={`${profile.name || profile.username}'s Profile`}
       />
     </div>
   );

@@ -40,7 +40,13 @@ export function useLogin() {
         
         // Check for returnTo param
         const params = new URLSearchParams(window.location.search);
-        const returnTo = params.get("returnTo") || "/timeline";
+        let returnTo = params.get("returnTo") || "/timeline";
+        
+        // Safeguard: prevent redirecting back to login page
+        if (returnTo.startsWith("/login")) {
+          returnTo = "/timeline";
+        }
+        
         router.push(returnTo);
       } else {
         toast.error(response.message || "Login failed");

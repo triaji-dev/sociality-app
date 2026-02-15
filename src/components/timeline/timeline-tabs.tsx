@@ -59,14 +59,14 @@ export function TimelineTabs() {
       <TabsList className="grid w-full grid-cols-2 mb-6 h-auto bg-transparent p-0 rounded-none border-b border-border gap-0">
         <TabsTrigger 
           value="feed" 
-          className="flex-1 flex flex-row justify-center items-center gap-2 md:gap-3 h-12 rounded-none border-b-2 transition-colors data-[state=active]:border-foreground data-[state=inactive]:border-border data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=inactive]:text-muted-foreground data-[state=inactive]:font-medium md:text-base tracking-tight bg-transparent dark:data-[state=active]:border-white text-2xl"
+          className="flex-1 flex flex-row justify-center items-center gap-2 md:gap-3 h-12 rounded-none border-b-2 transition-colors data-[state=active]:border-foreground data-[state=inactive]:border-border data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=inactive]:text-muted-foreground data-[state=inactive]:font-medium md:text-base tracking-tight bg-transparent dark:data-[state=active]:border-white text-lg"
         >
           <Home className="w-5 h-5 md:w-6 md:h-6" />
           Feed
         </TabsTrigger>
         <TabsTrigger 
           value="explore" 
-          className="flex-1 flex flex-row justify-center items-center gap-2 md:gap-3 h-12 rounded-none border-b-2 transition-colors data-[state=active]:border-foreground data-[state=inactive]:border-border data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=inactive]:text-muted-foreground data-[state=inactive]:font-medium text-2xl md:text-base tracking-tight bg-transparent dark:data-[state=active]:border-white"
+          className="flex-1 flex flex-row justify-center items-center gap-2 md:gap-3 h-12 rounded-none border-b-2 transition-colors data-[state=active]:border-foreground data-[state=inactive]:border-border data-[state=active]:text-foreground data-[state=active]:font-bold data-[state=inactive]:text-muted-foreground data-[state=inactive]:font-medium text-lg md:text-base tracking-tight bg-transparent dark:data-[state=active]:border-white"
         >
           <Compass className="w-5 h-5 md:w-6 md:h-6" />
           Explore

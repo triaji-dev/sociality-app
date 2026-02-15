@@ -5,6 +5,7 @@ import { useMe, useMyPosts, useMySaved, useMyFollowers, useMyFollowing } from "@
 import { AuthGuard } from "@/components/auth";
 import { UserListDialog } from "@/components/users";
 import { PostGrid } from "@/components/posts";
+import { ShareModal } from "@/components/posts/share-modal";
 import { PageLoader, ErrorState } from "@/components/shared";
 import { UserAvatar } from "@/components/users/user-avatar";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import Link from "next/link";
 function ProfileContent() {
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [activeTab, setActiveTab] = useState<"posts" | "saved">("posts");
 
   const { data, isLoading, error, refetch } = useMe();
@@ -71,16 +73,7 @@ function ProfileContent() {
               </Button>
             </Link>
             <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: `${user.name || user.username}'s Profile`,
-                    url: window.location.href,
-                  }).catch(() => {});
-                } else {
-                  navigator.clipboard.writeText(window.location.href);
-                }
-              }}
+              onClick={() => setShowShare(true)}
               className="w-10 h-10 md:w-12 md:h-12 border border-border rounded-full flex items-center justify-center hover:bg-accent transition-colors cursor-pointer"
             >
               <Image
@@ -266,6 +259,14 @@ function ProfileContent() {
         hasNextPage={followingQuery.hasNextPage}
         isFetchingNextPage={followingQuery.isFetchingNextPage}
         emptyMessage="Not following anyone yet."
+      />
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={showShare}
+        onClose={() => setShowShare(false)}
+        url={typeof window !== "undefined" ? window.location.href : ""}
+        title={`${user.name || user.username}'s Profile`}
       />
     </div>
   );
