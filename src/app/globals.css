@@ -289,7 +289,7 @@
 
 /* Minimalist Scrollbar Utility */
 .minimal-scrollbar::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 .minimal-scrollbar::-webkit-scrollbar-button {
@@ -304,19 +304,18 @@
 
 .minimal-scrollbar::-webkit-scrollbar-track {
   background: transparent;
-  margin-block: 16px; 
+  margin-block: 8px; 
 }
 
 .minimal-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--color-gray-700);
   border-radius: 20px;
   background-clip: padding-box;
-  border: 2px solid transparent;
-  border-right-width: 2px;
+  border: 1px solid transparent;
 }
 
 .minimal-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-foreground);
+  background: var(--color-gray-600);
 }
 
 /* Sonner toast type accent colors */

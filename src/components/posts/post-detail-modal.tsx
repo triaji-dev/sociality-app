@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { PostActions } from "@/components/posts/post-actions";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
 import dayjs from "dayjs";
@@ -131,17 +131,31 @@ export function PostDetailModal() {
     setShowEmojiPicker(false);
   };
 
-  const commonEmojis = ['😀','😂','😍','🥰','😊','😎','🤔','😮','😢','😡','👍','👎','❤️','🔥','💯','🎉','😘','🤗'];
+  const commonEmojis = [
+    '😀', '😅', '😍', '😇', '😊', '😋',
+    '🤪', '🤐', '😉', '🤗', '😪', '🙄',
+    '🤫', '😴', '🥵', '😫', '😭', '😱'
+  ];
 
   if (!isOpen) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closePost()}>
-      <DialogContent className="w-[calc(100vw-32px)] md:w-[calc(100vw-240px)] sm:max-w-none h-[80vh] max-h-[720px] p-0 gap-0 overflow-hidden bg-gray-950 border border-gray-900 flex flex-col md:flex-row">
+      <DialogContent className="w-[calc(100vw-32px)] md:w-[calc(100vw-240px)] sm:max-w-none h-[80vh] max-h-[720px] p-0 gap-0 overflow-visible bg-gray-950 border border-gray-900 flex flex-col md:flex-row [&>button]:hidden">
         <VisuallyHidden>
           <DialogTitle>Post Detail</DialogTitle>
           <DialogDescription>Full post view with comments</DialogDescription>
         </VisuallyHidden>
+
+        {/* Close Button - Top-Right Corner */}
+        <div className="absolute -top-10 right-0 h-10 w-10 flex items-center justify-center z-50">
+          <DialogClose className="p-2 hover:bg-white/10 rounded-full transition-colors cursor-pointer group">
+            <X className="h-8 w-8 text-white group-hover:scale-110 transition-transform" />
+            <span className="sr-only">Close</span>
+          </DialogClose>
+        </div>
+
+        <div className="flex flex-col md:flex-row w-full h-full overflow-hidden rounded-lg">
 
         {isPostLoading || !post ? (
           <div className="flex items-center justify-center w-full h-full">
@@ -149,17 +163,7 @@ export function PostDetailModal() {
           </div>
         ) : (
           <>
-             {/* Close Button (Mobile inside, Desktop handled by Dialog or custom) */}
-             {/* Using standard DialogClose for simplicity or custom button if needed. 
-                 User code had a custom button outside. DialogContent usually has a close button. 
-                 I'll hide the default one via CSS if needed or just let it be. 
-                 User code: hidden md:flex absolute ... outside.
-                 Dialog component restricts content to *inside*. 
-                 I will put a close button INSIDE top right for mobile, or rely on Dialog's default behavior.
-             */}
-
-            {/* Image Section */}
-            <div className="w-full md:w-[60%] h-[40vh] md:h-full bg-black relative shrink-0">
+             <div className="w-full md:w-[60%] h-[40vh] md:h-full bg-black relative shrink-0">
                {imageLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-900 z-10">
                     <Loader2 className="w-12 h-12 text-gray-400 animate-spin" />
@@ -181,7 +185,7 @@ export function PostDetailModal() {
             <div className="flex flex-col w-full md:w-[40%] h-full bg-gray-950 border-l border-gray-900">
               
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-900">
+              <div className="flex items-center justify-between p-4 bg-gray-950">
                 <div className="flex items-center gap-3 min-w-0">
                   <UserAvatar user={post.author} size="md" />
                   <div className="flex flex-col min-w-0">
@@ -219,7 +223,7 @@ export function PostDetailModal() {
               </div>
 
               {/* Caption & Comments Scroll Area */}
-              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-gray-800" ref={commentsContainerRef}>
+              <div className="flex-1 overflow-y-auto p-4 minimal-scrollbar" ref={commentsContainerRef}>
                 {post.caption && (
                   <div className="mb-4">
                     <p className="text-gray-25 text-sm leading-relaxed whitespace-pre-wrap">
@@ -240,43 +244,45 @@ export function PostDetailModal() {
                   ) : (
                     <>
                       {comments.map((comment) => (
-                        <div key={comment.id} className="group flex gap-3">
-                           <UserAvatar user={comment.author} size="sm" className="w-8 h-8 shrink-0" />
-                           <div className="flex-1 min-w-0">
-                              <div className="flex justify-between items-start">
-                                <span className="text-gray-25 text-sm font-bold truncate mr-2">
-                                  {comment.author.name || comment.author.username}
-                                </span>
-                                <span className="text-gray-400 text-xs shrink-0">
-                                  {dayjs(comment.createdAt).fromNow()}
-                                </span>
+                        <div key={comment.id} className="group flex flex-col gap-2 border-b border-gray-900 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0">
+                           <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3 min-w-0">
+                                <UserAvatar user={comment.author} size="sm" className="w-10 h-10 shrink-0" />
+                                <div className="flex flex-col min-w-0">
+                                   <span className="text-gray-25 text-sm font-bold truncate">
+                                     {comment.author.name || comment.author.username}
+                                   </span>
+                                   <span className="text-gray-400 text-xs mt-0.5">
+                                     {dayjs(comment.createdAt).fromNow()}
+                                   </span>
+                                </div>
                               </div>
-                              <p className="text-gray-25 text-sm mt-0.5 whitespace-pre-wrap word-break-all">
-                                {comment.text}
-                              </p>
-                           </div>
 
-                           {/* Comment Menu */}
-                           {(post.author.id === currentUser?.id || comment.author.id === currentUser?.id) && (
-                              <div className="relative delete-menu-container opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button
-                                  onClick={() => setShowDeleteMenu(showDeleteMenu === comment.id ? null : comment.id)}
-                                  className="p-1 hover:bg-gray-900 rounded-full"
-                                >
-                                  <MoreHorizontal className="w-4 h-4 text-gray-400" />
-                                </button>
-                                {showDeleteMenu === comment.id && (
-                                  <div className="absolute right-0 top-6 w-24 bg-gray-950 border border-gray-900 rounded-lg shadow-lg z-50 py-1">
-                                    <button
-                                      onClick={() => deleteComment.mutate(comment.id)}
-                                      className="w-full px-3 py-1.5 text-left text-xs text-red-500 hover:bg-gray-900 cursor-pointer"
-                                    >
-                                      Delete
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                           )}
+                              {/* Comment Menu */}
+                              {(post.author.id === currentUser?.id || comment.author.id === currentUser?.id) && (
+                                 <div className="relative delete-menu-container opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                                   <button
+                                     onClick={() => setShowDeleteMenu(showDeleteMenu === comment.id ? null : comment.id)}
+                                     className="p-1 hover:bg-gray-900 rounded-full transition-colors"
+                                   >
+                                     <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                                   </button>
+                                   {showDeleteMenu === comment.id && (
+                                     <div className="absolute right-0 top-6 w-24 bg-gray-950 border border-gray-900 rounded-lg shadow-lg z-50 py-1">
+                                       <button
+                                         onClick={() => deleteComment.mutate(comment.id)}
+                                         className="w-full px-3 py-1.5 text-left text-xs text-red-500 hover:bg-gray-900 cursor-pointer"
+                                       >
+                                         Delete
+                                       </button>
+                                     </div>
+                                   )}
+                                 </div>
+                              )}
+                           </div>
+                           <p className="text-gray-25 text-sm whitespace-pre-wrap word-break-all">
+                             {comment.text}
+                           </p>
                         </div>
                       ))}
                       
@@ -292,7 +298,7 @@ export function PostDetailModal() {
               </div>
 
               {/* Footer Actions & Input */}
-              <div className="p-4 border-t border-gray-900 bg-gray-950 mt-auto">
+              <div className="p-4 bg-gray-950 mt-auto">
                  <PostActions 
                     postId={post.id}
                     likeCount={post.likeCount}
@@ -307,17 +313,19 @@ export function PostDetailModal() {
                       <button
                         type="button"
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className="p-3 border border-gray-900 rounded-xl hover:bg-gray-900 transition-colors"
+                        className="h-12 w-12 flex items-center justify-center border border-gray-900 rounded-xl hover:bg-gray-900 transition-colors"
                       >
                         <Smile className="w-5 h-5 text-gray-25" />
                       </button>
                       {showEmojiPicker && (
-                         <div className="absolute bottom-12 left-0 w-[280px] h-[200px] bg-gray-950 border border-gray-900 rounded-xl p-2 grid grid-cols-6 gap-1 overflow-y-auto z-50 shadow-xl">
-                            {commonEmojis.map(emoji => (
-                              <button key={emoji} type="button" onClick={() => handleEmojiClick(emoji)} className="text-xl p-1 hover:bg-gray-900 rounded cursor-pointer">
-                                {emoji}
-                              </button>
-                            ))}
+                         <div className="absolute bottom-14 left-0 w-[240px] bg-gray-950 border border-gray-900 rounded-xl p-2 z-50 shadow-xl overflow-hidden">
+                            <div className="grid grid-cols-6 gap-2">
+                               {commonEmojis.map(emoji => (
+                                 <button key={emoji} type="button" onClick={() => handleEmojiClick(emoji)} className="text-xl p-1 hover:bg-gray-900 rounded transition-colors flex items-center justify-center h-8 w-8 cursor-pointer">
+                                   {emoji}
+                                 </button>
+                               ))}
+                            </div>
                          </div>
                       )}
                     </div>
@@ -326,14 +334,14 @@ export function PostDetailModal() {
                        <Input
                           value={commentText}
                           onChange={(e) => setCommentText(e.target.value)}
-                          placeholder="Add a comment..."
-                          className="bg-gray-950 border border-gray-900 pr-12 focus:border-primary-300 text-gray-25 placeholder:text-gray-500"
+                          placeholder="Add Comment"
+                          className="h-12 bg-gray-950 border border-gray-900 pr-14 focus:border-primary-300 text-gray-25 placeholder:text-gray-500 rounded-xl"
                           disabled={addComment.isPending}
                        />
                        <Button 
                           type="submit" 
                           disabled={!commentText.trim() || addComment.isPending}
-                          className="absolute right-1 top-1 h-8 px-3 bg-transparent hover:bg-transparent text-primary-300 font-semibold disabled:text-gray-600"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 h-8 px-3 bg-transparent hover:bg-transparent text-primary-300 font-bold disabled:text-gray-600"
                        >
                           Post
                        </Button>
@@ -344,6 +352,7 @@ export function PostDetailModal() {
             </div>
           </>
         )}
+        </div>
       </DialogContent>
     </Dialog>
   );

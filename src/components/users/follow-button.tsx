@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useToggleFollow } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { CheckCircle } from "lucide-react";
 
 interface FollowButtonProps {
   username: string;
@@ -61,12 +62,21 @@ export function FollowButton({
       size={size}
       disabled={toggleFollow.isPending}
       className={cn(
-        "min-w-[100px] transition-all",
-        isFollowing && "hover:border-destructive hover:text-destructive hover:bg-destructive/10",
+        "rounded-full transition-all whitespace-nowrap",
+        isFollowing 
+          ? "border-gray-600 text-white hover:bg-gray-800 hover:text-white w-[140px]" 
+          : "bg-primary-300 hover:bg-primary-300/90 text-white shadow-md shadow-primary-300/20 w-[90px]",
         className
       )}
     >
-      {isFollowing ? "Following" : "Follow"}
+      {isFollowing ? (
+        <>
+          <CheckCircle className="mr-2 h-4 w-4" />
+          Following
+        </>
+      ) : (
+        "Follow"
+      )}
     </Button>
   );
 }
