@@ -7,6 +7,7 @@ import { userService } from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 import { UserSearchResult } from '@/types';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -79,20 +80,22 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
                 autoFocus
               />
               {searchQuery && (
-            <button
+            <Button
+              variant='ghost'
+              size='icon-xs'
               onClick={handleClear}
-              className='absolute right-4 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-muted rounded-full transition-colors cursor-pointer group'
+              className='absolute right-4 top-1/2 transform -translate-y-1/2 rounded-full group'
             >
               <X className='h-4 w-4 p-[3px] text-background bg-muted-foreground rounded-full group-hover:text-foreground' strokeWidth={4} />
-            </button>
+            </Button>
               )}
             </div>
           </div>
 
           <SheetClose asChild>
-            <button className='p-2 hover:opacity-80 transition-opacity cursor-pointer'>
+            <Button variant='ghost' size='icon' className='shrink-0'>
               <X className='h-6 w-6 text-foreground' strokeWidth={2} />
-            </button>
+            </Button>
           </SheetClose>
         </header>
 

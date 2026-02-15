@@ -171,11 +171,15 @@ export function PostDetailModal() {
               {/* Header */}
               <div className="flex items-center justify-between p-4 bg-background">
                 <div className="flex items-center gap-3 min-w-0">
-                  <UserAvatar user={post.author} size="md" />
+                  <Link href={post.author.username === currentUser?.username ? "/profile" : `/profile/${post.author.username}`} onClick={closePost}>
+                    <UserAvatar user={post.author} size="md" />
+                  </Link>
                   <div className="flex flex-col min-w-0">
-                    <p className="text-foreground text-sm font-bold truncate">
-                      {post.author.name || post.author.username}
-                    </p>
+                    <Link href={post.author.username === currentUser?.username ? "/profile" : `/profile/${post.author.username}`} className="hover:underline" onClick={closePost}>
+                      <p className="text-foreground text-sm font-bold truncate">
+                        {post.author.name || post.author.username}
+                      </p>
+                    </Link>
                     <p className="text-muted-foreground text-xs truncate">
                       {dayjs(post.createdAt).fromNow()}
                     </p>
@@ -185,21 +189,24 @@ export function PostDetailModal() {
                 {/* Post Menu (Owner only) */}
                 {post.author.id === currentUser?.id && (
                   <div className="relative post-menu-container">
-                    <button 
+                    <Button 
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={() => setShowPostMenu(!showPostMenu)}
-                      className="p-1 hover:bg-accent rounded-full transition-colors cursor-pointer"
+                      className="rounded-full"
                     >
-                      <MoreHorizontal className="w-5 h-5 text-foreground" />
-                    </button>
+                      <MoreHorizontal className="w-5! h-5! text-foreground" />
+                    </Button>
                     {showPostMenu && (
                       <div className="absolute right-0 top-8 w-32 bg-background border border-border rounded-lg shadow-lg z-50 py-1">
                         {/* Edit omitted as service missing */}
-                        <button
+                        <Button
+                          variant="ghost"
                           onClick={handleDeletePost}
-                          className="w-full px-3 py-2 text-left text-sm text-red-500 hover:bg-accent transition-colors"
+                          className="w-full px-3 py-2 justify-start rounded-none text-sm text-red-500 hover:text-red-500"
                         >
                           Delete Post
-                        </button>
+                        </Button>
                       </div>
                     )}
                   </div>
@@ -231,11 +238,16 @@ export function PostDetailModal() {
                         <div key={comment.id} className="group flex flex-col gap-2 border-b border-border pb-4 mb-4 last:border-0 last:pb-0 last:mb-0">
                            <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3 min-w-0">
-                                <UserAvatar user={comment.author} size="sm" className="w-10 h-10 shrink-0" />
+                                <Link href={comment.author.username === currentUser?.username ? "/profile" : `/profile/${comment.author.username}`} onClick={closePost}>
+                                  <UserAvatar user={comment.author} size="sm" className="w-10 h-10 shrink-0" />
+                                </Link>
                                 <div className="flex flex-col min-w-0">
-                                   <span className="text-foreground text-sm font-bold truncate">
-                                     {comment.author.name || comment.author.username}
-                                   </span>
+                                   <Link href={comment.author.username === currentUser?.username ? "/profile" : `/profile/${comment.author.username}`} className="hover:underline" onClick={closePost}>
+                                     <span className="text-foreground text-sm font-bold truncate">
+                                       {comment.author.name || comment.author.username}
+                                     </span>
+                                   </Link>
+
                                    <span className="text-muted-foreground text-xs mt-0.5">
                                      {dayjs(comment.createdAt).fromNow()}
                                    </span>
@@ -245,20 +257,23 @@ export function PostDetailModal() {
                               {/* Comment Menu */}
                               {(post.author.id === currentUser?.id || comment.author.id === currentUser?.id) && (
                                  <div className="relative delete-menu-container opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                                   <button
+                                   <Button
+                                     variant="ghost"
+                                     size="icon-xs"
                                      onClick={() => setShowDeleteMenu(showDeleteMenu === comment.id ? null : comment.id)}
-                                     className="p-1 hover:bg-accent rounded-full transition-colors"
+                                     className="rounded-full"
                                    >
-                                     <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                                   </button>
+                                     <MoreHorizontal className="w-4! h-4! text-muted-foreground" />
+                                   </Button>
                                    {showDeleteMenu === comment.id && (
                                      <div className="absolute right-0 top-6 w-24 bg-background border border-border rounded-lg shadow-lg z-50 py-1">
-                                       <button
+                                       <Button
+                                         variant="ghost"
                                          onClick={() => deleteComment.mutate(comment.id)}
-                                         className="w-full px-3 py-1.5 text-left text-xs text-red-500 hover:bg-accent cursor-pointer"
+                                         className="w-full px-3 py-1.5 justify-start rounded-none text-xs text-red-500 hover:text-red-500 h-auto"
                                        >
                                          Delete
-                                       </button>
+                                       </Button>
                                      </div>
                                    )}
                                  </div>
@@ -293,13 +308,15 @@ export function PostDetailModal() {
                  
                  <form onSubmit={handleSubmitComment} className="mt-4 flex gap-2 relative">
                     <div className="relative emoji-picker-container">
-                      <button
+                      <Button
+                        variant="outline"
+                        size="icon-lg"
                         type="button"
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className="h-12 w-12 flex items-center justify-center border border-border rounded-xl hover:bg-accent transition-colors"
+                        className="h-12 w-12 rounded-xl"
                       >
-                        <Smile className="w-5 h-5 text-foreground" />
-                      </button>
+                        <Smile className="w-5! h-5! text-foreground" />
+                      </Button>
                       {showEmojiPicker && (
                          <div className="absolute bottom-14 left-0 w-[240px] bg-background border border-border rounded-xl p-2 z-50 shadow-xl overflow-hidden">
                             <div className="grid grid-cols-6 gap-2">

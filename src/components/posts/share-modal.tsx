@@ -4,6 +4,7 @@ import { useState } from "react";
 import { X, Copy, Share2, Twitter, Facebook, MessageCircle, Send, Check } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -84,12 +85,13 @@ export function ShareModal({
     colorClass?: string;
     active?: boolean;
   }) => (
-    <button
+    <Button
+      variant="ghost"
       onClick={onClick}
-      className="flex flex-col items-center gap-2 group cursor-pointer"
+      className="flex flex-col items-center gap-2 group h-auto p-2 hover:bg-transparent hover:scale-110"
     >
       <div className={cn(
-        "w-12 h-12 flex items-center justify-center rounded-2xl bg-muted group-hover:bg-accent group-hover:scale-110 transition-all duration-200",
+        "w-12 h-12 flex items-center justify-center rounded-2xl bg-muted group-hover:bg-accent transition-all duration-200",
         active && "bg-primary/20 text-primary"
       )}>
         <Icon className={cn("w-6 h-6", colorClass)} strokeWidth={1.5} />
@@ -97,7 +99,7 @@ export function ShareModal({
       <span className="text-foreground text-[10px] font-medium leading-tight">
         {label}
       </span>
-    </button>
+    </Button>
   );
 
   return (
@@ -115,12 +117,14 @@ export function ShareModal({
           <h2 className="text-foreground text-xl font-bold tracking-tight">
             Share
           </h2>
-          <button
+          <Button
+            variant="ghost"
+            size="icon-lg"
             onClick={onClose}
-            className="w-10 h-10 flex items-center justify-center hover:bg-accent rounded-full transition-colors cursor-pointer group"
+            className="rounded-full"
           >
-            <X className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-          </button>
+            <X className="w-5! h-5! text-muted-foreground" />
+          </Button>
         </div>
 
         {/* Content */}

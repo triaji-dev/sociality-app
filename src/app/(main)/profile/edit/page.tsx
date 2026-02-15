@@ -122,12 +122,14 @@ function EditProfileContent() {
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
         <div className="flex flex-row justify-between items-center px-4 h-16">
           <div className="flex flex-row items-center gap-2 flex-1">
-            <button
+            <Button
+              variant="ghost"
+              size="icon-xs"
               onClick={handleBack}
-              className="w-6 h-6 flex items-center justify-center hover:bg-accent rounded-full transition-colors cursor-pointer"
+              className="rounded-full"
             >
-              <ArrowLeft className="w-4 h-4 text-foreground" strokeWidth={1.875} />
-            </button>
+              <ArrowLeft className="w-4! h-4! text-foreground" strokeWidth={1.875} />
+            </Button>
             <h1 className="text-foreground text-base font-bold leading-[30px] tracking-tight">
               Edit Profile
             </h1>
@@ -147,12 +149,14 @@ function EditProfileContent() {
       <div className="w-full max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] mx-auto pt-4 md:pt-0 px-0">
         {/* Desktop Header */}
         <div className="hidden md:flex flex-row items-center gap-3 mb-8">
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={handleBack}
-            className="w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors cursor-pointer"
+            className="rounded-full"
           >
-            <ArrowLeft className="w-5 h-5 text-foreground" strokeWidth={2.5} />
-          </button>
+            <ArrowLeft className="w-5! h-5! text-foreground" strokeWidth={2.5} />
+          </Button>
           <h1 className="text-foreground text-2xl font-bold leading-9 tracking-tight">
             Edit Profile
           </h1>

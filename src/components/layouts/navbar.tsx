@@ -11,6 +11,7 @@ import { DesktopSearchDropdown } from '@/components/search/desktop-search-dropdo
 import { MobileMenuDropdown } from './mobile-menu-dropdown';
 import { useAuthStore } from '@/stores/auth-store';
 import { Search, Menu, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { userService } from '@/services/user.service';
 
@@ -96,12 +97,14 @@ export function Navbar() {
             className='w-full h-full pl-10 pr-10 bg-muted/50 border-border text-foreground placeholder-muted-foreground focus:border-purple-500 focus:ring-purple-500 rounded-full'
           />
           {desktopSearchQuery && (
-            <button
+            <Button
+              variant="ghost"
+              size="icon-xs"
               onClick={handleClearDesktopSearch}
-              className='absolute right-4 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-muted rounded-full transition-colors cursor-pointer group'
+              className='absolute right-4 top-1/2 transform -translate-y-1/2 rounded-full group'
             >
               <X className='h-4 w-4 p-[3px] text-background bg-muted-foreground rounded-full group-hover:text-foreground' strokeWidth={4} />
-            </button>
+            </Button>
           )}
         </div>
 
@@ -119,30 +122,34 @@ export function Navbar() {
       {/* Right Section */}
       <div className='flex items-center gap-4 md:gap-3'>
         {/* Mobile Search Icon - Only visible on mobile */}
-        <button
-          className='md:hidden p-2 hover:opacity-80 transition-opacity cursor-pointer'
+        <Button
+          variant='ghost'
+          size='icon'
+          className='md:hidden'
           onClick={() => setIsSearchModalOpen(true)}
         >
           <Search className='h-5 w-5 text-foreground' strokeWidth={1.25} />
-        </button>
+        </Button>
 
         {/* Profile Section */}
         {!mounted || isAuthLoading ? (
           // Show loading state
           <div className='flex items-center gap-2'>
-            <div className='w-8 h-8 bg-gray-700 rounded-full animate-pulse'></div>
+            <div className='w-8 h-8 bg-muted rounded-full animate-pulse'></div>
           </div>
         ) : user && isAuthenticated ? (
           <ProfileDropdown user={user} />
         ) : (
           <>
             {/* Mobile Menu Icon - Only visible on mobile when logged out */}
-            <button
-              className='md:hidden p-2 hover:opacity-80 transition-opacity cursor-pointer'
+            <Button
+              variant='ghost'
+              size='icon'
+              className='md:hidden'
               onClick={() => setIsMenuDropdownOpen(!isMenuDropdownOpen)}
             >
               <Menu className='h-6 w-6 text-foreground' strokeWidth={1.5} />
-            </button>
+            </Button>
 
             {/* Desktop Auth Buttons - Hidden on mobile */}
             <div className='hidden md:flex items-center gap-3'>

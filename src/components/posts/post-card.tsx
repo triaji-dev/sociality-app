@@ -8,8 +8,8 @@ import { MoreHorizontal, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UserAvatar } from "@/components/users/user-avatar";
 import { PostActions } from "./post-actions";
-import { PostImage } from "./post-image";
 import { Button } from "@/components/ui/button";
+import { PostImage } from "./post-image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -148,21 +148,23 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
                 : caption}
             </p>
             {shouldTruncate && !isExpanded && (
-              <button
+              <Button
+                variant="link"
                 onClick={() => setIsExpanded(true)}
-                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity cursor-pointer"
+                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 p-0 h-auto"
               >
                 Show more
-              </button>
+              </Button>
             )}
             
             {isExpanded && caption.length > captionLimit && (
-               <button
+               <Button
+                variant="link"
                 onClick={() => setIsExpanded(false)}
-                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 transition-opacity cursor-pointer"
+                className="text-primary text-base font-semibold leading-[30px] tracking-[-0.02em] hover:opacity-80 p-0 h-auto"
               >
                 Show less
-              </button>
+              </Button>
             )}
           </div>
         </div>

@@ -6,6 +6,7 @@ import { UserAvatar } from '@/components/users/user-avatar';
 import { LogOut, User, Sun, Moon, UserPen } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useAuthStore } from '@/stores/auth-store';
+import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -64,15 +65,16 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
   return (
     <div className='relative' ref={dropdownRef}>
       {/* Profile Button */}
-      <button
+      <Button
+        variant='ghost'
         onClick={() => setIsOpen(!isOpen)}
-        className='cursor-pointer flex items-center gap-3 hover:opacity-90 transition-all hover:scale-105 ease-in-out duration-200 focus:outline-none'
+        className='gap-3 hover:opacity-90 hover:scale-105 hover:bg-transparent focus:outline-none p-0 h-auto'
       >
         <UserAvatar user={user} size='md' />
         <span className='text-foreground text-sm font-medium hidden sm:block'>
           {user.name || user.username}
         </span>
-      </button>
+      </Button>
 
       {/* Dropdown Menu */}
       {isOpen && (
@@ -99,9 +101,10 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
 
           {/* Theme Toggle */}
           {mounted && (
-            <button
+            <Button
+              variant='ghost'
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className='flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent/50 transition-colors w-full text-left cursor-pointer'
+              className='w-full justify-start gap-3 px-4 py-3 text-sm text-foreground rounded-none h-auto'
             >
               {theme === 'dark' ? (
                 <>
@@ -114,20 +117,21 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
                   <span className='font-medium'>Dark Mode</span>
                 </>
               )}
-            </button>
+            </Button>
           )}
 
           {/* Divider */}
           <div className='border-t border-border my-2' />
 
           {/* Logout Button */}
-          <button
+          <Button
+            variant='ghost'
             onClick={handleLogout}
-            className='flex items-center gap-3 px-4 py-3 text-sm text-red hover:bg-accent/50 transition-colors w-full text-left cursor-pointer'
+            className='w-full justify-start gap-3 px-4 py-3 text-sm text-red hover:text-red rounded-none h-auto'
           >
             <LogOut className='h-4 w-4' />
             <span className='font-medium'>Logout</span>
-          </button>
+          </Button>
         </div>
       )}
 

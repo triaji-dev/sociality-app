@@ -42,7 +42,6 @@ export function UserCard({
         <FollowButton
           username={username}
           isFollowing={isFollowedByMe}
-          size="sm"
         />
       )}
     </div>

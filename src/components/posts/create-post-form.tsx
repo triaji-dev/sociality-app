@@ -133,16 +133,17 @@ export function CreatePostForm() {
                         </div>
 
                         {/* Delete Image */}
-                        <button
+                        <Button
+                          variant="outline"
                           type="button"
                           onClick={handleRemoveImage}
-                          className="flex flex-row items-center px-3 gap-1.5 h-10 bg-muted border border-border rounded-xl hover:bg-red/10 hover:border-red transition-colors"
+                          className="h-10 px-3 gap-1.5 rounded-xl hover:bg-red/10 hover:border-red"
                         >
                           <Trash2 className="w-5 h-5 text-red" strokeWidth={1.5} />
                           <span className="text-red text-sm font-medium leading-7 tracking-tight">
                             Delete Image
                           </span>
-                        </button>
+                        </Button>
                       </div>
 
                       {/* File Info */}

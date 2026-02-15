@@ -5,6 +5,7 @@ import { Heart, Bookmark } from "lucide-react";
 import { useToggleLike, useToggleSave } from "@/hooks";
 import { LikersDialog } from "./likers-dialog";
 import { ShareModal } from "./share-modal";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
@@ -18,6 +19,8 @@ interface PostActionsProps {
   onCommentClick?: () => void;
   onLikersClick?: () => void;
 }
+
+const actionButtonClass = "group p-0 h-auto hover:bg-transparent hover:scale-110 active:scale-90 transition-all duration-200";
 
 export function PostActions({
   postId,
@@ -98,63 +101,68 @@ export function PostActions({
       <div className="flex flex-row items-center gap-4">
         {/* Like Button */}
         <div className="flex flex-row items-center gap-1.5">
-          <button
+          <Button
+            variant="ghost"
             onClick={handleLike}
             disabled={toggleLike.isPending}
-            className="group flex flex-row items-center justify-center cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
+            className={actionButtonClass}
           >
              <Heart
               className={cn(
-                "w-6 h-6 transition-all duration-200",
+                "w-6! h-6! transition-all duration-200",
                 liked ? "fill-red text-red" : "text-foreground group-hover:text-red",
                 toggleLike.isPending && "opacity-50"
               )}
             />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
             onClick={() => setShowLikers(true)}
-            className="group flex flex-row items-center justify-center cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
+            className={actionButtonClass}
           >
             <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em] transition-colors duration-200 group-hover:text-red">
                {currentLikeCount}
             </span>
-          </button>
+          </Button>
         </div>
 
         {/* Comment Button */}
-        <button
+        <Button
+          variant="ghost"
           onClick={onCommentClick}
-          className="group flex flex-row items-center gap-1.5 cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
+          className={cn(actionButtonClass, "gap-1.5")}
         >
           <img src="/icons/comment-icon.svg" alt="Comment" className="w-6 h-6 transition-transform duration-200 dark:invert-0 invert" />
           <span className="text-foreground text-base font-semibold leading-[30px] tracking-[-0.02em] transition-colors duration-200">
             {commentCount}
           </span>
-        </button>
+        </Button>
 
         {/* Share Button */}
-        <button
+        <Button
+          variant="ghost"
           onClick={() => setShowShare(true)}
-          className="group flex flex-row items-center gap-1.5 cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
+          className={actionButtonClass}
         >
           <img src="/icons/share-icon.svg" alt="Share" className="w-6 h-6 transition-transform duration-200 dark:invert-0 invert" />
-        </button>
+        </Button>
       </div>
 
       {/* Right Action - Save */}
-      <button
+      <Button
+        variant="ghost"
         onClick={handleSave}
         disabled={toggleSave.isPending}
-        className="cursor-pointer hover:scale-110 active:scale-90 transition-all duration-200"
+        className={cn(actionButtonClass, "hover:bg-transparent")}
       >
         <Bookmark
           className={cn(
-            "w-6 h-6 transition-all duration-200",
+            "w-6! h-6! transition-all duration-200",
             saved ? "fill-foreground text-foreground" : "text-foreground",
              toggleSave.isPending && "opacity-50"
           )}
         />
-      </button>
+      </Button>
 
       {showLikers && (
         <LikersDialog

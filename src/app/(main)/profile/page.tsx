@@ -72,9 +72,11 @@ function ProfileContent() {
                 Edit Profile
               </Button>
             </Link>
-            <button
+            <Button
+              variant="outline"
+              size="icon-lg"
               onClick={() => setShowShare(true)}
-              className="w-10 h-10 md:w-12 md:h-12 border border-border rounded-full flex items-center justify-center hover:bg-accent transition-colors cursor-pointer"
+              className="w-10 h-10 md:w-12 md:h-12 rounded-full"
             >
               <Image
                 src="/icons/share-icon.svg"
@@ -83,7 +85,7 @@ function ProfileContent() {
                 height={20}
                 className="w-5 h-5 md:w-6 md:h-6 dark:invert-0 invert"
               />
-            </button>
+            </Button>
           </div>
         </div>
 

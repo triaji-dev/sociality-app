@@ -40,7 +40,7 @@ export function MobileNav() {
   }, [lastScrollY]);
 
   // Hide on specific pages (must be after all hooks)
-  if (pathname === "/profile/edit") return null;
+  if (pathname === "/profile/edit" || pathname === "/posts/new") return null;
 
   const navItems = [
     { href: "/timeline", label: "Home", icon: "home", requiresAuth: true, fallbackHref: "/timeline" },
