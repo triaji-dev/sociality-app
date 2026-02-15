@@ -48,6 +48,11 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
     enabled: debouncedQuery.length > 0,
   });
 
+  const handleClear = () => {
+    setSearchQuery('');
+    setDebouncedQuery('');
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
@@ -63,7 +68,7 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
         {/* Header — matches navbar h-16 */}
         <header className='flex items-center gap-3 px-4 h-16 shrink-0 border-b border-border'>
           <div className='flex-1 relative'>
-            <div className='flex items-center gap-2 px-3 py-2 bg-muted/50 border border-border rounded-full'>
+            <div className='flex items-center gap-2 px-3 py-2 bg-muted/50 border border-border rounded-full pr-10'>
               <Search className='h-5 w-5 text-muted-foreground' strokeWidth={1.25} />
               <input
                 type='text'
@@ -73,6 +78,14 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
                 className='flex-1 bg-transparent text-foreground placeholder-muted-foreground text-sm focus:outline-none'
                 autoFocus
               />
+              {searchQuery && (
+            <button
+              onClick={handleClear}
+              className='absolute right-4 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-muted rounded-full transition-colors cursor-pointer group'
+            >
+              <X className='h-4 w-4 p-[3px] text-background bg-muted-foreground rounded-full group-hover:text-foreground' strokeWidth={4} />
+            </button>
+              )}
             </div>
           </div>
 

@@ -10,7 +10,7 @@ import { MobileSearchModal } from '@/components/search/mobile-search-modal';
 import { DesktopSearchDropdown } from '@/components/search/desktop-search-dropdown';
 import { MobileMenuDropdown } from './mobile-menu-dropdown';
 import { useAuthStore } from '@/stores/auth-store';
-import { Search, Menu } from 'lucide-react';
+import { Search, Menu, X } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { userService } from '@/services/user.service';
 
@@ -22,6 +22,11 @@ export function Navbar() {
   const [desktopSearchQuery, setDesktopSearchQuery] = useState('');
   const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const handleClearDesktopSearch = () => {
+    setDesktopSearchQuery('');
+    setIsDesktopDropdownOpen(false);
+  };
 
   // Handle client-side mounting
   useEffect(() => {
@@ -88,8 +93,16 @@ export function Navbar() {
                 setIsDesktopDropdownOpen(true);
               }
             }}
-            className='w-full h-full pl-10 pr-4 bg-muted/50 border-border text-foreground placeholder-muted-foreground focus:border-purple-500 focus:ring-purple-500 rounded-full'
+            className='w-full h-full pl-10 pr-10 bg-muted/50 border-border text-foreground placeholder-muted-foreground focus:border-purple-500 focus:ring-purple-500 rounded-full'
           />
+          {desktopSearchQuery && (
+            <button
+              onClick={handleClearDesktopSearch}
+              className='absolute right-4 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-muted rounded-full transition-colors cursor-pointer group'
+            >
+              <X className='h-4 w-4 p-[3px] text-background bg-muted-foreground rounded-full group-hover:text-foreground' strokeWidth={4} />
+            </button>
+          )}
         </div>
 
         {/* Desktop Search Dropdown */}

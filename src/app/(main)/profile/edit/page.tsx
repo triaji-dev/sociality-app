@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -31,7 +32,7 @@ const editProfileSchema = z.object({
     .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores"),
   phone: z
     .string()
-    .regex(/^08[0-9]{8,11}$/, "Please enter a valid Indonesian phone number"),
+    .regex(/^(?:\+62|08)[0-9]{8,11}$/, "Please enter a valid Indonesian phone number (e.g., 08... or +62...)"),
   bio: z.string().max(150, "Bio must be at most 150 characters").optional(),
 });
 
