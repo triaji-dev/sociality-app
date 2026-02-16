@@ -116,7 +116,7 @@ export function ShareModal({
   );
 
   const ShareContent = () => (
-    <div className="flex flex-col gap-6 py-4">
+    <div className="flex flex-col gap-6 py-4 w-full">
        <div className="grid grid-cols-4 gap-4">
           <ShareButton 
             onClick={handleCopyLink} 
@@ -158,7 +158,7 @@ export function ShareModal({
        <div className="space-y-2">
           <p className="text-sm font-medium text-foreground px-1">Page Link</p>
           <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-xl border border-border/50 group-focus-within:border-primary/50 transition-colors">
-             <div className="flex-1 px-2 overflow-hidden">
+             <div className="flex-1 px-2 overflow-hidden min-w-0">
                 <p className="text-sm text-muted-foreground truncate font-mono select-all">{url}</p>
              </div>
              <Button
