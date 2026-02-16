@@ -82,7 +82,6 @@ export function PostGrid({
               className="h-full w-full object-cover transition-transform group-hover:scale-105"
             />
             
-            {/* Hover overlay - only show if stats are available */}
             {'likeCount' in post && 'commentCount' in post && (
               <div className="absolute inset-0 flex items-center justify-center gap-4 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
                 <div className="flex items-center gap-1 text-white">

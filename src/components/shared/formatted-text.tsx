@@ -12,10 +12,8 @@ interface FormattedTextProps {
 export function FormattedText({ text, className, linkClassName }: FormattedTextProps) {
   if (!text) return null;
 
-  // Regex to find URLs
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   
-  // Split text by URLs, keeping the delimiters (the URLs themselves)
   const parts = text.split(urlRegex);
 
   return (

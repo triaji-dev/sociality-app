@@ -21,14 +21,12 @@ export function DesktopSearchDropdown({
 }: DesktopSearchDropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Fetch search results
   const { data: users, isLoading } = useQuery({
     queryKey: ['search-users', searchQuery],
     queryFn: () => userService.searchUsers(searchQuery),
     enabled: searchQuery.length > 0 && isOpen,
   });
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

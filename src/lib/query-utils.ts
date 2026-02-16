@@ -2,10 +2,6 @@
 import { InfiniteData } from "@tanstack/react-query";
 import { Post, PaginatedResponse } from "@/types";
 
-/**
- * Shared getNextPageParam for all infinite queries with standard pagination.
- * Eliminates duplication across 14+ hook usages.
- */
 export function getStandardNextPageParam<T>(lastPage: PaginatedResponse<T>) {
   if (!lastPage.data) return undefined;
   const { page, totalPages } = lastPage.data.pagination;
@@ -19,7 +15,7 @@ export function updatePostInInfiniteData(
   postId: number,
   updater: (post: Post) => Post,
 ): InfinitePostData | undefined {
-  if (!data) return data;
+  if (!data || !data.pages) return data;
   return {
     ...data,
     pages: data.pages.map((page) => {

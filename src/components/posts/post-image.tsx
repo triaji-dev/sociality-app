@@ -16,8 +16,7 @@ export function PostImage({ src, alt, className, containerClassName }: PostImage
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // Fallback image if the original fails to load
-  const fallbackSrc = "/images/placeholder-post.webp"; // Ensure this exists or use a generic one
+  const fallbackSrc = "/images/placeholder-post.webp";
 
   return (
     <div className={cn("relative w-full h-full bg-muted overflow-hidden flex items-center justify-center", containerClassName)}>

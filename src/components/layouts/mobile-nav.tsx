@@ -39,7 +39,6 @@ export function MobileNav() {
     };
   }, [lastScrollY]);
 
-  // Hide on specific pages (must be after all hooks)
   if (pathname === "/profile/edit" || pathname === "/posts/new") return null;
 
   const navItems = [

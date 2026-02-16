@@ -37,6 +37,14 @@ export function useToggleSave() {
         postKeys.exploreInfinite(),
         (old) => updatePostInInfiniteData(old, postId, updater),
       );
+      queryClient.setQueriesData<InfinitePostData>(
+        { queryKey: ["users"] },
+        (old) => updatePostInInfiniteData(old, postId, updater),
+      );
+      queryClient.setQueriesData<InfinitePostData>(
+        { queryKey: ["me"] },
+        (old) => updatePostInInfiniteData(old, postId, updater),
+      );
       queryClient.setQueryData(
         postKeys.detail(postId),
         (old: { success: boolean; data: Post | null } | undefined) => {
@@ -65,8 +73,6 @@ export function useToggleSave() {
       toast.error("Failed to save/unsave post");
     },
     onSettled: () => {
-      // Only invalidate saved list — not post queries, because the API
-      // doesn't return savedByMe so refetch would overwrite our optimistic state
       queryClient.invalidateQueries({ queryKey: ["me", "saved"] });
     },
   });

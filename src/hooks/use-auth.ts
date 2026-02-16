@@ -18,7 +18,6 @@ export function useRegister() {
         toast.success("Account created successfully! Logging you in...");
         
         try {
-          // Auto-login after registration
           const loginResponse = await authService.login({
             email: variables.email,
             password: variables.password,
@@ -37,10 +36,6 @@ export function useRegister() {
           router.push("/login");
         }
       } else {
-        // If the API returns success: false, we might want to throw an error so onError handles it?
-        // Or just show the message.
-        // If we want the component to handle it, we should probably reject the promise or returning the response allows checking response.success
-        // However, useMutation treats resolved promises as success.
         if (response.message) {
             toast.error(response.message);
         } else {
@@ -48,13 +43,8 @@ export function useRegister() {
         }
       }
     },
-    // Removed onError to allow component to handle it via mutate options or catch block
-    // actually mutate's onError will trigger even if this onError is defined.
-    // The issue is WE WANT TO SUPPRESS the generic toast if we handle it specifically.
-    // So let's just log it here and NOT show a toast.
     onError: (error: Error) => {
       console.error("Register error:", error);
-      // toast.error("Registration failed. Please try again."); // Removed generic toast
     },
   });
 }
@@ -70,11 +60,9 @@ export function useLogin() {
         login(response.data.user, response.data.token);
         toast.success("Welcome back!");
         
-        // Check for returnTo param
         const params = new URLSearchParams(window.location.search);
         let returnTo = params.get("returnTo") || "/timeline";
         
-        // Safeguard: prevent redirecting back to login page
         if (returnTo.startsWith("/login")) {
           returnTo = "/timeline";
         }

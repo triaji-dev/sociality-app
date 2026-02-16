@@ -10,7 +10,6 @@ export const api = axios.create({
   },
 });
 
-// Request interceptor: attach auth token
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getToken();
@@ -25,8 +24,6 @@ api.interceptors.request.use(
   }
 );
 
-// Normalize paginated responses: API returns varying collection keys
-// (posts, users, comments) but frontend expects a uniform "items" key
 const COLLECTION_KEYS = ["posts", "users", "comments"] as const;
 
 function normalizePaginatedData(data: Record<string, unknown>): Record<string, unknown> {
@@ -41,7 +38,6 @@ function normalizePaginatedData(data: Record<string, unknown>): Record<string, u
   return data;
 }
 
-// Response interceptor: normalize pagination + handle 401 errors
 api.interceptors.response.use(
   (response) => {
     if (response.data?.data && typeof response.data.data === "object") {
@@ -53,7 +49,6 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       removeToken();
       
-      // Skip redirection if we're on the login page or the request specifically avoids it
       if (typeof window !== "undefined") {
         const isLoginPage = window.location.pathname === "/login";
         const isLoginRequest = error.config?.url?.includes("/api/auth/login");

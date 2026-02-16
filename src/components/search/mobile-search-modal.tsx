@@ -26,7 +26,6 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  // Reset search when closed
   useEffect(() => {
     if (!isOpen) {
       setSearchQuery('');
@@ -34,7 +33,6 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
     }
   }, [isOpen]);
 
-  // Debounce search query
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(searchQuery);
@@ -42,7 +40,6 @@ export function MobileSearchModal({ isOpen, onClose }: MobileSearchModalProps) {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Search users
   const { data: searchResults, isLoading } = useQuery({
     queryKey: ['search-users', debouncedQuery],
     queryFn: () => userService.searchUsers(debouncedQuery),

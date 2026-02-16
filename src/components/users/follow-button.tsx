@@ -28,7 +28,6 @@ export function FollowButton({
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const toggleFollow = useToggleFollow();
 
-  // Sync with parent props when they change (e.g. from query refetch)
   useEffect(() => {
     setIsFollowing(initialIsFollowing);
   }, [initialIsFollowing]);
@@ -37,25 +36,21 @@ export function FollowButton({
     e.preventDefault();
     e.stopPropagation();
 
-    // Optimistic toggle
     const newIsFollowing = !isFollowing;
     setIsFollowing(newIsFollowing);
 
     toggleFollow.mutate(
-      { username, isFollowing: !newIsFollowing }, // send CURRENT server state (which is !new)
+      { username, isFollowing: !newIsFollowing },
       {
         onSuccess: (response) => {
           if (response.success && response.data) {
-             // Server confirms new state
              setIsFollowing(response.data.following);
              analytics.track(response.data.following ? "follow_user" : "unfollow_user", { targetUsername: username });
           } else {
-             // Revert on API logic failure 
              setIsFollowing(!newIsFollowing); 
           }
         },
         onError: () => {
-          // Revert on network/server error
           setIsFollowing(!newIsFollowing);
         },
       }

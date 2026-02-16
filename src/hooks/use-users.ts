@@ -23,7 +23,6 @@ export const userKeys = {
   userFollowing: (username: string) => [...userKeys.all, username, "following"] as const,
 };
 
-// My Profile
 export function useMe() {
   return useQuery({
     queryKey: userKeys.me(),
@@ -50,7 +49,6 @@ export function useUpdateMe() {
       if (response.success && response.data) {
         toast.success("Profile updated!");
         queryClient.invalidateQueries({ queryKey: userKeys.me() });
-        // Update auth store with new user info
         setUser({
           id: response.data.id,
           name: response.data.name,
@@ -106,7 +104,6 @@ export function useMyFollowing() {
   });
 }
 
-// Search Users
 export function useSearchUsers(query: string) {
   return useInfiniteQuery({
     queryKey: userKeys.search(query),
@@ -117,7 +114,6 @@ export function useSearchUsers(query: string) {
   });
 }
 
-// Public User Profile
 export function useUser(username: string) {
   return useQuery({
     queryKey: userKeys.detail(username),

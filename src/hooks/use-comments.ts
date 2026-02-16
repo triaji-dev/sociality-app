@@ -34,7 +34,6 @@ export function useAddComment(postId: number) {
         queryClient.invalidateQueries({ queryKey: commentKeys.infinite(postId) });
         queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) });
 
-        // Optimistically update comment count in lists
         const updateCommentCount = (post: Post) => ({
              ...post,
              commentCount: post.commentCount + 1
@@ -50,6 +49,10 @@ export function useAddComment(postId: number) {
         );
         queryClient.setQueriesData<InfinitePostData>(
              { queryKey: ["users"] },
+             (old) => updatePostInInfiniteData(old, postId, updateCommentCount)
+        );
+        queryClient.setQueriesData<InfinitePostData>(
+             { queryKey: ["me"] },
              (old) => updatePostInInfiniteData(old, postId, updateCommentCount)
         );
 
@@ -75,7 +78,6 @@ export function useDeleteComment(postId: number) {
         queryClient.invalidateQueries({ queryKey: commentKeys.infinite(postId) });
         queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) });
 
-        // Optimistically update comment count in lists
         const updateCommentCount = (post: Post) => ({
              ...post,
              commentCount: Math.max(0, post.commentCount - 1)
@@ -91,6 +93,10 @@ export function useDeleteComment(postId: number) {
         );
         queryClient.setQueriesData<InfinitePostData>(
              { queryKey: ["users"] },
+             (old) => updatePostInInfiniteData(old, postId, updateCommentCount)
+        );
+        queryClient.setQueriesData<InfinitePostData>(
+             { queryKey: ["me"] },
              (old) => updatePostInInfiniteData(old, postId, updateCommentCount)
         );
 

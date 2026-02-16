@@ -42,7 +42,6 @@ export function PostActions({
   const pathname = usePathname();
   const { isAuthenticated } = useAuthStore();
 
-  // Sync with parent props
   useEffect(() => { setLiked(initialLikedByMe); }, [initialLikedByMe]);
   useEffect(() => { setSaved(initialSavedByMe); }, [initialSavedByMe]);
   useEffect(() => { setCurrentLikeCount(initialLikeCount); }, [initialLikeCount]);

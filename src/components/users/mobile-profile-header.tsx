@@ -8,8 +8,8 @@ import { UserAvatar } from "./user-avatar";
 
 interface MobileProfileHeaderProps {
   title?: string;
-  username?: string; // For avatar fallback if needed
-  avatarUrl?: string | null; // For avatar in header (optional, maybe not needed if we just show name)
+  username?: string; 
+  avatarUrl?: string | null; 
   showBack?: boolean;
   rightAction?: React.ReactNode;
   className?: string;
@@ -46,9 +46,6 @@ export function MobileProfileHeader({
           </Button>
         )}
         
-        {/* If we want an avatar in the header when scrolling, we could add it here. 
-            For now, following the design which seems to be just Title/Name 
-        */}
         <div className="flex items-center gap-2">
            {avatarUrl && (
                <UserAvatar name={title || ""} src={avatarUrl} size="sm" className="w-8 h-8" />

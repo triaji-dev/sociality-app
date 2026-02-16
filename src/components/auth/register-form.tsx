@@ -58,18 +58,13 @@ export function RegisterForm() {
     const { confirmPassword, ...registerData } = data;
     registerMutation.mutate(registerData, {
       onError: (error: any) => {
-        // Assuming error structure from backend
-        // If Axios error, standard is error.response.data
         const responseData = error?.response?.data;
         
         if (responseData) {
-             // Case 1: "message" field contains specific text we can parse OR "errors" object exists
-             // Example check based on typical patterns:
              const message = responseData.message || "";
-             const errors = responseData.errors; // Some APIs return { errors: { email: "..." } }
+             const errors = responseData.errors;
 
              if (errors) {
-                // Map object errors
                 if (errors.email) {
                     setError("email", { type: "server", message: Array.isArray(errors.email) ? errors.email[0] : errors.email });
                 }
@@ -86,8 +81,6 @@ export function RegisterForm() {
                      setError("name", { type: "server", message: Array.isArray(errors.name) ? errors.name[0] : errors.name });
                 }
              } else if (message) {
-                 // Fallback: Parsing the message string if standardized "errors" object is missing
-                 // This relies on the backend returning clear strings like "Email is already taken"
                  const msgLower = message.toLowerCase();
                  if (msgLower.includes("email")) {
                      setError("email", { type: "server", message: message });
@@ -96,7 +89,6 @@ export function RegisterForm() {
                  } else if (msgLower.includes("phone")) {
                      setError("phone", { type: "server", message: message });
                  } else {
-                     // If we can't map it, show a generic error on the root or a toast
                       toast.error(message);
                  }
              } else {
