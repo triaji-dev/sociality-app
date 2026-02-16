@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-md hover:bg-primary/90 hover:shadow-lg rounded-full",
+        default: "bg-primary text-white shadow-md hover:bg-primary/90 hover:shadow-lg rounded-full",
         destructive:
           "bg-destructive text-white shadow-sm hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
@@ -21,7 +21,7 @@ const buttonVariants = cva(
         ghost2:
           "hover:text-accent-foreground",
         profileStats:
-          "bg-transparent h-auto p-0 font-normal hover:text-primary transition-colors hover:no-underline hover:scale-105",
+          "bg-transparent h-auto p-0 font-normal hover:text-primary transition-colors hover:no-underline hover:scale-105 active:scale-95 transition-all duration-200",
         link: "text-primary underline-offset-4 hover:underline",
         navbarOutline:
           "border border-input bg-transparent text-foreground font-bold text-base tracking-[-0.02em] hover:opacity-80 transition-opacity hover:bg-transparent",

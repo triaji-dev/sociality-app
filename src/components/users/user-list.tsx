@@ -52,7 +52,7 @@ export function UserList({
       isLoading={isFetchingNextPage}
       onLoadMore={onLoadMore}
     >
-      <div className="divide-y">
+      <div className="space-y-6">
         {users.map((user) => (
           <UserCard
             key={user.id}

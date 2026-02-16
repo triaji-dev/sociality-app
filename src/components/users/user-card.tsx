@@ -26,15 +26,22 @@ export function UserCard({
   const isMe = currentUser?.id === id;
 
   return (
-    <div className="flex items-center justify-between gap-3 py-2">
+    <div className="flex items-center justify-between gap-3">
       <Link
         href={isMe ? "/profile" : `/profile/${username}`}
-        className="flex flex-1 items-center gap-3 min-w-0"
+        className="flex flex-1 items-center gap-3 min-w-0 group"
       >
-        <UserAvatar src={avatarUrl} name={name} size="md" />
-        <div className="min-w-0 flex-1">
-          <p className="font-medium text-sm truncate">{name}</p>
-          <p className="text-muted-foreground text-sm truncate">@{username}</p>
+        <UserAvatar 
+          src={avatarUrl} 
+          name={name} 
+          size="md" 
+          className="h-12 w-12 border-2 border-border shrink-0"
+        />
+        <div className="min-w-0 flex flex-col">
+          <span className="font-bold text-base leading-tight truncate group-hover:underline decoration-foreground/50 underline-offset-4 decoration-2 transition-all">
+            {name}
+          </span>
+          <span className="text-muted-foreground text-sm truncate">@{username}</span>
         </div>
       </Link>
       

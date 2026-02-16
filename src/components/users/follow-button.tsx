@@ -69,10 +69,10 @@ export function FollowButton({
       size={size}
       disabled={toggleFollow.isPending}
       className={cn(
-        "rounded-full transition-all whitespace-nowrap",
+        "rounded-full transition-all duration-200 whitespace-nowrap active:scale-95",
         isFollowing 
-          ? "border-border text-foreground hover:bg-accent hover:text-foreground w-[140px]" 
-          : "bg-primary-300 hover:bg-primary-300/90 text-white shadow-md shadow-primary-300/20 w-[90px]",
+          ? "border-border text-foreground hover:bg-accent hover:text-foreground hover:scale-105 w-[140px]" 
+          : "bg-primary-300 hover:bg-primary-300/90 hover:scale-105 hover:shadow-lg hover:shadow-primary-300/40 text-white shadow-md shadow-primary-300/20 w-[90px]",
         className
       )}
     >

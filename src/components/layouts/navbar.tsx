@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { ProfileDropdown } from './profile-dropdown';
 import { MobileSearchModal } from '@/components/search/mobile-search-modal';
 import { DesktopSearchDropdown } from '@/components/search/desktop-search-dropdown';
@@ -51,8 +52,13 @@ export function Navbar() {
     refetchOnWindowFocus: false,
   });
 
+  const isProfilePage = pathname.startsWith('/profile');
+
   return (
-    <header className='fixed top-0 left-0 w-full h-16 md:h-20 bg-background/80 backdrop-blur-md border-b border-border flex flex-row justify-between items-center px-4 md:px-[120px] gap-4 md:gap-[124px] z-50'>
+    <header className={cn(
+      'fixed top-0 left-0 w-full h-16 md:h-20 bg-background/80 backdrop-blur-md border-b border-border flex flex-row justify-between items-center px-4 md:px-[120px] gap-4 md:gap-[124px] z-50',
+      isProfilePage ? 'hidden md:flex' : 'flex'
+    )}>
       {/* Logo Section */}
       <Link
         href='/timeline'

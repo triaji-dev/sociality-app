@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useMe, useMyPosts, useMySaved, useMyFollowers, useMyFollowing } from "@/hooks";
 import { AuthGuard } from "@/components/auth";
-import { UserListDialog } from "@/components/users";
+import { UserListDialog, MobileProfileHeader } from "@/components/users";
 import { PostGrid } from "@/components/posts";
 import { ShareModal } from "@/components/posts/share-modal";
 import { PageLoader, ErrorState } from "@/components/shared";
 import { UserAvatar } from "@/components/users/user-avatar";
 import { Button } from "@/components/ui/button";
-import { Bookmark, Loader2 } from "lucide-react";
+import { Bookmark, Loader2, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -47,9 +47,36 @@ function ProfileContent() {
   const stats = profile.stats;
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 -mt-6 md:mt-0">
+      <MobileProfileHeader 
+        title={user.name} 
+        username={user.username}
+        showBack={true}
+        className="md:hidden"
+        rightAction={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowShare(true)}
+            >
+              <Image
+                src="/icons/share-icon.svg"
+                alt="Share"
+                width={20}
+                height={20}
+                className="w-5 h-5 dark:invert-0 invert"
+              />
+            </Button>
+            <Link href="/profile/edit">
+               <Settings className="w-6 h-6" />
+            </Link>
+          </div>
+        }
+      />
+
       {/* Profile Section */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 pt-14 md:pt-0">
         {/* Header */}
         <div className="flex flex-col gap-3 md:gap-0 relative">
           {/* User Info */}
@@ -66,7 +93,7 @@ function ProfileContent() {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-row items-center gap-3 w-full md:w-auto md:absolute md:right-0 md:top-0">
+          <div className="flex flex-row items-center gap-3 w-full md:w-auto md:absolute md:right-0 md:top-0 mt-4 md:mt-0">
             <Link href="/profile/edit" className="flex-1 md:flex-none">
               <Button className="w-full md:w-[130px] h-10 md:h-12 border border-border bg-transparent text-foreground text-sm md:text-base font-bold rounded-full hover:bg-accent hover:border-accent">
                 Edit Profile
@@ -76,7 +103,7 @@ function ProfileContent() {
               variant="outline"
               size="icon-lg"
               onClick={() => setShowShare(true)}
-              className="w-10 h-10 md:w-12 md:h-12 rounded-full"
+              className="w-10 h-10 md:w-12 md:h-12 rounded-full hidden md:flex"
             >
               <Image
                 src="/icons/share-icon.svg"
@@ -97,26 +124,28 @@ function ProfileContent() {
         )}
 
         {/* Stats */}
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-between md:justify-start md:gap-0">
           {/* Posts */}
-          <button
+          <Button
+            variant="profileStats"
             onClick={() => setActiveTab("posts")}
-            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity cursor-pointer"
+            className="flex flex-col items-center gap-0.5 flex-1 md:flex-none md:w-auto p-0 md:px-4"
           >
             <div className="text-foreground text-lg md:text-xl font-bold leading-8 md:leading-[34px] tracking-tight">
               {stats.posts}
             </div>
             <div className="text-muted-foreground text-xs md:text-base font-normal leading-4 md:leading-[30px]">
-              Posts
+              Post
             </div>
-          </button>
+          </Button>
 
-          <div className="w-px h-[50px] md:h-[66px] bg-border" />
+          <div className="w-px h-[30px] md:h-[66px] bg-border mx-2 md:mx-0" />
 
           {/* Followers */}
-          <button
+          <Button
+            variant="profileStats"
             onClick={() => setShowFollowers(true)}
-            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity cursor-pointer"
+            className="flex flex-col items-center gap-0.5 flex-1 md:flex-none md:w-auto p-0 md:px-4"
           >
             <div className="text-foreground text-lg md:text-xl font-bold leading-8 md:leading-[34px] tracking-tight">
               {stats.followers}
@@ -124,14 +153,15 @@ function ProfileContent() {
             <div className="text-muted-foreground text-xs md:text-base font-normal leading-4 md:leading-[30px]">
               Followers
             </div>
-          </button>
+          </Button>
 
-          <div className="w-px h-[50px] md:h-[66px] bg-border" />
+          <div className="w-px h-[30px] md:h-[66px] bg-border mx-2 md:mx-0" />
 
           {/* Following */}
-          <button
+          <Button
+            variant="profileStats"
             onClick={() => setShowFollowing(true)}
-            className="flex flex-col items-center gap-0.5 flex-1 hover:opacity-80 transition-opacity cursor-pointer"
+            className="flex flex-col items-center gap-0.5 flex-1 md:flex-none md:w-auto p-0 md:px-4"
           >
             <div className="text-foreground text-lg md:text-xl font-bold leading-8 md:leading-[34px] tracking-tight">
               {stats.following}
@@ -139,19 +169,22 @@ function ProfileContent() {
             <div className="text-muted-foreground text-xs md:text-base font-normal leading-4 md:leading-[30px]">
               Following
             </div>
-          </button>
+          </Button>
 
-          <div className="w-px h-[50px] md:h-[66px] bg-border" />
+          <div className="w-px h-[30px] md:h-[66px] bg-border mx-2 md:mx-0" />
 
           {/* Likes */}
-          <div className="flex flex-col items-center gap-0.5 flex-1">
+          <Button
+            variant="profileStats"
+            className="flex flex-col items-center gap-0.5 flex-1 md:flex-none md:w-auto p-0 md:px-4 cursor-default hover:scale-100! hover:text-foreground!"
+          >
             <div className="text-foreground text-lg md:text-xl font-bold leading-8 md:leading-[34px] tracking-tight">
               {stats.likes}
             </div>
             <div className="text-muted-foreground text-xs md:text-base font-normal leading-4 md:leading-[30px]">
               Likes
             </div>
-          </div>
+          </Button>
         </div>
       </div>
 

@@ -36,8 +36,8 @@ export function LikersDialog({ postId, open, onOpenChange }: LikersDialogProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md p-5 gap-5 bg-background border-border text-foreground overflow-visible [&>button]:hidden">
-        <div className="absolute right-0 top-0 -translate-y-[140%]">
+      <DialogContent className="max-sm:fixed max-sm:bottom-0 max-sm:top-auto max-sm:left-0 max-sm:right-0 max-sm:translate-x-0 max-sm:translate-y-0 max-sm:max-w-none max-sm:rounded-b-none max-sm:rounded-t-[20px] max-sm:border-x-0 max-sm:border-b-0 max-sm:data-[state=open]:slide-in-from-bottom-full max-sm:data-[state=closed]:slide-out-to-bottom-full max-sm:duration-300 sm:max-w-md p-5 gap-5 bg-background border-border text-foreground overflow-visible [&>button]:hidden">
+        <div className="absolute right-0 top-0 -translate-y-[110%] max-sm:hidden">
           <DialogClose className="rounded-full p-2 hover:scale-120 transition-transform cursor-pointer">
               <X className="h-5 w-5 text-foreground" />
               <span className="sr-only">Close</span>
@@ -46,9 +46,12 @@ export function LikersDialog({ postId, open, onOpenChange }: LikersDialogProps) 
         
         <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle className="text-xl font-bold">Likes</DialogTitle>
+          <DialogClose className="hidden max-sm:flex rounded-full p-2 hover:bg-accent transition-colors">
+            <X className="h-5 w-5" />
+          </DialogClose>
         </DialogHeader>
         
-        <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden w-full" id="likers-scroll-area">
+        <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden w-full minimal-scrollbar" id="likers-scroll-area">
           {isLoading ? (
             <div className="flex justify-center py-8">
               <LoadingSpinner />

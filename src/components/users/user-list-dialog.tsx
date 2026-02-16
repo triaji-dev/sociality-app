@@ -5,10 +5,12 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { UserCard } from "@/components/users/user-card";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import { InfiniteData } from "@tanstack/react-query";
 import { PaginatedResponse, UserListItem, Liker } from "@/types";
 
@@ -43,12 +45,22 @@ export function UserListDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md p-0 gap-0 overflow-hidden">
-        <DialogHeader className="p-4 border-b">
-          <DialogTitle className="text-center">{title}</DialogTitle>
+      <DialogContent className="max-sm:fixed max-sm:bottom-0 max-sm:top-auto max-sm:left-0 max-sm:right-0 max-sm:translate-x-0 max-sm:translate-y-0 max-sm:max-w-none max-sm:rounded-b-none max-sm:rounded-t-[20px] max-sm:border-x-0 max-sm:border-b-0 max-sm:data-[state=open]:slide-in-from-bottom-full max-sm:data-[state=closed]:slide-out-to-bottom-full max-sm:duration-300 sm:max-w-md p-5 gap-5 bg-background border-border text-foreground overflow-visible [&>button]:hidden">
+        <div className="absolute right-0 top-0 -translate-y-[110%] max-sm:hidden">
+          <DialogClose className="rounded-full p-2 hover:scale-120 transition-transform cursor-pointer">
+              <X className="h-5 w-5 text-foreground" />
+              <span className="sr-only">Close</span>
+          </DialogClose>
+        </div>
+
+        <DialogHeader className="flex flex-row items-center justify-between">
+          <DialogTitle className="text-xl font-bold">{title}</DialogTitle>
+          <DialogClose className="hidden max-sm:flex rounded-full p-2 hover:bg-accent transition-colors">
+            <X className="h-5 w-5" />
+          </DialogClose>
         </DialogHeader>
         
-        <div className="max-h-[60vh] overflow-y-auto p-4">
+        <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden w-full minimal-scrollbar" id="user-list-scroll-area">
           {isLoading ? (
             <div className="flex justify-center py-8">
               <LoadingSpinner />
@@ -62,7 +74,7 @@ export function UserListDialog({
               {emptyMessage}
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {users.map((user) => (
                 <UserCard
                   key={user.id}
@@ -82,6 +94,7 @@ export function UserListDialog({
                     size="sm"
                     onClick={() => fetchNextPage()}
                     disabled={isFetchingNextPage}
+                    className="text-muted-foreground hover:text-foreground"
                   >
                     {isFetchingNextPage ? (
                       <LoadingSpinner size="sm" />
