@@ -9,9 +9,10 @@ import type { Comment } from "@/types";
 
 interface CommentListProps {
   postId: number;
+  variant?: "default" | "rich";
 }
 
-export function CommentList({ postId }: CommentListProps) {
+export function CommentList({ postId, variant = "default" }: CommentListProps) {
   const {
     data,
     isLoading,
@@ -56,7 +57,7 @@ export function CommentList({ postId }: CommentListProps) {
         )}
       </div>
       
-      <CommentForm postId={postId} />
+      <CommentForm postId={postId} variant={variant} />
     </div>
   );
 }

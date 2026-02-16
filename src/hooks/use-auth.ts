@@ -37,12 +37,24 @@ export function useRegister() {
           router.push("/login");
         }
       } else {
-        toast.error(response.message || "Registration failed");
+        // If the API returns success: false, we might want to throw an error so onError handles it?
+        // Or just show the message.
+        // If we want the component to handle it, we should probably reject the promise or returning the response allows checking response.success
+        // However, useMutation treats resolved promises as success.
+        if (response.message) {
+            toast.error(response.message);
+        } else {
+            toast.error("Registration failed");
+        }
       }
     },
+    // Removed onError to allow component to handle it via mutate options or catch block
+    // actually mutate's onError will trigger even if this onError is defined.
+    // The issue is WE WANT TO SUPPRESS the generic toast if we handle it specifically.
+    // So let's just log it here and NOT show a toast.
     onError: (error: Error) => {
       console.error("Register error:", error);
-      toast.error("Registration failed. Please try again.");
+      // toast.error("Registration failed. Please try again."); // Removed generic toast
     },
   });
 }

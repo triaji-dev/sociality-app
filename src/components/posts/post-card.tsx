@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useAuthStore } from "@/stores/auth-store";
 import { usePostModalStore } from "@/stores/post-modal-store";
-import { useDeletePost } from "@/hooks";
+import { useDeletePost, useMediaQuery } from "@/hooks";
 import type { Post } from "@/types";
 
 dayjs.extend(relativeTime);
@@ -37,11 +37,13 @@ dayjs.extend(relativeTime);
 interface PostCardProps {
   post: Post;
   showFullCaption?: boolean;
+  onCommentClick?: () => void;
 }
 
-export function PostCard({ post, showFullCaption = false }: PostCardProps) {
+export function PostCard({ post, showFullCaption = false, onCommentClick }: PostCardProps) {
   const router = useRouter();
   const { openPost } = usePostModalStore();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const currentUser = useAuthStore((state) => state.user);
   const isOwner = currentUser?.id === post.author.id;
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -56,6 +58,32 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
     deletePost.mutate(post.id, {
       onSuccess: () => setShowDeleteDialog(false),
     });
+  };
+
+  const handlePostClick = () => {
+    if (onCommentClick) {
+      onCommentClick();
+      return;
+    }
+
+    if (isDesktop) {
+      openPost(post.id);
+    } else {
+      router.push(`/posts/${post.id}`);
+    }
+  };
+
+  const handleCommentClick = () => {
+    if (onCommentClick) {
+      onCommentClick();
+      return;
+    }
+
+    if (isDesktop) {
+      openPost(post.id);
+    } else {
+      router.push(`/posts/${post.id}?action=comment`);
+    }
   };
 
   return (
@@ -109,7 +137,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
           {/* Image */}
           <div
             className="cursor-pointer w-full"
-            onClick={() => openPost(post.id)}
+            onClick={handlePostClick}
           >
              <div
               className="w-full aspect-square relative overflow-hidden rounded-lg bg-muted cursor-pointer hover:opacity-95 transition-opacity"
@@ -131,7 +159,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
               commentCount={post.commentCount}
               likedByMe={post.likedByMe}
               savedByMe={post.savedByMe}
-              onCommentClick={() => openPost(post.id)}
+              onCommentClick={handleCommentClick}
             />
           </div>
 

@@ -12,10 +12,11 @@ import { DesktopSearchDropdown } from '@/components/search/desktop-search-dropdo
 import { MobileMenuDropdown } from './mobile-menu-dropdown';
 import { useAuthStore } from '@/stores/auth-store';
 import { useDebounce } from '@/hooks/use-debounce';
-import { Search, Menu, X } from 'lucide-react';
+import { Search, Menu, X, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { userService } from '@/services/user.service';
+import { useRouter } from 'next/navigation';
 
 export function Navbar() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuthStore();
@@ -53,34 +54,73 @@ export function Navbar() {
   });
 
   const isProfilePage = pathname.startsWith('/profile');
+  const isAddPostPage = pathname === '/posts/new';
+  const router = useRouter();
 
   return (
     <header className={cn(
       'fixed top-0 left-0 w-full h-16 md:h-20 bg-background/80 backdrop-blur-md border-b border-border flex flex-row justify-between items-center px-4 md:px-[120px] gap-4 md:gap-[124px] z-50',
-      isProfilePage ? 'hidden md:flex' : 'flex'
+      'flex'
     )}>
       {/* Logo Section */}
-      <Link
-        href='/timeline'
-        onClick={(e) => {
-          if (pathname === '/timeline') {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-        }}
-        className='flex items-center gap-3 hover:opacity-90 transition-all hover:scale-105 ease-in-out duration-200'
-      >
-        <Image
-          src='/logos/main-logo.svg'
-          alt='Sociality'
-          width={30}
-          height={30}
-          className='w-[30px] h-[30px] dark:invert-0 invert'
-        />
-        <span className='text-foreground text-xl md:text-lg font-bold md:font-semibold'>
-          Sociality
-        </span>
-      </Link>
+      <div className="flex items-center gap-3">
+        {/* Mobile Add Post Header */}
+        {isAddPostPage && (
+          <div className="flex md:hidden items-center gap-3">
+            <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => router.back()} 
+                className="p-0 hover:bg-transparent -ml-2"
+            >
+                <ArrowLeft className="w-6 h-6 text-foreground" />
+            </Button>
+            <span className="text-foreground text-xl font-bold">Add Post</span>
+          </div>
+        )}
+
+        {/* Mobile Profile Header */}
+        {isProfilePage && (
+          <div className="flex md:hidden items-center gap-3">
+            <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => router.back()} 
+                className="p-0 hover:bg-transparent -ml-2"
+            >
+                <ArrowLeft className="w-6 h-6 text-foreground" />
+            </Button>
+            <span className="text-foreground text-xl font-bold">
+              {pathname === '/profile' ? user?.username : pathname.split('/')[2]}
+            </span>
+          </div>
+        )}
+
+        <Link
+            href='/timeline'
+            onClick={(e) => {
+            if (pathname === '/timeline') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            }}
+            className={cn(
+                'items-center gap-3 hover:opacity-90 transition-all hover:scale-105 ease-in-out duration-200',
+                isAddPostPage || isProfilePage ? 'hidden md:flex' : 'flex'
+            )}
+        >
+            <Image
+            src='/logos/main-logo.svg'
+            alt='Sociality'
+            width={30}
+            height={30}
+            className='w-[30px] h-[30px] dark:invert-0 invert'
+            />
+            <span className='text-foreground text-xl md:text-lg font-bold md:font-semibold'>
+            Sociality
+            </span>
+        </Link>
+      </div>
 
       {/* Desktop Search Bar - Hidden on mobile */}
       <div className='hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'>
@@ -129,15 +169,17 @@ export function Navbar() {
 
       {/* Right Section */}
       <div className='flex items-center gap-4 md:gap-3'>
-        {/* Mobile Search Icon - Only visible on mobile */}
-        <Button
-          variant='ghost'
-          size='icon'
-          className='md:hidden'
-          onClick={() => setIsSearchModalOpen(true)}
-        >
-          <Search className='h-5 w-5 text-foreground' strokeWidth={1.25} />
-        </Button>
+        {/* Mobile Search Icon - Only visible on mobile AND NOT on Add Post page or Profile page */}
+        {!isAddPostPage && !isProfilePage && (
+            <Button
+                variant='ghost'
+                size='icon'
+                className='md:hidden'
+                onClick={() => setIsSearchModalOpen(true)}
+            >
+                <Search className='h-5 w-5 text-foreground' strokeWidth={1.25} />
+            </Button>
+        )}
 
         {/* Profile Section */}
         {!mounted || isAuthLoading ? (

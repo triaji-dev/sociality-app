@@ -45,7 +45,7 @@ export function LikersDialog({ postId, open, onOpenChange }: LikersDialogProps) 
         </div>
         
         <DialogHeader className="flex flex-row items-center justify-between">
-          <DialogTitle className="text-xl font-bold">Likes</DialogTitle>
+          <DialogTitle className="text-lg font-bold">Likes</DialogTitle>
           <DialogClose className="hidden max-sm:flex rounded-full p-2 hover:bg-accent transition-colors">
             <X className="h-5 w-5" />
           </DialogClose>

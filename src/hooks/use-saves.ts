@@ -5,6 +5,7 @@ import { saveService } from "@/services";
 import { postKeys } from "./use-posts";
 import { Post, PaginatedResponse } from "@/types";
 import { updatePostInInfiniteData, InfinitePostData } from "@/lib/query-utils";
+import { toast } from "sonner";
 
 
 
@@ -46,6 +47,10 @@ export function useToggleSave() {
 
       return { previousFeed, previousExplore, previousDetail };
     },
+    onSuccess: (_, { isSaved }) => {
+        const action = isSaved ? "Unsaved" : "Saved";
+        toast.success(`Post ${action} successfully`);
+    },
     onError: (err, { postId }, context) => {
       if (context?.previousFeed) {
         queryClient.setQueryData(postKeys.feedInfinite(), context.previousFeed);
@@ -57,6 +62,7 @@ export function useToggleSave() {
         queryClient.setQueryData(postKeys.detail(postId), context.previousDetail);
       }
       console.error("Toggle save error:", err);
+      toast.error("Failed to save/unsave post");
     },
     onSettled: () => {
       // Only invalidate saved list — not post queries, because the API

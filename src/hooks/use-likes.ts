@@ -5,6 +5,7 @@ import { likeService } from "@/services";
 import { postKeys } from "./use-posts";
 import { Post, PaginatedResponse } from "@/types";
 import { updatePostInInfiniteData, InfinitePostData, getStandardNextPageParam } from "@/lib/query-utils";
+import { toast } from "sonner";
 
 export const likeKeys = {
   all: ["likes"] as const,
@@ -47,6 +48,7 @@ export function useToggleLike() {
         likeCount: isLiked ? post.likeCount - 1 : post.likeCount + 1,
       });
 
+      // Update main feeds
       queryClient.setQueryData<InfinitePostData>(
         postKeys.feedInfinite(),
         (old) => updatePostInInfiniteData(old, postId, updater),
@@ -55,6 +57,13 @@ export function useToggleLike() {
         postKeys.exploreInfinite(),
         (old) => updatePostInInfiniteData(old, postId, updater),
       );
+
+      // Update all user-related lists (Profile posts, My posts, User likes, etc.)
+      queryClient.setQueriesData<InfinitePostData>(
+        { queryKey: ["users"] },
+        (old) => updatePostInInfiniteData(old, postId, updater)
+      );
+
       queryClient.setQueryData(
         postKeys.detail(postId),
         (old: { success: boolean; data: Post | null } | undefined) => {
@@ -65,8 +74,11 @@ export function useToggleLike() {
 
       return { previousFeed, previousExplore, previousDetail };
     },
-    onSuccess: (response, { postId }) => {
+    onSuccess: (response, { postId, isLiked }) => {
       if (!response.data) return;
+      
+      const action = isLiked ? "Unliked" : "Liked";
+      toast.success(`Post ${action} successfully`);
 
       // Use the server-confirmed values as source of truth
       const { liked, likeCount } = response.data;
@@ -85,6 +97,13 @@ export function useToggleLike() {
         postKeys.exploreInfinite(),
         (old) => updatePostInInfiniteData(old, postId, reconcile),
       );
+
+      // Sync user lists
+      queryClient.setQueriesData<InfinitePostData>(
+        { queryKey: ["users"] },
+        (old) => updatePostInInfiniteData(old, postId, reconcile)
+      );
+
       queryClient.setQueryData(
         postKeys.detail(postId),
         (old: { success: boolean; data: Post | null } | undefined) => {
@@ -100,10 +119,15 @@ export function useToggleLike() {
       if (context?.previousExplore) {
         queryClient.setQueryData(postKeys.exploreInfinite(), context.previousExplore);
       }
+      // Revert user lists? It's complex to store all previous states.
+      // Simply invalidating might be safer on error.
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      
       if (context?.previousDetail) {
         queryClient.setQueryData(postKeys.detail(postId), context.previousDetail);
       }
       console.error("Toggle like error:", err);
+      toast.error("Failed to like/unlike post");
     },
     onSettled: (_, __, { postId }) => {
       queryClient.invalidateQueries({ queryKey: likeKeys.likers(postId) });

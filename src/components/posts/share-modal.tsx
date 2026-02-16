@@ -5,6 +5,20 @@ import { X, Copy, Share2, Twitter, Facebook, MessageCircle, Send, Check } from "
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -22,6 +36,7 @@ export function ShareModal({
   description = "",
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const handleCopyLink = async () => {
     try {
@@ -70,8 +85,6 @@ export function ShareModal({
     }
   };
 
-  if (!isOpen) return null;
-
   const ShareButton = ({ 
     onClick, 
     icon: Icon, 
@@ -85,109 +98,114 @@ export function ShareModal({
     colorClass?: string;
     active?: boolean;
   }) => (
-    <Button
-      variant="ghost"
+    <button
+      type="button"
       onClick={onClick}
-      className="flex flex-col items-center gap-2 group h-auto p-2 hover:bg-transparent hover:scale-110"
+      className="flex flex-col items-center gap-2 group p-2 transition-transform cursor-pointer focus:outline-none"
     >
       <div className={cn(
-        "w-12 h-12 flex items-center justify-center rounded-2xl bg-muted group-hover:bg-accent transition-all duration-200",
-        active && "bg-primary/20 text-primary"
+        "w-12 h-12 flex items-center justify-center rounded-full bg-muted transition-all duration-200 group-hover:scale-110 group-active:scale-95 border border-transparent group-hover:border-border/50",
+        active && "bg-primary/10 text-primary border-primary/20"
       )}>
-        <Icon className={cn("w-6 h-6", colorClass)} strokeWidth={1.5} />
+        <Icon className={cn("w-5 h-5 transition-colors", colorClass)} strokeWidth={1.5} />
       </div>
-      <span className="text-foreground text-[10px] font-medium leading-tight">
+      <span className="text-muted-foreground text-xs font-medium group-hover:text-foreground transition-colors">
         {label}
       </span>
-    </Button>
+    </button>
   );
 
-  return (
-    <div className="fixed inset-0 z-70 flex items-end md:items-center justify-center p-4">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" 
-        onClick={onClose} 
-      />
+  const ShareContent = () => (
+    <div className="flex flex-col gap-6 py-4">
+       <div className="grid grid-cols-4 gap-4">
+          <ShareButton 
+            onClick={handleCopyLink} 
+            icon={copied ? Check : Copy} 
+            label={copied ? "Copied" : "Copy"} 
+            active={copied}
+          />
+          <ShareButton 
+            onClick={handleNativeShare} 
+            icon={Share2} 
+            label="More" 
+          />
+          <ShareButton 
+            onClick={() => handleSocialShare("whatsapp")} 
+            icon={MessageCircle} 
+            label="WhatsApp" 
+            colorClass="text-[#25D366]" 
+          />
+          <ShareButton 
+            onClick={() => handleSocialShare("telegram")} 
+            icon={Send} 
+            label="Telegram" 
+            colorClass="text-[#0088cc]" 
+          />
+          <ShareButton 
+            onClick={() => handleSocialShare("twitter")} 
+            icon={Twitter} 
+            label="Twitter" 
+            colorClass="text-[#1DA1F2]" 
+          />
+          <ShareButton 
+            onClick={() => handleSocialShare("facebook")} 
+            icon={Facebook} 
+            label="Facebook" 
+            colorClass="text-[#1877F2]" 
+          />
+       </div>
 
-      {/* Modal Container */}
-      <div className="relative w-full max-w-[440px] bg-background border border-border rounded-[32px] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 shadow-2xl">
-        {/* Header */}
-        <div className="flex flex-row justify-between items-center px-6 py-5 border-b border-border/50">
-          <h2 className="text-foreground text-xl font-bold tracking-tight">
-            Share
-          </h2>
-          <Button
-            variant="ghost"
-            size="icon-lg"
-            onClick={onClose}
-            className="rounded-full"
-          >
-            <X className="w-5! h-5! text-muted-foreground" />
-          </Button>
-        </div>
-
-        {/* Content */}
-        <div className="flex flex-col p-6 gap-8">
-          {/* Share Grid */}
-          <div className="grid grid-cols-4 gap-y-6 gap-x-2">
-            <ShareButton 
-              onClick={handleCopyLink} 
-              icon={copied ? Check : Copy} 
-              label={copied ? "Copied" : "Copy"} 
-              active={copied}
-            />
-            <ShareButton 
-              onClick={handleNativeShare} 
-              icon={Share2} 
-              label="System" 
-            />
-            <ShareButton 
-              onClick={() => handleSocialShare("whatsapp")} 
-              icon={MessageCircle} 
-              label="WhatsApp" 
-              colorClass="text-[#25D366]" 
-            />
-            <ShareButton 
-              onClick={() => handleSocialShare("telegram")} 
-              icon={Send} 
-              label="Telegram" 
-              colorClass="text-[#0088cc]" 
-            />
-            <ShareButton 
-              onClick={() => handleSocialShare("twitter")} 
-              icon={Twitter} 
-              label="Twitter" 
-              colorClass="text-[#1DA1F2]" 
-            />
-            <ShareButton 
-              onClick={() => handleSocialShare("facebook")} 
-              icon={Facebook} 
-              label="Facebook" 
-              colorClass="text-[#1877F2]" 
-            />
-          </div>
-
-          {/* URL Section */}
-          <div className="space-y-3">
-            <p className="text-muted-foreground text-sm font-medium px-1">Page Link</p>
-            <div className="flex items-center gap-2 p-1.5 bg-muted/50 rounded-2xl border border-border/50 focus-within:border-primary/50 transition-colors">
-              <div className="flex-1 px-3 py-2 overflow-hidden">
-                <p className="text-foreground text-sm truncate font-medium">{url}</p>
-              </div>
-              <button
+       <div className="space-y-2">
+          <p className="text-sm font-medium text-foreground px-1">Page Link</p>
+          <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-xl border border-border/50 group-focus-within:border-primary/50 transition-colors">
+             <div className="flex-1 px-2 overflow-hidden">
+                <p className="text-sm text-muted-foreground truncate font-mono select-all">{url}</p>
+             </div>
+             <Button
+                size="sm"
+                variant="ghost"
                 onClick={handleCopyLink}
                 className={cn(
-                  "flex items-center justify-center p-2.5 rounded-xl transition-all duration-200 cursor-pointer",
-                  copied ? "bg-green-500/10 text-green-500" : "bg-primary text-white hover:opacity-90 active:scale-95"
+                   "h-8 px-3 rounded-lg font-medium transition-all hover:bg-background shadow-sm",
+                   copied ? "text-green-500" : "text-primary"
                 )}
-              >
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              </button>
-            </div>
+             >
+                {copied ? "Copied" : "Copy"}
+             </Button>
           </div>
-        </div>
-      </div>
+       </div>
     </div>
+  );
+
+  if (isDesktop) {
+    return (
+      <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <DialogContent showCloseButton={false} className="sm:max-w-md gap-0 p-0 overflow-hidden border-border bg-background shadow-lg sm:rounded-2xl">
+          <DialogHeader className="px-6 py-4 border-b border-border/40 flex flex-row items-center justify-between">
+            <DialogTitle className="text-lg font-bold">Share</DialogTitle>
+            <DialogClose className="rounded-full p-2 hover:bg-accent transition-colors -mr-2">
+              <X className="h-4 w-4 text-muted-foreground" />
+              <span className="sr-only">Close</span>
+            </DialogClose>
+          </DialogHeader>
+          <div className="px-6 pb-6">
+            <ShareContent />
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
+    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <SheetContent side="bottom" className="rounded-t-[20px] max-h-[85vh] p-0 flex flex-col gap-0 bg-background border-t border-border">
+         <SheetHeader className="px-6 py-4 border-b border-border/40">
+            <SheetTitle className="text-lg font-bold text-left">Share</SheetTitle>
+         </SheetHeader>
+         <div className="px-6 pb-8 pt-2">
+            <ShareContent />
+         </div>
+      </SheetContent>
+    </Sheet>
   );
 }

@@ -7,6 +7,9 @@ import type { Post, SavedPost, LikedPost } from "@/types";
 import { usePostModalStore } from "@/stores/post-modal-store";
 import { PostImage } from "./post-image";
 
+import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@/hooks/use-media-query";
+
 interface PostGridProps {
   posts: (Post | SavedPost | LikedPost)[];
   hasMore: boolean;
@@ -31,6 +34,16 @@ export function PostGrid({
   onRetry,
 }: PostGridProps) {
   const { openPost } = usePostModalStore();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const router = useRouter();
+
+  const handlePostClick = (postId: number) => {
+    if (isDesktop) {
+      openPost(postId);
+    } else {
+      router.push(`/posts/${postId}`);
+    }
+  };
 
   if (isLoading) {
     return <PageLoader />;
@@ -60,7 +73,7 @@ export function PostGrid({
         {posts.map((post) => (
           <div
             key={post.id}
-            onClick={() => openPost(post.id)}
+            onClick={() => handlePostClick(post.id)}
             className="group relative aspect-square overflow-hidden bg-muted cursor-pointer"
           >
             <PostImage

@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/auth-store";
 import { analytics } from "@/lib/analytics";
 import { useRouter, usePathname } from "next/navigation";
-import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 
@@ -74,15 +73,11 @@ export function PostActions({
             setLiked(response.data.liked);
             setCurrentLikeCount(response.data.likeCount);
             analytics.track(response.data.liked ? "like_post" : "unlike_post", { postId });
-            if (response.data.liked) {
-              toast.success("Liked");
-            }
           }
         },
         onError: () => {
           setLiked(wasLiked);
           setCurrentLikeCount((c) => (wasLiked ? c + 1 : c - 1));
-          toast.error("Failed to update like status");
         },
       },
     );
@@ -107,13 +102,9 @@ export function PostActions({
       {
         onSuccess: (response) => {
              analytics.track(!wasSaved ? "save_post" : "unsave_post", { postId });
-             if (!wasSaved) {
-               toast.success("Saved");
-             }
         },
         onError: () => {
           setSaved(wasSaved);
-          toast.error("Failed to update save status");
         },
       },
     );

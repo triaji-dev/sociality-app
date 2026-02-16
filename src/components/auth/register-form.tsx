@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { toast } from "sonner";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -46,6 +47,7 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -54,7 +56,57 @@ export function RegisterForm() {
 
   const onSubmit = (data: RegisterFormData) => {
     const { confirmPassword, ...registerData } = data;
-    registerMutation.mutate(registerData);
+    registerMutation.mutate(registerData, {
+      onError: (error: any) => {
+        // Assuming error structure from backend
+        // If Axios error, standard is error.response.data
+        const responseData = error?.response?.data;
+        
+        if (responseData) {
+             // Case 1: "message" field contains specific text we can parse OR "errors" object exists
+             // Example check based on typical patterns:
+             const message = responseData.message || "";
+             const errors = responseData.errors; // Some APIs return { errors: { email: "..." } }
+
+             if (errors) {
+                // Map object errors
+                if (errors.email) {
+                    setError("email", { type: "server", message: Array.isArray(errors.email) ? errors.email[0] : errors.email });
+                }
+                if (errors.username) {
+                     setError("username", { type: "server", message: Array.isArray(errors.username) ? errors.username[0] : errors.username });
+                }
+                if (errors.phone) {
+                     setError("phone", { type: "server", message: Array.isArray(errors.phone) ? errors.phone[0] : errors.phone });
+                }
+                 if (errors.password) {
+                     setError("password", { type: "server", message: Array.isArray(errors.password) ? errors.password[0] : errors.password });
+                }
+                if (errors.name) {
+                     setError("name", { type: "server", message: Array.isArray(errors.name) ? errors.name[0] : errors.name });
+                }
+             } else if (message) {
+                 // Fallback: Parsing the message string if standardized "errors" object is missing
+                 // This relies on the backend returning clear strings like "Email is already taken"
+                 const msgLower = message.toLowerCase();
+                 if (msgLower.includes("email")) {
+                     setError("email", { type: "server", message: message });
+                 } else if (msgLower.includes("username")) {
+                     setError("username", { type: "server", message: message });
+                 } else if (msgLower.includes("phone")) {
+                     setError("phone", { type: "server", message: message });
+                 } else {
+                     // If we can't map it, show a generic error on the root or a toast
+                      toast.error(message);
+                 }
+             } else {
+                 toast.error("Registration failed. Please try again.");
+             }
+        } else {
+            toast.error("An unexpected error occurred. Please try again.");
+        }
+      }
+    });
   };
 
   return (

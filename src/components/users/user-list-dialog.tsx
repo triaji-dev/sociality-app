@@ -54,7 +54,7 @@ export function UserListDialog({
         </div>
 
         <DialogHeader className="flex flex-row items-center justify-between">
-          <DialogTitle className="text-xl font-bold">{title}</DialogTitle>
+          <DialogTitle className="text-lg font-bold">{title}</DialogTitle>
           <DialogClose className="hidden max-sm:flex rounded-full p-2 hover:bg-accent transition-colors">
             <X className="h-5 w-5" />
           </DialogClose>

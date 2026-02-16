@@ -13,7 +13,7 @@ export default function NewPostPage() {
     <AuthGuard>
       <div className="w-full md:w-[452px] mx-auto px-4 md:px-0 flex flex-col gap-6">
         {/* Header */}
-        <div className="flex flex-row items-center gap-3">
+        <div className="hidden md:flex flex-row items-center gap-3">
           <Button
             variant="ghost"
             size="icon"

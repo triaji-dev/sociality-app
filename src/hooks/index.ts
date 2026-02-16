@@ -5,4 +5,5 @@ export * from "./use-likes";
 export * from "./use-follow";
 export * from "./use-saves";
 export * from "./use-users";
+export * from "./use-media-query";
 export * from "./use-debounce";

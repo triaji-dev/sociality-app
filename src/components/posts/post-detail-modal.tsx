@@ -164,12 +164,12 @@ export function PostDetailModal() {
           </div>
         ) : (
           <>
-             <div className="w-full md:w-[60%] h-[40vh] md:h-full bg-black relative shrink-0">
+             <div className="w-full md:w-[60%] h-[40vh] md:h-full bg-white dark:bg-black relative shrink-0">
                 <PostImage
                   src={post.imageUrl}
                   alt={post.caption || "Post"}
                   className="object-contain"
-                  containerClassName="bg-muted"
+                  containerClassName="bg-white dark:bg-black"
                 />
             </div>
 
