@@ -133,6 +133,7 @@ export function PostActions({
         <div className="flex flex-row items-center gap-1.5">
           <Button
             variant="ghost2"
+            size="none"
             onClick={handleLike}
             disabled={toggleLike.isPending}
             className={actionButtonClass}
@@ -147,6 +148,7 @@ export function PostActions({
           </Button>
           <Button
             variant="ghost2"
+            size="none"
             onClick={() => setShowLikers(true)}
             className={actionButtonClass}
           >
@@ -159,6 +161,7 @@ export function PostActions({
         {/* Comment Button */}
         <Button
           variant="ghost2"
+          size="none"
           onClick={handleCommentClick}
           className={cn(actionButtonClass, "flex items-center gap-1.5")}
         >
@@ -171,6 +174,7 @@ export function PostActions({
         {/* Share Button */}
         <Button
           variant="ghost2"
+          size="none"
           onClick={(e) => {
             e.stopPropagation();
             setShowShare(true);
@@ -184,6 +188,7 @@ export function PostActions({
       {/* Right Action - Save */}
       <Button
         variant="ghost2"
+        size="none"
         onClick={handleSave}
         disabled={toggleSave.isPending}
         className={cn(actionButtonClass, "hover:bg-transparent")}

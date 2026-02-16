@@ -149,9 +149,9 @@ export function PostDetailModal() {
         </VisuallyHidden>
 
         {/* Close Button - Top-Right Corner */}
-        <div className="absolute -top-10 right-0 h-10 w-10 flex items-center justify-center z-50">
-          <DialogClose className="p-2 hover:bg-white/10 rounded-full transition-colors cursor-pointer group">
-            <X className="h-8 w-8 text-white group-hover:scale-110 transition-transform" />
+        <div className="absolute -top-12 -right-3 h-10 w-10 flex items-center justify-center z-50">
+          <DialogClose className="p-2 rounded-full cursor-pointer group">
+            <X className="h-6 w-6 text-white group-hover:scale-110 transition-transform" />
             <span className="sr-only">Close</span>
           </DialogClose>
         </div>
