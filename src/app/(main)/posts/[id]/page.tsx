@@ -2,7 +2,7 @@
 
 import { useState, use, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { usePost } from "@/hooks";
+import { usePost, useMediaQuery } from "@/hooks";
 import { PostCard } from "@/components/posts";
 import { CommentList } from "@/components/comments";
 import { PageLoader, ErrorState } from "@/components/shared";
@@ -42,6 +42,8 @@ export default function PostPage({ params }: PostPageProps) {
 
   const post = data.data;
 
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
   return (
     <div className="max-w-xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
@@ -55,23 +57,31 @@ export default function PostPage({ params }: PostPageProps) {
         <PostCard 
           post={post} 
           showFullCaption 
-          onCommentClick={() => setIsCommentOpen(true)}
+          preventNavigation
+          onCommentClick={!isDesktop ? () => setIsCommentOpen(true) : undefined}
         />
         
         {/* Comment Sheet (Styled like LikersDialog) */}
-        <Sheet open={isCommentOpen} onOpenChange={setIsCommentOpen}>
-          <SheetContent 
-            side="bottom" 
-            className="max-h-[85vh] h-auto flex flex-col p-0 rounded-t-[20px] overflow-hidden"
-          >
-            <SheetHeader className="p-4">
-              <SheetTitle>Comments</SheetTitle>
-            </SheetHeader>
-            <div className="flex-1 overflow-hidden relative">
-               <CommentList postId={postId} variant="rich" />
-            </div>
-          </SheetContent>
-        </Sheet>
+        <div className="hidden md:block mt-8">
+           <CommentList postId={postId} variant="rich" />
+        </div>
+
+        {/* Comment Sheet (Mobile Only) */}
+        <div className="md:hidden">
+            <Sheet open={isCommentOpen} onOpenChange={setIsCommentOpen}>
+            <SheetContent 
+                side="bottom" 
+                className="max-h-[85vh] h-auto flex flex-col p-0 rounded-t-[20px] overflow-hidden"
+            >
+                <SheetHeader className="p-4">
+                <SheetTitle>Comments</SheetTitle>
+                </SheetHeader>
+                <div className="flex-1 overflow-hidden relative">
+                <CommentList postId={postId} variant="rich" />
+                </div>
+            </SheetContent>
+            </Sheet>
+        </div>
       </div>
     </div>
   );

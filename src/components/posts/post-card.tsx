@@ -38,9 +38,10 @@ interface PostCardProps {
   post: Post;
   showFullCaption?: boolean;
   onCommentClick?: () => void;
+  preventNavigation?: boolean;
 }
 
-export function PostCard({ post, showFullCaption = false, onCommentClick }: PostCardProps) {
+export function PostCard({ post, showFullCaption = false, onCommentClick, preventNavigation = false }: PostCardProps) {
   const router = useRouter();
   const { openPost } = usePostModalStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -66,6 +67,8 @@ export function PostCard({ post, showFullCaption = false, onCommentClick }: Post
       return;
     }
 
+    if (preventNavigation) return;
+
     if (isDesktop) {
       openPost(post.id);
     } else {
@@ -78,6 +81,8 @@ export function PostCard({ post, showFullCaption = false, onCommentClick }: Post
       onCommentClick();
       return;
     }
+
+    if (preventNavigation) return;
 
     if (isDesktop) {
       openPost(post.id);
