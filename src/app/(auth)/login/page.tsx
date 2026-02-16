@@ -1,5 +1,9 @@
-import { LoginForm } from "@/components/auth";
+import { LoginForm, GuestGuard } from "@/components/auth";
 
 export default function LoginPage() {
-  return <LoginForm />;
+  return (
+    <GuestGuard>
+      <LoginForm />
+    </GuestGuard>
+  );
 }

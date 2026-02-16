@@ -10,8 +10,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PostActions } from "@/components/posts/post-actions";
 import { PostImage } from "@/components/posts/post-image";
+import { FormattedText } from "@/components/shared/formatted-text";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
+import { analytics } from "@/lib/analytics";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
@@ -63,6 +65,9 @@ export function PostDetailModal() {
       setShowEmojiPicker(false);
       setShowDeleteMenu(null);
       setShowPostMenu(false);
+      if (postId) {
+        analytics.track("view_post", { postId: postId as number });
+      }
     }
   }, [isOpen, postId]);
 
@@ -105,7 +110,10 @@ export function PostDetailModal() {
     addComment.mutate(
       { text: commentText },
       {
-        onSuccess: () => setCommentText("")
+        onSuccess: () => {
+          setCommentText("");
+          analytics.track("comment_post", { postId: postId || 0 });
+        }
         // Toast handled by hook
       }
     );
@@ -134,7 +142,7 @@ export function PostDetailModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closePost()}>
-      <DialogContent className="w-[calc(100vw-32px)] md:w-[calc(100vw-240px)] sm:max-w-none h-[80vh] max-h-[720px] p-0 gap-0 overflow-visible bg-background border border-border flex flex-col md:flex-row [&>button]:hidden">
+      <DialogContent className="w-[calc(100vw-32px)] md:w-[calc(100vw-240px)] sm:max-w-none h-[80vh] max-h-[720px] p-0 gap-0 overflow-visible bg-background border border-border flex flex-col md:flex-row [&>button]:hidden rounded-xl">
         <VisuallyHidden>
           <DialogTitle>Post Detail</DialogTitle>
           <DialogDescription>Full post view with comments</DialogDescription>
@@ -148,7 +156,7 @@ export function PostDetailModal() {
           </DialogClose>
         </div>
 
-        <div className="flex flex-col md:flex-row w-full h-full overflow-hidden rounded-lg">
+        <div className="flex flex-col md:flex-row w-full h-full overflow-hidden rounded-xl bg-background">
 
         {isPostLoading || !post ? (
           <div className="flex items-center justify-center w-full h-full">
@@ -190,10 +198,10 @@ export function PostDetailModal() {
                 {post.author.id === currentUser?.id && (
                   <div className="relative post-menu-container">
                     <Button 
-                      variant="ghost"
+                      variant="ghost2"
                       size="icon-sm"
                       onClick={() => setShowPostMenu(!showPostMenu)}
-                      className="rounded-full"
+                      className="rounded-full hover:scale-110 active:scale-90"
                     >
                       <MoreHorizontal className="w-5! h-5! text-foreground" />
                     </Button>
@@ -217,9 +225,10 @@ export function PostDetailModal() {
               <div className="flex-1 overflow-y-auto p-4 minimal-scrollbar" ref={commentsContainerRef}>
                 {post.caption && (
                   <div className="mb-4">
-                    <p className="text-foreground text-sm leading-relaxed whitespace-pre-wrap">
-                      {post.caption}
-                    </p>
+                    <FormattedText 
+                      text={post.caption}
+                      className="text-foreground text-sm leading-relaxed" 
+                    />
                   </div>
                 )}
                 
@@ -258,10 +267,10 @@ export function PostDetailModal() {
                               {(post.author.id === currentUser?.id || comment.author.id === currentUser?.id) && (
                                  <div className="relative delete-menu-container opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                                    <Button
-                                     variant="ghost"
+                                     variant="ghost2"
                                      size="icon-xs"
                                      onClick={() => setShowDeleteMenu(showDeleteMenu === comment.id ? null : comment.id)}
-                                     className="rounded-full"
+                                     className="rounded-full hover:scale-110 active:scale-90"
                                    >
                                      <MoreHorizontal className="w-4! h-4! text-muted-foreground" />
                                    </Button>
@@ -279,9 +288,10 @@ export function PostDetailModal() {
                                  </div>
                               )}
                            </div>
-                           <p className="text-foreground text-sm whitespace-pre-wrap word-break-all">
-                             {comment.text}
-                           </p>
+                           <FormattedText 
+                             text={comment.text}
+                             className="text-foreground text-sm" 
+                           />
                         </div>
                       ))}
                       

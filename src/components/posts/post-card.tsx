@@ -10,6 +10,7 @@ import { UserAvatar } from "@/components/users/user-avatar";
 import { PostActions } from "./post-actions";
 import { Button } from "@/components/ui/button";
 import { PostImage } from "./post-image";
+import { FormattedText } from "@/components/shared/formatted-text";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -88,7 +89,7 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
             {isOwner && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Button variant="ghost2" size="icon" className="h-8 w-8 hover:scale-110 active:scale-90">
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -143,9 +144,11 @@ export function PostCard({ post, showFullCaption = false }: PostCardProps) {
               >
                 {post.author.name}
               </Link>
-               {shouldTruncate && !isExpanded
-                ? caption.slice(0, captionLimit) + "..."
-                : caption}
+              <FormattedText 
+                text={shouldTruncate && !isExpanded
+                  ? caption.slice(0, captionLimit) + "..."
+                  : caption} 
+              />
             </p>
             {shouldTruncate && !isExpanded && (
               <Button

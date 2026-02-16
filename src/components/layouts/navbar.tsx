@@ -10,6 +10,7 @@ import { MobileSearchModal } from '@/components/search/mobile-search-modal';
 import { DesktopSearchDropdown } from '@/components/search/desktop-search-dropdown';
 import { MobileMenuDropdown } from './mobile-menu-dropdown';
 import { useAuthStore } from '@/stores/auth-store';
+import { useDebounce } from '@/hooks/use-debounce';
 import { Search, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -21,6 +22,7 @@ export function Navbar() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isMenuDropdownOpen, setIsMenuDropdownOpen] = useState(false);
   const [desktopSearchQuery, setDesktopSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(desktopSearchQuery, 300);
   const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -115,7 +117,7 @@ export function Navbar() {
             setIsDesktopDropdownOpen(false);
             setDesktopSearchQuery('');
           }}
-          searchQuery={desktopSearchQuery}
+          searchQuery={debouncedSearchQuery}
         />
       </div>
 

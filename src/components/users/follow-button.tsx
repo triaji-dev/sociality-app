@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import { useToggleFollow } from "@/hooks";
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/stores/auth-store";
+import { analytics } from "@/lib/analytics";
+import { useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { CheckCircle } from "lucide-react";
 
@@ -19,6 +22,9 @@ export function FollowButton({
   size = "default", 
   className,
 }: FollowButtonProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { isAuthenticated } = useAuthStore();
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const toggleFollow = useToggleFollow();
 
@@ -42,6 +48,7 @@ export function FollowButton({
           if (response.success && response.data) {
              // Server confirms new state
              setIsFollowing(response.data.following);
+             analytics.track(response.data.following ? "follow_user" : "unfollow_user", { targetUsername: username });
           } else {
              // Revert on API logic failure 
              setIsFollowing(!newIsFollowing); 
