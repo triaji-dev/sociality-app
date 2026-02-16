@@ -63,27 +63,30 @@ export function ProfileHeader({
 
           {/* Stats */}
           <div className="flex gap-6 text-sm">
-            <button 
+            <Button 
+              variant="profileStats"
               onClick={onPostsClick}
-              className="hover:underline flex items-center gap-1 cursor-pointer"
+              className="gap-1 px-1 -mx-1"
             >
-              <span className="font-semibold">{stats.post}</span>{" "}
+              <span className="font-semibold text-foreground">{stats.post}</span>{" "}
               <span className="text-muted-foreground">posts</span>
-            </button>
-            <button 
+            </Button>
+            <Button 
+              variant="profileStats"
               onClick={onFollowersClick}
-              className="hover:underline flex items-center gap-1 cursor-pointer"
+              className="gap-1 px-1 -mx-1"
             >
-              <span className="font-semibold">{stats.followers}</span>{" "}
+              <span className="font-semibold text-foreground">{stats.followers}</span>{" "}
               <span className="text-muted-foreground">followers</span>
-            </button>
-            <button 
+            </Button>
+            <Button 
+              variant="profileStats"
               onClick={onFollowingClick}
-              className="hover:underline flex items-center gap-1 cursor-pointer"
+              className="gap-1 px-1 -mx-1"
             >
-              <span className="font-semibold">{stats.following}</span>{" "}
+              <span className="font-semibold text-foreground">{stats.following}</span>{" "}
               <span className="text-muted-foreground">following</span>
-            </button>
+            </Button>
           </div>
 
           {/* Bio */}

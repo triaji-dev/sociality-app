@@ -9,13 +9,33 @@ import { toast } from "sonner";
 
 export function useRegister() {
   const router = useRouter();
+  const login = useAuthStore((state) => state.login);
 
   return useMutation({
     mutationFn: (data: RegisterRequest) => authService.register(data),
-    onSuccess: (response) => {
+    onSuccess: async (response, variables) => {
       if (response.success) {
-        toast.success("Registration successful! Please login.");
-        router.push("/login");
+        toast.success("Account created successfully! Logging you in...");
+        
+        try {
+          // Auto-login after registration
+          const loginResponse = await authService.login({
+            email: variables.email,
+            password: variables.password,
+          });
+
+          if (loginResponse.success && loginResponse.data) {
+            login(loginResponse.data.user, loginResponse.data.token);
+            router.push("/timeline");
+          } else {
+            toast.info("Registration successful, but please login manually.");
+            router.push("/login");
+          }
+        } catch (error) {
+          console.error("Auto-login error:", error);
+          toast.info("Registration successful, but please login manually.");
+          router.push("/login");
+        }
       } else {
         toast.error(response.message || "Registration failed");
       }

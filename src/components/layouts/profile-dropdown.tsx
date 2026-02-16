@@ -66,9 +66,9 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
     <div className='relative' ref={dropdownRef}>
       {/* Profile Button */}
       <Button
-        variant='ghost'
+        variant='ghost2'
         onClick={() => setIsOpen(!isOpen)}
-        className='gap-3 hover:opacity-90 hover:scale-105 hover:bg-transparent focus:outline-none p-0 h-auto'
+        className='gap-3 hover:scale-105 focus:outline-none p-0 h-auto'
       >
         <UserAvatar user={user} size='md' />
         <span className='text-foreground text-sm font-medium hidden sm:block'>
